@@ -61,7 +61,7 @@ public class StringChecker implements IChecker {
 
     @Override
     public String getName() {
-        return name;
+        return name + " string checker";
     }
 
 }
