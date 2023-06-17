@@ -341,8 +341,10 @@ public class Checkers {
         addStringCheckers(list);
         //final CallsMethodChecker callsRuntimeGetRuntime = new CallsMethodChecker(Opcodes.INVOKESTATIC, "java/lang/Runtime", "getRuntime", "()Ljava/lang/Runtime;", TestResult.TestResultLevel.BENIGN);
         final CallsMethodChecker callsRuntimeExec = new CallsMethodChecker(Opcodes.INVOKEVIRTUAL, "java/lang/Runtime", "exec", "([Ljava/lang/String;)Ljava/lang/Process;", TestResult.TestResultLevel.SUS);
+        final CallsMethodChecker callsB64Decode = new CallsMethodChecker(Opcodes.INVOKEVIRTUAL, "java/util/Base64$Decoder", "decode", "(Ljava/lang/String;)[B", TestResult.TestResultLevel.BENIGN);
         //list.add(callsRuntimeGetRuntime);
         list.add(callsRuntimeExec);
+        list.add(callsB64Decode);
         list.add(new CallsNekoClientLikeChecker());
         return list;
     }
