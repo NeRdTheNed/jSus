@@ -45,6 +45,10 @@ public class Scanner {
 
         if (files != null) {
             for (final File file : dir.listFiles()) {
+                if (!file.toString().toLowerCase().endsWith(".jar")) {
+                    continue;
+                }
+
                 try {
                     final JarFile jarFile = new JarFile(file);
 
