@@ -297,7 +297,31 @@ public class Checkers {
         list.add(susTest);
     }
 
+    private static void addSkyrageChecker(List<IChecker> list) {
+        final HashMap<String, TestResult.TestResultLevel> susMap = new HashMap<>();
+        final String[] virusStrings = {
+            "kernel-certs-debug4917.log",
+            "KguQvFBPWsHhudivS2ccfiTv7lwzMtqzpFJdWRhxkaU=",
+            "KguQvFBPWsHhudivS2ccfpkWIGgJLbt3",
+            "KguQvFBPWsHhudivS2ccfrWv1IgzKb9r5vfjM4Vlj8A=",
+            "first.throwable.in",
+            "t23e7v6uz8idz87ehugwq.skyrage.de"
+        };
+
+        for (final String virusString : virusStrings) {
+            susMap.put(virusString, TestResult.TestResultLevel.VIRUS);
+        }
+
+        susMap.put("/plugi", TestResult.TestResultLevel.STRONG_SUS);
+        susMap.put("n-config.bin", TestResult.TestResultLevel.STRONG_SUS);
+        susMap.put("REPLACE HEREEEE", TestResult.TestResultLevel.SUS);
+        susMap.put("LWphc", TestResult.TestResultLevel.SUS);
+        final StringChecker susTest = new StringChecker("Skyrage", susMap);
+        list.add(susTest);
+    }
+
     private static void addStringCheckers(List<IChecker> list) {
+        addSkyrageChecker(list);
         addYoinkRatChecker(list);
     }
 
