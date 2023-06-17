@@ -33,6 +33,7 @@ public class WeirdStringConstructionMethodsChecker implements IChecker {
                     final String methodDesc = methodInsNode.desc;
 
                     if ("java/lang/String".equals(methodOwner) && "([B)V".equals(methodDesc) && "<init>".equals(methodName)) {
+                        // TODO Handle more scenarios
                         final AbstractInsnNode prev = ins.getPrevious();
                         int previousOpcode = prev.getOpcode();
 
@@ -44,6 +45,11 @@ public class WeirdStringConstructionMethodsChecker implements IChecker {
                             final String prevMethodName = prevMethodInsNode.name;
                             final String prevMethodOwner = prevMethodInsNode.owner;
                             final String prevMethodDesc = prevMethodInsNode.desc;
+
+                            // TODO handle org.apache.commons.codec.binary.Base16
+                            // TODO handle org.apache.commons.codec.binary.Base32
+                            // TODO handle org.apache.commons.codec.binary.Base64
+                            // TODO handle org.apache.commons.codec.binary.Hex
 
                             if ("java/util/Base64$Decoder".equals(prevMethodOwner) && "decode".equals(prevMethodName) && "(Ljava/lang/String;)[B".equals(prevMethodDesc)) {
                                 final AbstractInsnNode prev2 = prev.getPrevious();
