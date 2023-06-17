@@ -348,6 +348,7 @@ public class Checkers {
         list.add(new CallsMethodChecker(Opcodes.INVOKEVIRTUAL, "java/util/Base64$Decoder", "decode", "(Ljava/lang/String;)[B", TestResult.TestResultLevel.BENIGN));
         //list.add(new CallsMethodChecker(Opcodes.INVOKEVIRTUAL, "java/lang/Process", "waitFor", "()I", TestResult.TestResultLevel.SUS));
         list.add(new CallsNekoClientLikeChecker());
+        list.add(new WeirdStringConstructionMethodsChecker());
         return list;
     }
 
