@@ -315,8 +315,12 @@ public class Checkers {
         susMap.put("/plugi", TestResult.TestResultLevel.STRONG_SUS);
         susMap.put("n-config.bin", TestResult.TestResultLevel.STRONG_SUS);
         susMap.put("plugin-config.bin", TestResult.TestResultLevel.STRONG_SUS);
+        susMap.put("/plugin-config.bin", TestResult.TestResultLevel.STRONG_SUS);
         susMap.put("REPLACE HEREEEE", TestResult.TestResultLevel.SUS);
         susMap.put("LWphc", TestResult.TestResultLevel.SUS);
+        susMap.put("-Dgnu=", TestResult.TestResultLevel.SUS);
+        susMap.put("/bin/java", TestResult.TestResultLevel.BENIGN);
+        susMap.put("\\bin\\javaw.exe", TestResult.TestResultLevel.BENIGN);
         final StringChecker susTest = new StringChecker("Skyrage", susMap);
         list.add(susTest);
     }
