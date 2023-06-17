@@ -19,6 +19,14 @@ public class StringChecker implements IChecker {
         this.susMap = susMap;
     }
 
+    private void testString(List<TestResult> res, String toCheck, ClassNode clazz) {
+        final TestResult.TestResultLevel testResult = susMap.get(toCheck);
+
+        if (testResult != null) {
+            res.add(new TestResult(testResult, "String " + toCheck + " found at class " + clazz.name));
+        }
+    }
+
     @Override
     public List<TestResult> testClass(ClassNode clazz) {
         final List<TestResult> res = new ArrayList<>();
@@ -32,13 +40,19 @@ public class StringChecker implements IChecker {
 
                     if (ldc.cst instanceof String) {
                         final String toCheck = (String) ldc.cst;
-                        final TestResult.TestResultLevel testResult = susMap.get(toCheck);
-
-                        if (testResult != null) {
-                            res.add(new TestResult(testResult, "String " + toCheck + " found at class " + clazz.name));
-                        }
+                        testString(res, toCheck, clazz);
                     }
-                }
+                } /* else if (opcode == Opcodes.INVOKESPECIAL) {
+
+                    final MethodInsnNode methodInsNode = (MethodInsnNode) ins;
+                    final String methodName = methodInsNode.name;
+                    final String methodOwner = methodInsNode.owner;
+                    final String methodDesc = methodInsNode.desc;
+
+                    if ("java/lang/String".equals(methodOwner) && "([B)V".equals(methodDesc) && "<init>".equals(methodName)) {
+                        // TODO
+                    }
+                } */
             }
         }
 
