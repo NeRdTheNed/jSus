@@ -1,0 +1,66 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+}
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+final def compiler = javaToolchains.compilerFor {
+    languageVersion = JavaLanguageVersion.of(8)
+}
+
+// Tells Gradle to use the previously defined Java 8 compatible JDK.
+java {
+    toolchain {
+        compiler
+    }
+}
+
+// Tells Gradle to always compile with the previously defined Java 8 compatible JDK.
+tasks.withType(JavaCompile).configureEach {
+    javaCompiler = compiler
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+    // Tells Gradle to include more debug information in compiled .class files.
+    options.debug = true
+    options.debugOptions.debugLevel = 'source,lines,vars'
+}
+
+repositories {
+    mavenCentral()
+}
+
+shadowJar {
+    minimize()
+
+    archiveClassifier = 'all'
+}
+
+dependencies {
+    // asm
+    api 'org.ow2.asm:asm:9.5'
+    api 'org.ow2.asm:asm-tree:9.5'
+
+    shadow 'org.ow2.asm:asm:9.5'
+    shadow 'org.ow2.asm:asm-tree:9.5'
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'com.github.NeRdTheNed.jSus.CMDMain'
+        )
+    }
+}
+
+build.finalizedBy(shadowJar)
