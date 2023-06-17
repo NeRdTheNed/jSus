@@ -321,7 +321,17 @@ public class Checkers {
         list.add(susTest);
     }
 
+    private static void addNekoClientChecker(List<IChecker> list) {
+        // WIP, doesn't detect anything but the two known weird strings in infected mods
+        final HashMap<String, TestResult.TestResultLevel> susMap = new HashMap<>();
+        susMap.put("-74.-10.78.-106.12", TestResult.TestResultLevel.STRONG_SUS);
+        susMap.put("-114.-18.38.108.-100", TestResult.TestResultLevel.STRONG_SUS);
+        final StringChecker susTest = new StringChecker("NekoClient", susMap);
+        list.add(susTest);
+    }
+
     private static void addStringCheckers(List<IChecker> list) {
+        addNekoClientChecker(list);
         addSkyrageChecker(list);
         addYoinkRatChecker(list);
     }
