@@ -304,7 +304,7 @@ public class Checkers {
     private static List<IChecker> makeCheckerList() {
         final List<IChecker> list = new ArrayList<>();
         addStringCheckers(list);
-        final CallsMethodChecker callsRuntimeGetRuntime = new CallsMethodChecker(Opcodes.INVOKESTATIC, "java/lang/Runtime", "getRuntime", "()Ljava/lang/Runtime;", TestResult.TestResultLevel.SUS);
+        final CallsMethodChecker callsRuntimeGetRuntime = new CallsMethodChecker(Opcodes.INVOKESTATIC, "java/lang/Runtime", "getRuntime", "()Ljava/lang/Runtime;", TestResult.TestResultLevel.BENIGN);
         final CallsMethodChecker callsRuntimeExec = new CallsMethodChecker(Opcodes.INVOKEVIRTUAL, "java/lang/Runtime", "exec", "([Ljava/lang/String;)Ljava/lang/Process;", TestResult.TestResultLevel.SUS);
         list.add(callsRuntimeGetRuntime);
         list.add(callsRuntimeExec);
