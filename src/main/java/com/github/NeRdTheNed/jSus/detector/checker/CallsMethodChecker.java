@@ -16,6 +16,8 @@ public class CallsMethodChecker implements IChecker {
     final private String compareMethodName;
     final private String compareMethodDesc;
 
+    final private String name;
+
     final private TestResult.TestResultLevel result;
 
     public CallsMethodChecker(int compareOpcode, String compareMethodOwner, String compareMethodName, String compareMethodDesc, TestResult.TestResultLevel result) {
@@ -25,11 +27,12 @@ public class CallsMethodChecker implements IChecker {
         this.compareMethodName = compareMethodName;
         this.compareMethodDesc = compareMethodDesc;
         this.result = result;
+        name = "Calls " + compareMethodOwner + "." + compareMethodName + " checker";
     }
 
     @Override
     public String getName() {
-        return "Calls " + compareMethodOwner + "." + compareMethodName + " checker";
+        return name;
     }
 
     @Override

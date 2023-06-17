@@ -15,7 +15,7 @@ public class StringChecker implements IChecker {
     private final Map<String, TestResult.TestResultLevel> susMap;
 
     public StringChecker(String name, Map<String, TestResult.TestResultLevel> susMap) {
-        this.name = name;
+        this.name = name + " string checker";
         this.susMap = susMap;
     }
 
@@ -61,7 +61,7 @@ public class StringChecker implements IChecker {
 
     @Override
     public String getName() {
-        return name + " string checker";
+        return name;
     }
 
 }
