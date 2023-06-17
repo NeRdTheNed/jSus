@@ -345,6 +345,10 @@ public class Checkers {
         addStringCheckers(list);
         //list.add(new CallsMethodChecker(Opcodes.INVOKESTATIC, "java/lang/Runtime", "getRuntime", "()Ljava/lang/Runtime;", TestResult.TestResultLevel.BENIGN));
         list.add(new CallsMethodChecker(Opcodes.INVOKEVIRTUAL, "java/lang/Runtime", "exec", "([Ljava/lang/String;)Ljava/lang/Process;", TestResult.TestResultLevel.SUS));
+        // TODO handle org.apache.commons.codec.binary.Base16
+        // TODO handle org.apache.commons.codec.binary.Base32
+        // TODO handle org.apache.commons.codec.binary.Base64
+        // TODO handle org.apache.commons.codec.binary.Hex
         list.add(new CallsMethodChecker(Opcodes.INVOKEVIRTUAL, "java/util/Base64$Decoder", "decode", "(Ljava/lang/String;)[B", TestResult.TestResultLevel.BENIGN));
         //list.add(new CallsMethodChecker(Opcodes.INVOKEVIRTUAL, "java/lang/Process", "waitFor", "()I", TestResult.TestResultLevel.SUS));
         list.add(new CallsNekoClientLikeChecker());
