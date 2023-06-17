@@ -176,8 +176,6 @@ public class Checkers {
 
             // later
 
-            "\\AppData\\Local\\Temp",
-
             "/Google/Chrome/User Data/Default/Web Data",
             "/Library/Application Support/Google/Chrome/User Data/Default/Web Data",
             "/.config/google-chrome/Default/Web Data",
@@ -390,6 +388,9 @@ public class Checkers {
         }
 
         final String begignStrings[] = {
+            // Netty
+            "\\AppData\\Local\\Temp",
+
             "http://checkip.amazonaws.com",
             "https://wtfismyip.com/text",
 
