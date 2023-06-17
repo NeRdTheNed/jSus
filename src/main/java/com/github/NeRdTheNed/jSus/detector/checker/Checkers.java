@@ -314,6 +314,7 @@ public class Checkers {
 
         susMap.put("/plugi", TestResult.TestResultLevel.STRONG_SUS);
         susMap.put("n-config.bin", TestResult.TestResultLevel.STRONG_SUS);
+        susMap.put("plugin-config.bin", TestResult.TestResultLevel.STRONG_SUS);
         susMap.put("REPLACE HEREEEE", TestResult.TestResultLevel.SUS);
         susMap.put("LWphc", TestResult.TestResultLevel.SUS);
         final StringChecker susTest = new StringChecker("Skyrage", susMap);
