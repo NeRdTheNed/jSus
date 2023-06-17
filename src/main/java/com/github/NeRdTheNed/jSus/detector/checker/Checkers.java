@@ -18,24 +18,14 @@ public class Checkers {
             " --tweakClass net.minecraftforge.apiloader.APILoader",
             "net.minecraftforge.apiloader.APILoader",
             "libraries/net/minecraftforge/apiloader/1.0.4/apiloader-1.0.4.jar",
-
             "APILoader - 28 Dec 2020\n\n",
-
             // v1
-
             "--tweakClass net.minecraftforge.apiloader.APILoader",
-
             "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvNzk5MDk5MzU4MDg3MzQ4MzE1L1VyTjQtV2psTDBsQUJNckF3dVpiMUdUUDJkUFdJbG1jR0JEbmJKalFYMmhwdE4taF8xXzBfeUxROXlSR0JNeGc4X0dK",
-
-
             "http://yoink.site/ukraine/rat.jar",
-
             "the rat is running out of the game",
-
             "https://cdn-107.anonfiles.com/xe9fG219y7/1a2d8176-1659361918/build.exe",
-
             "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTAwODQzNTUwNzc5MDg5MzA2Ny9GTjVoYmhjWkJNY183ZnVrR1MyX3JjQnFWWkc3dDhGaURlZlBrVGpIZVRkRFhrU0liWEh6Z3plQmhpcWd1SUVUV0QwRw==",
-
             "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvODMwNTQ5ODg5NzgzNTYyMjcwL193OW8zQlgyck1zNzl2ZmMtdGNWWm9BZlYtLTVxQXJDdFFhbEJBZ09VMzdHZ3J3SENyLWgzdXVLVmVZeWJnY3g1N20t",
             "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvODMwNTgwNjUzNjA2Njk5MDIwLzROaFBRcWlhY3NKREFOYnZ5YlFxMFZDZTJWOE5OaldwLUl1SXR6cF96QVZzZG54SVRwWUdIbkF5LVhHb1Rqb29vc0Zo",
             "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvODMwNTgwNzczNTM0MzAyMjE5L1ZLd2dlUzh0NnQtTlJ2ZTFGN19HOTdGR29FQUxIdnoxb3VrbmdhU2lVV2dPYThGalZCbE4xS2dnZEVhbFJWYlRVNW9V",
@@ -48,7 +38,6 @@ public class Checkers {
         }
 
         final String strongSusStrings[] = {
-
             // Moneyrat
             "/AppData/Roaming/discord/Local Storage/leveldb/",
             "/AppData/Roaming/discordptb/Local Storage/leveldb/",
@@ -62,22 +51,17 @@ public class Checkers {
             "/AppData/Roaming/Yandex/YandexBrowser/User Data/Default/Local Storage/leveldb/",
             "/AppData/Local/BraveSoftware/Brave-Browser/User Data/Default/Local Storage/leveldb/",
             "/AppData/Roaming/BraveSoftware/Brave-Browser/User Data/Default/Local Storage/leveldb/",
-
             "/Library/Application Support/discord/Local Storage/leveldb/",
             "/Library/Application Support/discordptb/Local Storage/leveldb/",
             "/Library/Application Support/discordcanary/Local Storage/leveldb/",
             "/Library/Application Support/Firefox/Profiles/",
             "/Library/Application Support/Google/Chrome/User Data/Default/Local Storage/leveldb/",
-
             "/.metadata/.plugins/org.eclipse.buildship.ui/dialog_settings.xml",
             "<item key=\"project_location\" ",
             "/eclipse/configuration/.settings/org.eclipse.ui.ide.prefs",
-
             "wmic process get name,executablepath",
             "ps -e -o command",
-
             "428A487E3361EF9C5FC20233485EA236",
-
             "/AppData/Roaming/FileZilla/recentservers.xml",
             "rusherhack/alts.json",
             "rusherhack/waypoints.json",
@@ -85,11 +69,9 @@ public class Checkers {
             "/options/recentProjects.xml",
             "<option name=\"recentPaths\">",
             "https://pastebin.com/raw/X5UHFxtM",
-
             "89D85BE00F56ACE593BC029C686E9BA5",
             "99CE85B34778C8C765CD2F222748EF11",
             "F6DA144461738529DB35B7DC4E2578B2",
-
             "\nDiscord token[s]: \n",
             "\nMinecraft data: \n",
             "\nPyro loader credentials: \n",
@@ -115,38 +97,27 @@ public class Checkers {
             //"\nRunning processes:\n"
             "http://dengimod.cf/discordhook/sendstuff2.php",
             "https://pastebin.com/raw/eiv5znvZ",
-
-
             // V1
-
             "https://pastebin.com/raw/jdiVNVZ2",
-
             "\\Google\\Chrome\\User Data\\Default\\Login Data",
             "\\Local Storage\\leveldb\\",
-
             "/AppData/Roaming/FileZilla/recentservers.xml",
             "\\Future\\accounts.txt",
-
             "/AppData/Roaming/JetBrains/",
             "/options/recentProjects.xml",
             "<option name=\"recentPaths\">",
             "\u0024USER_HOME\u0024",
-
             "https://pastebin.com/raw/ZrMLRRar",
-
             "\\Google\\Chrome\\User Data\\Default",
             "\\Opera Software\\Opera Stable",
             "\\BraveSoftware\\Brave-Browser\\User Data\\Default",
             "\\Yandex\\YandexBrowser\\User Data\\Default",
             "\\LightCord",
             "\\Microsoft\\Edge\\User Data\\Default",
-
             "[\\w\\W]{24}\\.[\\w\\W]{6}\\.[\\w\\W]{27}|mfa\\.[\\w\\W]{84}",
             "\\Local Storage\\leveldb\\",
             "\\Mozilla\\Firefox\\Profiles",
-
             // 1.5
-
             "/Google/Chrome/User Data/Local State", "/Google/Chrome/User Data/Default/Login Data",
             "/Library/Application Support/Google/Chrome/User Data/Local State",  "/Library/Application Support/Google/Chrome/User Data/Default/Login Data",
             "/.config/google-chrome/Local State",  "/.config/google-chrome/Default/Login Data",
@@ -162,20 +133,14 @@ public class Checkers {
             "/Microsoft/Edge/User Data/Local State", "/Microsoft/Edge/User Data/Default/Login Data",
             "/Library/Application Support/Microsoft/Edge/Local State",  "/Library/Application Support/Microsoft/Edge/Default/Login Data",
             "/.config/Microsoft/Edge/Local State",  "/.config/Microsoft/Edge/Default/Login Data",
-
             "SELECT `origin_url`,`username_value`,`password_value` from `logins`",
-
             "https://pastebin.com/raw/ZrMLRRar",
-
             "\\Google\\Chrome\\User Data\\Default",
             "\\Opera Software\\Opera Stable",
             "\\BraveSoftware\\Brave-Browser\\User Data\\Default",
             "\\Yandex\\YandexBrowser\\User Data\\Default",
-
             "\\Local Storage\\leveldb\\",
-
             // later
-
             "/Google/Chrome/User Data/Default/Web Data",
             "/Library/Application Support/Google/Chrome/User Data/Default/Web Data",
             "/.config/google-chrome/Default/Web Data",
@@ -191,11 +156,8 @@ public class Checkers {
             "/Microsoft/Edge/User Data/Default/Web Data",
             "/Library/Application Support/Microsoft/Edge/Default/Web Data",
             "/.config/Microsoft/Edge/Default/Web Data",
-
             "SELECT date_created,date_last_used,name,value,count from `autofill` ORDER BY date_created",
             "NAME: %s\nVALUE: %s\nCREATED: %s\nLAST USED: %s\nCOUNT: %s\n------------\n",
-
-
             "/Google/Chrome/User Data/Default/Cookies",
             "/Library/Application Support/Google/Chrome/User Data/Default/Cookies",
             "/.config/google-chrome/Default/Cookies",
@@ -211,7 +173,6 @@ public class Checkers {
             "/Microsoft/Edge/User Data/Default/Cookies",
             "/Library/Application Support/Microsoft/Edge/Default/Cookies",
             "/.config/Microsoft/Edge/Default/Cookies",
-
             "/Google/Chrome/User Data/Default/Network/Cookies",
             "/Library/Application Support/Google/Chrome/User Data/Default/Network/Cookies",
             "/.config/google-chrome/Default/Network/Cookies",
@@ -227,10 +188,8 @@ public class Checkers {
             "/Microsoft/Edge/User Data/Default/Network/Cookies",
             "/Library/Application Support/Microsoft/Edge/Default/Network/Cookies",
             "/.config/Microsoft/Edge/Default/Network/Cookies",
-
             "SELECT `host_key`,`name`,`path`,`encrypted_value`,`expires_utc` from `cookies`",
             "HOST KEY: %s\nNAME: %s\nPATH: %s\nEXPIRES (UTC): %s\nVALUE: %s\n------------\n",
-
             "/Google/Chrome/User Data/Default/Web Data",
             "/Library/Application Support/Google/Chrome/User Data/Default/Web Data",
             "/.config/google-chrome/Default/Web Data",
@@ -246,21 +205,13 @@ public class Checkers {
             "/Microsoft/Edge/User Data/Default/Web Data",
             "/Library/Application Support/Microsoft/Edge/Default/Web Data",
             "/.config/Microsoft/Edge/Default/Web Data",
-
             "SELECT * from `credit_cards`",
             "NAME: %s\nDATE: %s/%s\nCARD: %s\n------------\n",
-
-
             "com.liberty.jaxx\\IndexedDB\\file__0.indexeddb.leveldb\\",
-
-
-
             "HKCU\\Software\\Bitcoin\\Bitcoin-Qt",
             "HKCU\\Software\\Dash\\Dash-Qt",
             "HKCU\\Software\\Litecoin\\Litecoin-Qt",
-
             "HKCU\\Software\\monero-project\\monero-core",
-
             "/AppData/Roaming/discord/Local Storage/leveldb/",
             "/AppData/Roaming/discordptb/Local Storage/leveldb/",
             "/AppData/Roaming/discordcanary/Local Storage/leveldb/",
@@ -274,18 +225,14 @@ public class Checkers {
             "/AppData/Roaming/Yandex/YandexBrowser/User Data/Default/Local Storage/leveldb/",
             "/AppData/Local/BraveSoftware/Brave-Browser/User Data/Default/Local Storage/leveldb/",
             "/AppData/Roaming/BraveSoftware/Brave-Browser/User Data/Default/Local Storage/leveldb/",
-
             "/Library/Application Support/discord/Local Storage/leveldb/",
             "/Library/Application Support/discordptb/Local Storage/leveldb/",
             "/Library/Application Support/discordcanary/Local Storage/leveldb/",
             "/Library/Application Support/Firefox/Profiles/",
             "/Library/Application Support/Google/Chrome/User Data/Default/Local Storage/leveldb/",
-
             "aHR0cHM6Ly9kaXNjb3JkYXBwLmNvbS9hcGkvdjYvdXNlcnMvQG1lL2JpbGxpbmcvcGF5bWVudC1zb3VyY2Vz",
-
             "\\recentservers.xml",
             "FileZilla/recentservers.xml",
-
             "/Google/Chrome/User Data/Local State", "/Google/Chrome/User Data/Default/Login Data",
             "/Library/Application Support/Google/Chrome/User Data/Local State", "/Library/Application Support/Google/Chrome/User Data/Default/Login Data",
             "/.config/google-chrome/Local State", "/.config/google-chrome/Default/Login Data",
@@ -301,16 +248,13 @@ public class Checkers {
             "/Microsoft/Edge/User Data/Local State", "/Microsoft/Edge/User Data/Default/Login Data",
             "/Library/Application Support/Microsoft/Edge/Local State", "/Library/Application Support/Microsoft/Edge/Default/Login Data",
             "/.config/Microsoft/Edge/Local State", "/.config/Microsoft/Edge/Default/Login Data",
-
             "SELECT `origin_url`,`username_value`,`password_value` from `logins`",
             "/Google/Chrome/User Data",
             "FROM: %s\nURL: %s\nUSERNAME: %s\nPASSWORD: %s\n------------\n",
-
             "HKLM\\SOFTWARE\\WOW6432Node\\Valve\\Steam",
             "Steam/config/",
             "config\\loginusers.vdf",
             "Telegram Desktop\\tdata",
-
             "manatee.technology 1.5 | by juggenbande",
             "=========[SYSTEM INFO]=========\n",
             "=========[DISCORD INFO]=========\n",
@@ -319,13 +263,8 @@ public class Checkers {
             "=========[CRYPTO]=========\n",
             "=========[STEAM]=========\n",
             "=========[OTHER]=========\n",
-
             "Browser Cookies\n", "Browser Credit Cards\n", "Browser Autofill\n",
-
             "http://yoink.site/atlanta/%s.php",
-
-
-
         };
 
         for (final String susString : strongSusStrings) {
@@ -346,7 +285,6 @@ public class Checkers {
             "/Future/auth_key",
             "Pyro/alts.json",
             "Pyro/server/",
-
             "https://discordapp.com/api/v6/users/@me/billing/payment-sources",
             "\\Future\\backup",
             "Pyro\\alts.json",
@@ -355,32 +293,23 @@ public class Checkers {
             "rusherhack\\waypoints.json",
             "\\.minecraft\\SalHack\\Waypoints\\Waypoints.json",
             "\\Documents\\ShareX\\",
-
             "@everyone NEW LOG ",
-
             "https://cdn.discordapp.com/attachments/761105850194329600/765200019488899102/5ccabf62108d5a8074ddd95af2211727.png",
             "https://cdn.discordapp.com/avatars/703469635416096839/a_fdaa18602fc0a9b5ce3577a54d2ca262.webp",
-
             "Armory\\", "Crypto/Armory",
             "atomic\\Local Storage\\leveldb\\", "Crypto/AtomicWallet",
             "Electrum\\wallets\\", "Crypto/Electrum",
             "Ethereum\\keystore\\", "Crypto/Ethereum",
             "Exodus\\exodus.wallet\\", "Crypto/Exodus",
             "Zcash\\", "Crypto/Zcash",
-
             "Crypto/Jaxx",
-
             "bytecoin\\", ".wallet", "Crypto/Bytecoin",
-
             "strDataDir", "\\wallet.dat", "Crypto/BitcoinCore",
             "strDataDir", "\\wallet.dat", "Crypto/DashCore",
             "strDataDir", "\\wallet.dat", "Crypto/LitecoinCore",
             "wallet_path", "Crypto/MoneroCore",
-
             "aHR0cHM6Ly9kaXNjb3JkYXBwLmNvbS9hcGkvdjYvdXNlcnMvQG1l",
             "cHJlbWl1bV90eXBl"
-
-
         };
 
         for (final String susString : susStrings) {
@@ -390,33 +319,21 @@ public class Checkers {
         final String begignStrings[] = {
             // Netty
             "\\AppData\\Local\\Temp",
-
             "http://checkip.amazonaws.com",
             "https://wtfismyip.com/text",
-
             //"launcher_profiles.json"
-
             //"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.11 Safari/537.36"
-
-
             //"https://discordapp.com/api/v6/users/@me",
-
             "https://discordapp.com/api/v6/users/@me",
-
             "428A487E3361EF9C5FC20233485EA236",
             "Failed to get future auth ",
-
             "\\discordcanary",
             "\\discordptb",
-
             "webappsstore",
-
             "\u0024USER_HOME\u0024",
             "\\.minecraft\\journeymap",
-
             "(?<=\\G.{1900})",
             "\u0043\u0072\u0065\u0061\u0074\u0065\u0064\u0020\u0062\u0079\u0020\u0079\u006f\u0069\u006e\u006b",
-
             "dQw4w9WgXcQ:"
         };
 
