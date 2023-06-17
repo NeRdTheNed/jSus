@@ -35,7 +35,7 @@ public class WeirdStringConstructionMethodsChecker implements IChecker {
                     if ("java/lang/String".equals(methodOwner) && "([B)V".equals(methodDesc) && "<init>".equals(methodName)) {
                         // TODO Handle more scenarios
                         final AbstractInsnNode prev = ins.getPrevious();
-                        int previousOpcode = prev.getOpcode();
+                        final int previousOpcode = prev.getOpcode();
 
                         if (previousOpcode == Opcodes.BASTORE) {
                             res.add(new TestResult(TestResult.TestResultLevel.SUS, "Constructing String from fixed byte array at class " + clazz.name));
