@@ -16,7 +16,7 @@ public class WeirdStringConstructionMethodsChecker implements IChecker {
         return "Weird string construction methods checker";
     }
 
-    // TODO More through check, check fixed Base64 as well
+    // TODO More thorough check, check fixed Base64 as well
     @Override
     public List<TestResult> testClass(ClassNode clazz) {
         final List<TestResult> res = new ArrayList<>();
