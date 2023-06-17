@@ -1,5 +1,6 @@
 package com.github.NeRdTheNed.jSus.detector.checker;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -9,8 +10,6 @@ import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
-
-import java.math.BigInteger;
 
 public class CallsNekoClientLikeChecker implements IChecker {
 
@@ -41,8 +40,8 @@ public class CallsNekoClientLikeChecker implements IChecker {
 
                         if ("()V".equals(methodDesc) && methodOwner.equals(clazz.name)) {
                             try {
-                                BigInteger part1 = new BigInteger(methodName.substring(1, 17), 16);
-                                BigInteger part2 = new BigInteger(methodName.substring(17, 33), 16);
+                                final BigInteger part1 = new BigInteger(methodName.substring(1, 17), 16);
+                                final BigInteger part2 = new BigInteger(methodName.substring(17, 33), 16);
                                 new UUID(part1.longValue(), part2.longValue());
                                 // Valid UUID: likely NekoClient
                                 res.add(new TestResult(TestResult.TestResultLevel.STRONG_SUS, "Call to method " + methodOwner + "." + methodName + " found at class " + clazz.name));
