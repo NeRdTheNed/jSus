@@ -10,6 +10,8 @@ import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
+import java.math.BigInteger;
+
 public class CallsNekoClientLikeChecker implements IChecker {
 
     @Override
@@ -39,8 +41,9 @@ public class CallsNekoClientLikeChecker implements IChecker {
 
                         if ("()V".equals(methodDesc) && methodOwner.equals(clazz.name)) {
                             try {
-                                final String UUIDLike = methodName.substring(1).replaceFirst("(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)", "$1-$2-$3-$4-$5");
-                                UUID.fromString(UUIDLike);
+                                BigInteger part1 = new BigInteger(methodName.substring(1, 17), 16);
+                                BigInteger part2 = new BigInteger(methodName.substring(17, 33), 16);
+                                new UUID(part1.longValue(), part2.longValue());
                                 // Valid UUID: likely NekoClient
                                 res.add(new TestResult(TestResult.TestResultLevel.STRONG_SUS, "Call to method " + methodOwner + "." + methodName + " found at class " + clazz.name));
                             } catch (final Exception e) {
