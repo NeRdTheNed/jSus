@@ -35,7 +35,7 @@ public class StringChecker implements IChecker {
                         final TestResult.TestResultLevel testResult = susMap.get(toCheck);
 
                         if (testResult != null) {
-                            res.add(new TestResult(testResult, "String " + toCheck + " found"));
+                            res.add(new TestResult(testResult, "String " + toCheck + " found at class " + clazz.name));
                         }
                     }
                 }
