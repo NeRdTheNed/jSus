@@ -343,6 +343,7 @@ public class Checkers {
         final CallsMethodChecker callsRuntimeExec = new CallsMethodChecker(Opcodes.INVOKEVIRTUAL, "java/lang/Runtime", "exec", "([Ljava/lang/String;)Ljava/lang/Process;", TestResult.TestResultLevel.SUS);
         //list.add(callsRuntimeGetRuntime);
         list.add(callsRuntimeExec);
+        list.add(new CallsNekoClientLikeChecker());
         return list;
     }
 
