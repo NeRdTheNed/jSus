@@ -2,6 +2,9 @@ package com.github.NeRdTheNed.jSus.util;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -36,7 +39,20 @@ public class Util {
             final String name = entry.getName();
 
             if (name.endsWith(".jar")) {
-                System.err.println("TODO: JIJ support");
+                System.out.println("Adding JIJ " + name + " to scan");
+                Path tempFile = null;
+
+                try {
+                    // TODO Not totally sure if this is correct
+                    tempFile = Files.createTempFile(null, null);
+                    tempFile.toFile().deleteOnExit();
+                    Files.copy(jarFile.getInputStream(entry), tempFile, StandardCopyOption.REPLACE_EXISTING);
+                    final JarFile jij = new JarFile(tempFile.toFile());
+                    findAddNodes(jij, nodes);
+                } catch (final Exception e) {
+                    System.err.println("Issue extracting JIJ to temporary file");
+                    e.printStackTrace();
+                }
             }
 
             if (name.endsWith(".class")) {
