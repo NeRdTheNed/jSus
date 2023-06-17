@@ -44,8 +44,8 @@ public class Scanner {
 
         if (files != null) {
             for (final File file : dir.listFiles()) {
-                if (file.isDirectory()) {
-                    detectSusFromDirectory(file);
+                if (file.isDirectory() && detectSusFromDirectory(file)) {
+                    foundSus = true;
                 }
 
                 if (!file.toString().toLowerCase().endsWith(".jar")) {
