@@ -17,6 +17,7 @@ import com.github.NeRdTheNed.jSus.detector.checker.IChecker;
 import com.github.NeRdTheNed.jSus.detector.checker.TestResult;
 import com.github.NeRdTheNed.jSus.util.Util;
 
+// TODO Use LL-zip
 public class Scanner {
 
     public static boolean detectSus(File file) throws Exception {
