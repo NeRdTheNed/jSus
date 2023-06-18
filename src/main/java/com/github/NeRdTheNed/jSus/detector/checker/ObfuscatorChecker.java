@@ -10,6 +10,7 @@ import org.objectweb.asm.tree.ClassNode;
 // TODO Doesn't really do much
 public class ObfuscatorChecker implements IChecker {
     private static final Set<String> commonObfNamesList = getCommonObfNamesList();
+    private static final Set<String> commonObfNamesListCaseSensitive = getCommonObfNamesListCaseSensitive();
 
     private static Set<String> getCommonObfNamesList() {
         final Set<String> set = new HashSet<>();
@@ -17,6 +18,68 @@ public class ObfuscatorChecker implements IChecker {
         set.add("prn");
         set.add("aux");
         set.add("nul");
+        return set;
+    }
+
+    private static Set<String> getCommonObfNamesListCaseSensitive() {
+        final Set<String> set = new HashSet<>();
+        final String[] reservedJavaNames = {
+            "abstract",
+            "assert",
+            "boolean",
+            "break",
+            "byte",
+            "case",
+            "catch",
+            "char",
+            "class",
+            "const",
+            "continue",
+            "default",
+            "do",
+            "double",
+            "else",
+            "enum",
+            "extends",
+            "final",
+            "finally",
+            "float",
+            "for",
+            "goto",
+            "if",
+            "implements",
+            "import",
+            "instanceof",
+            "int",
+            "interface",
+            "long",
+            "native",
+            "new",
+            "package",
+            "private",
+            "protected",
+            "public",
+            "return",
+            "short",
+            "static",
+            "strictfp",
+            "super",
+            "switch",
+            "synchronized",
+            "this",
+            "throw",
+            "throws",
+            "transient",
+            "try",
+            "void",
+            "volatile",
+            "while",
+        };
+
+        for (final String reservedName : reservedJavaNames) {
+            set.add(reservedName);
+        }
+
         return set;
     }
 
@@ -32,7 +95,7 @@ public class ObfuscatorChecker implements IChecker {
         final String className = clazz.name;
         final String processedClassName = className.substring(className.lastIndexOf("/") + 1);
 
-        if (commonObfNamesList.contains(processedClassName.toLowerCase())) {
+        if (commonObfNamesListCaseSensitive.contains(processedClassName) || commonObfNamesList.contains(processedClassName.toLowerCase())) {
             res.add(new TestResult(TestResult.TestResultLevel.BENIGN, "Found common obfuscated classname " + className));
         }
 
