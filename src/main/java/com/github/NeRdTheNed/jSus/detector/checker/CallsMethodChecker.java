@@ -20,8 +20,15 @@ public class CallsMethodChecker implements IChecker {
 
     private final TestResult.TestResultLevel result;
 
+    private final boolean compareOpcodeMatchWilcard(int toComp) {
+        if ((compareOpcode <= Opcodes.INVOKEINTERFACE) && (compareOpcode >= Opcodes.INVOKEVIRTUAL)) {
+            return compareOpcode == toComp;
+        }
+
+        return ((toComp <= Opcodes.INVOKEINTERFACE) && (toComp >= Opcodes.INVOKEVIRTUAL));
+    }
+
     public CallsMethodChecker(int compareOpcode, String compareMethodOwner, String compareMethodName, String compareMethodDesc, TestResult.TestResultLevel result) {
-        assert ((compareOpcode <= Opcodes.INVOKEINTERFACE) && (compareOpcode >= Opcodes.INVOKEVIRTUAL));
         this.compareOpcode = compareOpcode;
         this.compareMethodOwner = compareMethodOwner;
         this.compareMethodName = compareMethodName;
@@ -43,7 +50,7 @@ public class CallsMethodChecker implements IChecker {
             for (final AbstractInsnNode ins : methodNode.instructions) {
                 final int opcode = ins.getOpcode();
 
-                if (opcode == compareOpcode) {
+                if (compareOpcodeMatchWilcard(opcode)) {
                     final MethodInsnNode methodInsNode = (MethodInsnNode) ins;
                     final String methodOwner = methodInsNode.owner;
                     final String methodName = methodInsNode.name;
