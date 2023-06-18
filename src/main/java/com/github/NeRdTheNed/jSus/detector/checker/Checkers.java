@@ -367,9 +367,10 @@ public class Checkers {
         list.add(new CallsMethodChecker(Opcodes.INVOKESTATIC, "java/lang/Class", "forName", null, TestResult.TestResultLevel.VERY_BENIGN));
         list.add(new CallsMethodChecker(Opcodes.INVOKEVIRTUAL, "java/lang/Class", "getConstructor", null, TestResult.TestResultLevel.VERY_BENIGN));
         list.add(new CallsMethodChecker(Opcodes.INVOKEVIRTUAL, "java/lang/reflect/Constructor", "newInstance", null, TestResult.TestResultLevel.VERY_BENIGN));
-        //list.add(new CallsMethodChecker(Opcodes.INVOKESTATIC, "java/lang/Class", "forName", null, TestResult.TestResultLevel.VERY_BENIGN));
         list.add(new CallsMethodChecker(Opcodes.INVOKEVIRTUAL, "java/lang/Class", "getMethod", null, TestResult.TestResultLevel.VERY_BENIGN));
         list.add(new CallsMethodChecker(Opcodes.INVOKEVIRTUAL, "java/lang/reflect/Method", "invoke", null, TestResult.TestResultLevel.VERY_BENIGN));
+        list.add(new CallsMethodChecker(Opcodes.INVOKESTATIC, "java.lang.ClassLoader", null, null, TestResult.TestResultLevel.VERY_BENIGN));
+        list.add(new CallsMethodChecker(Opcodes.INVOKEVIRTUAL, "java.lang.ClassLoader", null, null, TestResult.TestResultLevel.VERY_BENIGN));
         list.add(new CallsNekoClientLikeChecker());
         list.add(new WeirdStringConstructionMethodsChecker());
         list.add(new ObfuscatorChecker());
