@@ -3,8 +3,11 @@ package com.github.NeRdTheNed.jSus;
 import java.io.File;
 import java.util.concurrent.Callable;
 
+import com.github.NeRdTheNed.jSus.detector.checker.TestResult;
+
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
+import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
 @Command(name = "jSus", mixinStandardHelpOptions = true, version = "jSus alpha",
@@ -13,9 +16,15 @@ public class CMDMain implements Callable<Integer> {
     @Parameters(index = "0", description = "The file / directory to scan")
     private File file;
 
+    @Option(names = { "-level", "-l" }, defaultValue = "VERY_BENIGN", description = "What level of sus to log. Valid values: ${COMPLETION-CANDIDATES}")
+    TestResult.TestResultLevel level;
+
+    @Option(names = { "-verbose", "-v" }, description = "Enable verbose logging. Separate from sus level.")
+    boolean verbose = false;
+
     @Override
     public Integer call() throws Exception {
-        final boolean didSus = Scanner.detectSus(file);
+        final boolean didSus = Scanner.detectSus(file, verbose, level);
         return didSus ? 1 : CommandLine.ExitCode.OK;
     }
 

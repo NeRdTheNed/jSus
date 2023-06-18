@@ -32,7 +32,7 @@ public class Util {
         return node;
     }
 
-    private static void findAddNodes(JarFile jarFile, List<ClassNode> nodes) {
+    private static void findAddNodes(JarFile jarFile, List<ClassNode> nodes, boolean verbose) {
         String obf = null;
         boolean didFindWeirdObf = false;
 
@@ -50,7 +50,10 @@ public class Util {
             }
 
             if (name.endsWith(".jar")) {
-                System.out.println("Adding JIJ " + name + " to scan");
+                if (verbose) {
+                    System.out.println("Adding JIJ " + name + " to scan");
+                }
+
                 Path tempFile = null;
 
                 try
@@ -60,9 +63,9 @@ public class Util {
                     tempFile.toFile().deleteOnExit();
                     Files.copy(is, tempFile, StandardCopyOption.REPLACE_EXISTING);
                     final JarFile jij = new JarFile(tempFile.toFile());
-                    findAddNodes(jij, nodes);
+                    findAddNodes(jij, nodes, verbose);
                 } catch (final Exception e) {
-                    System.err.println("Issue extracting JIJ to temporary file");
+                    System.err.println("Issue extracting JIJ " + name + " from " + jarFile.getName() + " to temporary file");
                     e.printStackTrace();
                 }
             }
@@ -111,9 +114,9 @@ public class Util {
         }
     }
 
-    public static List<ClassNode> gatherClassNodesFromJar(JarFile jarFile) {
+    public static List<ClassNode> gatherClassNodesFromJar(JarFile jarFile, boolean verbose) {
         final List<ClassNode> nodes = new ArrayList<>();
-        findAddNodes(jarFile, nodes);
+        findAddNodes(jarFile, nodes, verbose);
         return nodes;
     }
 }

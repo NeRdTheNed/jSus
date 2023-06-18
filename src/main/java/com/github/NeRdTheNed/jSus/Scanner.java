@@ -20,21 +20,21 @@ import com.github.NeRdTheNed.jSus.util.Util;
 // TODO Use LL-zip
 public class Scanner {
 
-    public static boolean detectSus(File file) throws Exception {
+    public static boolean detectSus(File file, boolean verbose, TestResult.TestResultLevel level) throws Exception {
         if (file.isDirectory()) {
-            return detectSusFromDirectory(file);
+            return detectSusFromDirectory(file, verbose, level);
         }
 
         try {
             final JarFile jarFile = new JarFile(file);
-            return detectSusFromJar(jarFile);
+            return detectSusFromJar(jarFile, verbose, level);
         } catch (final Exception e) {
             System.err.println("Invalid directory or jar file " + file.getAbsolutePath());
             throw e;
         }
     }
 
-    public static boolean detectSusFromDirectory(File dir) {
+    public static boolean detectSusFromDirectory(File dir, boolean verbose, TestResult.TestResultLevel level) {
         if (!dir.isDirectory()) {
             System.err.println("Invalid directory " + dir.getAbsolutePath());
             return false;
@@ -45,7 +45,7 @@ public class Scanner {
 
         if (files != null) {
             for (final File file : dir.listFiles()) {
-                if (file.isDirectory() && detectSusFromDirectory(file)) {
+                if (file.isDirectory() && detectSusFromDirectory(file, verbose, level)) {
                     foundSus = true;
                 }
 
@@ -56,7 +56,7 @@ public class Scanner {
                 try {
                     final JarFile jarFile = new JarFile(file);
 
-                    if (detectSusFromJar(jarFile)) {
+                    if (detectSusFromJar(jarFile, verbose, level)) {
                         foundSus = true;
                     }
                 } catch (final Exception e) {
@@ -69,11 +69,14 @@ public class Scanner {
         return foundSus;
     }
 
-    public static boolean detectSusFromJar(JarFile file) {
-        System.out.println("Scanning " + file.getName());
+    public static boolean detectSusFromJar(JarFile file, boolean verbose, TestResult.TestResultLevel level) {
+        if (verbose) {
+            System.out.println("Scanning " + file.getName());
+        }
+
         final ExecutorService execService = Executors.newCachedThreadPool();
         final ExecutorCompletionService<CheckResult> compService = new ExecutorCompletionService<>(execService);
-        final List<ClassNode> nodes = Util.gatherClassNodesFromJar(file);
+        final List<ClassNode> nodes = Util.gatherClassNodesFromJar(file, verbose);
         int tasks = 0;
 
         for (final IChecker checker : Checkers.checkerList) {
@@ -93,10 +96,13 @@ public class Scanner {
 
                 if (!finalRes.checkerResults.isEmpty()) {
                     didDetectSus = true;
+                    System.out.println("Found sus for file! " + file.getName());
                     System.out.println("Sus found by checker " + finalRes.checkerName + "!");
 
                     for (final TestResult testRes : finalRes.checkerResults) {
-                        System.out.println("- Sus level " + testRes.result + ": " + testRes.reason);
+                        if (level.ordinal() >= testRes.result.ordinal()) {
+                            System.out.println("- Sus level " + testRes.result + ": " + testRes.reason);
+                        }
                     }
                 }
             } catch (final Exception e) {
@@ -106,7 +112,10 @@ public class Scanner {
             }
         }
 
-        System.out.println("Finished scanning " + file.getName());
+        if (verbose) {
+            System.out.println("Finished scanning " + file.getName());
+        }
+
         return didDetectSus;
     }
 
