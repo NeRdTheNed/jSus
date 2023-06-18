@@ -76,6 +76,9 @@ public class ObfuscatorChecker implements IChecker {
             "volatile",
             "while",
             "_",
+            "true",
+            "false",
+            "null",
         };
         Collections.addAll(set, reservedJavaNames);
         return set;
