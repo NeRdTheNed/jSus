@@ -51,7 +51,7 @@ public class Util {
 
             if (name.endsWith(".jar")) {
                 if (verbose) {
-                    System.out.println("Adding JIJ " + name + " to scan");
+                    System.out.println("- Adding JIJ " + name + " to scan");
                 }
 
                 Path tempFile = null;
@@ -106,11 +106,11 @@ public class Util {
         }
 
         if (obf != null) {
-            System.out.println("Note: jar " + jarFile.getName() + " claims to be obfuscated by " + obf);
+            System.out.println("- Note: jar " + jarFile.getName() + " claims to be obfuscated by " + obf);
         }
 
         if (didFindWeirdObf) {
-            System.out.println("Note: Common class obfuscation technique was used in jar " + jarFile.getName());
+            System.out.println("- Note: Common class obfuscation technique was used in jar " + jarFile.getName());
         }
     }
 
