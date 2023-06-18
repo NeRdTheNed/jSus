@@ -64,6 +64,8 @@ public class Util {
 
                     if (node != null) {
                         nodes.add(node);
+                    } else {
+                        System.err.println("Class node was null: " + name);
                     }
                 } catch (final IOException e) {
                     System.err.println("Error reading class " + entry.getName() + " from jar " + jarFile.getName());
