@@ -361,7 +361,7 @@ public class Checkers {
         // TODO handle org.apache.commons.codec.binary.Hex
         list.add(new CallsMethodChecker(Opcodes.INVOKEVIRTUAL, "java/util/Base64$Decoder", "decode", "(Ljava/lang/String;)[B", TestResult.TestResultLevel.BENIGN));
         list.add(new CallsMethodChecker(Opcodes.INVOKESTATIC, "javax/xml/bind/DatatypeConverter", "parseBase64Binary", "(Ljava/lang/String;)[B", TestResult.TestResultLevel.BENIGN));
-        //list.add(new CallsMethodChecker(Opcodes.INVOKEVIRTUAL, "java/lang/Process", "waitFor", "()I", TestResult.TestResultLevel.SUS));
+        list.add(new CallsMethodChecker(Opcodes.INVOKEVIRTUAL, "java/lang/Process", "waitFor", "()I", TestResult.TestResultLevel.VERY_BENIGN));
         list.add(new CallsMethodChecker(Opcodes.INVOKESTATIC, "java/nio/file/Files", "setPosixFilePermissions", "(Ljava/nio/file/Path;Ljava/util/Set;)Ljava/nio/file/Path;", TestResult.TestResultLevel.BENIGN));
         list.add(new CallsMethodChecker(Opcodes.INVOKESTATIC, "java/nio/file/Files", "createSymbolicLink", "(Ljava/nio/file/Path;Ljava/nio/file/Path;[Ljava/nio/file/attribute/FileAttribute;)Ljava/nio/file/Path;", TestResult.TestResultLevel.BENIGN));
         list.add(new CallsMethodChecker(Opcodes.INVOKESTATIC, "java/lang/Class", "forName", "(Ljava/lang/String;)Ljava/lang/Class;", TestResult.TestResultLevel.VERY_BENIGN));
