@@ -25,6 +25,7 @@ public class UncommonJVMInstructionChecker implements IChecker {
         return "Uncommon JVM instruction checker";
     }
 
+    // TODO Check for uses of LDC that Javac wouldn't produce (LDC 1 instead of ICONST_1 ect)
     @Override
     public List<TestResult> testClass(ClassNode clazz) {
         final List<TestResult> res = new ArrayList<>();
