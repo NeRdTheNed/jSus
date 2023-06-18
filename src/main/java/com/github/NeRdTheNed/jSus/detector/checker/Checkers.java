@@ -328,6 +328,11 @@ public class Checkers {
     private static void addNekoClientChecker(List<IChecker> list) {
         // WIP, doesn't detect anything but the two known weird strings in infected mods
         final HashMap<String, TestResult.TestResultLevel> susMap = new HashMap<>();
+        susMap.put("dos:hidden", TestResult.TestResultLevel.BENIGN);
+        susMap.put("dos:system", TestResult.TestResultLevel.BENIGN);
+        susMap.put("run.bat", TestResult.TestResultLevel.BENIGN);
+        susMap.put("System32", TestResult.TestResultLevel.BENIGN);
+        susMap.put("reg.exe", TestResult.TestResultLevel.BENIGN);
         susMap.put("@echo off%nstart /B \"\" \"%s\" -jar \"%s\"", TestResult.TestResultLevel.SUS);
         susMap.put("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", TestResult.TestResultLevel.SUS);
         susMap.put("[Unit]%nDescription=%s%n%n[Service]%nType=simple%nRestart=always%nExecStart=\"%s\" -jar \"%s\"%nWorkingDirectory=%s%n%n[Install]%nWantedBy=multi-user.target%n", TestResult.TestResultLevel.SUS);
