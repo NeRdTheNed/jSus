@@ -27,7 +27,7 @@ public class CallsMethodChecker implements IChecker {
         this.compareMethodName = compareMethodName;
         this.compareMethodDesc = compareMethodDesc;
         this.result = result;
-        name = "Calls " + compareMethodOwner + "." + compareMethodName + " checker";
+        name = "Calls " + (compareMethodOwner == null ? "*" : compareMethodOwner) + "." + (compareMethodName == null ? "*" : compareMethodName) + " checker";
     }
 
     @Override
@@ -49,10 +49,10 @@ public class CallsMethodChecker implements IChecker {
                     final String methodName = methodInsNode.name;
                     final String methodDesc = methodInsNode.desc;
 
-                    if (compareMethodName.equals(methodName) &&
-                            compareMethodDesc.equals(methodDesc) &&
-                            compareMethodOwner.equals(methodOwner)) {
-                        res.add(new TestResult(result, "Call to method " + compareMethodOwner + "." + compareMethodName + " found at class " + clazz.name));
+                    if (((compareMethodName == null) || compareMethodName.equals(methodName)) &&
+                            ((compareMethodDesc == null) || compareMethodDesc.equals(methodDesc)) &&
+                            ((compareMethodOwner == null) || compareMethodOwner.equals(methodOwner))) {
+                        res.add(new TestResult(result, "Call to method " + methodOwner + "." + methodName + " found at class " + clazz.name));
                     }
                 }
             }
