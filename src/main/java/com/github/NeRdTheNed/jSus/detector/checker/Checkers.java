@@ -357,6 +357,7 @@ public class Checkers {
         list.add(new CallsMethodChecker(Opcodes.INVOKEVIRTUAL, "java/util/Base64$Decoder", "decode", "(Ljava/lang/String;)[B", TestResult.TestResultLevel.BENIGN));
         //list.add(new CallsMethodChecker(Opcodes.INVOKEVIRTUAL, "java/lang/Process", "waitFor", "()I", TestResult.TestResultLevel.SUS));
         list.add(new CallsMethodChecker(Opcodes.INVOKESTATIC, "java/nio/file/Files", "setPosixFilePermissions", "(Ljava/nio/file/Path;Ljava/util/Set;)Ljava/nio/file/Path;", TestResult.TestResultLevel.BENIGN));
+        list.add(new CallsMethodChecker(Opcodes.INVOKESTATIC, "java/nio/file/Files", "createSymbolicLink", "(Ljava/nio/file/Path;Ljava/nio/file/Path;[Ljava/nio/file/attribute/FileAttribute;)Ljava/nio/file/Path;", TestResult.TestResultLevel.BENIGN));
         list.add(new CallsNekoClientLikeChecker());
         list.add(new WeirdStringConstructionMethodsChecker());
         list.add(new ObfuscatorChecker());
