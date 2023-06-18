@@ -9,7 +9,7 @@ import org.objectweb.asm.tree.ClassNode;
 
 // TODO Doesn't really do much
 public class ObfuscatorChecker implements IChecker {
-    private static final Set<String> commonObfNamseList = getCommonObfNamesList();
+    private static final Set<String> commonObfNamesList = getCommonObfNamesList();
 
     private static Set<String> getCommonObfNamesList() {
         final Set<String> set = new HashSet<>();
@@ -32,7 +32,7 @@ public class ObfuscatorChecker implements IChecker {
         final String className = clazz.name;
         final String processedClassName = className.substring(className.lastIndexOf("/") + 1);
 
-        if (commonObfNamseList.contains(processedClassName.toLowerCase())) {
+        if (commonObfNamesList.contains(processedClassName.toLowerCase())) {
             res.add(new TestResult(TestResult.TestResultLevel.BENIGN, "Found common obfuscated classname " + className));
         }
 
