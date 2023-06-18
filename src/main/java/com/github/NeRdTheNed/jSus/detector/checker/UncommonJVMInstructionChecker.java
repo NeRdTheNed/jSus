@@ -8,6 +8,7 @@ import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
 
+// I have accidentally created a Kotlin detector, send help
 public class UncommonJVMInstructionChecker implements IChecker {
 
     private static String opcodeName(int opcode) {
