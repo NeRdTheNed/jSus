@@ -106,6 +106,7 @@ public class Scanner {
                                 firstLog = false;
                             }
 
+                            // TODO Use color output based on level
                             System.out.println("- Sus level " + testRes.result + ": " + testRes.reason);
                         }
                     }
