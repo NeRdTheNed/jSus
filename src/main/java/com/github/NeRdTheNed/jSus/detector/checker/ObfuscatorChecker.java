@@ -19,8 +19,6 @@ public class ObfuscatorChecker implements IChecker {
         set.add("prn");
         set.add("aux");
         set.add("nul");
-        // Real funny guys >:(
-        set.add("<html><img src=\"http:\\\">");
         return set;
     }
 
