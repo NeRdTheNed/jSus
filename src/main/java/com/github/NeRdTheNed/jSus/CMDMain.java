@@ -1,28 +1,26 @@
 package com.github.NeRdTheNed.jSus;
 
 import java.io.File;
+import java.util.concurrent.Callable;
 
-public class CMDMain {
+import picocli.CommandLine;
+import picocli.CommandLine.Command;
+import picocli.CommandLine.Parameters;
+
+@Command(name = "jSus", mixinStandardHelpOptions = true, version = "jSus alpha",
+         description = "Scans jar files for suspicious behaviour.")
+public class CMDMain implements Callable<Integer> {
+    @Parameters(index = "0", description = "The file / directory to scan")
+    private File file;
+
+    @Override
+    public Integer call() throws Exception {
+        final boolean didSus = Scanner.detectSus(file);
+        return didSus ? 1 : CommandLine.ExitCode.OK;
+    }
+
     public static void main(String[] args) {
-        System.out.println("jSus: scans jar files for suspicious behaviour");
-
-        if (args.length < 1) {
-            System.err.println("Please specify a file / directory to scan!");
-            System.exit(1);
-        }
-
-        boolean didSus = false;
-
-        try {
-            final File file = new File(args[0]);
-            didSus = Scanner.detectSus(file);
-        } catch (final Exception e) {
-            System.err.println("Invalid path " + args[0] + ", unable to scan file / directory.");
-            System.exit(1);
-        }
-
-        if (didSus) {
-            System.exit(1);
-        }
+        final int exitCode = new CommandLine(new CMDMain()).execute(args);
+        System.exit(exitCode);
     }
 }

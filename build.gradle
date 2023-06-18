@@ -36,6 +36,7 @@ tasks.withType(JavaCompile).configureEach {
     // Tells Gradle to include more debug information in compiled .class files.
     options.debug = true
     options.debugOptions.debugLevel = 'source,lines,vars'
+    options.compilerArgs += ["-Aproject=${project.group}/${project.name}"]
 }
 
 repositories {
@@ -53,8 +54,13 @@ dependencies {
     api 'org.ow2.asm:asm:9.5'
     api 'org.ow2.asm:asm-tree:9.5'
 
+    api 'info.picocli:picocli:4.7.4'
+    annotationProcessor 'info.picocli:picocli-codegen:4.7.4'
+
     shadow 'org.ow2.asm:asm:9.5'
     shadow 'org.ow2.asm:asm-tree:9.5'
+
+    shadow 'info.picocli:picocli:4.7.4'
 }
 
 jar {
