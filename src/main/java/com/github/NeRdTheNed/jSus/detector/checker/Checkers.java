@@ -354,6 +354,7 @@ public class Checkers {
         list.add(new CallsNekoClientLikeChecker());
         list.add(new WeirdStringConstructionMethodsChecker());
         list.add(new ObfuscatorChecker());
+        list.add(new UncommonJVMInstructionChecker());
         return list;
     }
 
