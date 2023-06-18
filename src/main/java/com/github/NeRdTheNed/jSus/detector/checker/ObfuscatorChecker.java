@@ -94,6 +94,7 @@ public class ObfuscatorChecker implements IChecker {
     // TODO https://github.com/java-deobfuscator/deobfuscator/tree/master/src/main/java/com/javadeobfuscator/deobfuscator/rules
     // TODO Handle cases like foo$illegalname$bar
     // TODO Check for sequences of bytecode Javac wouldn't produce
+    // TODO https://docs.oracle.com/javase/8/docs/api/java/lang/Character.html#isJavaIdentifierStart-int-
     @Override
     public List<TestResult> testClass(ClassNode clazz) {
         final List<TestResult> res = new ArrayList<>();
