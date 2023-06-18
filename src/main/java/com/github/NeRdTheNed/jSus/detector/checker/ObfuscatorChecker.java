@@ -77,9 +77,7 @@ public class ObfuscatorChecker implements IChecker {
             "while",
             "_",
         };
-
         Collections.addAll(set, reservedJavaNames);
-
         return set;
     }
 
