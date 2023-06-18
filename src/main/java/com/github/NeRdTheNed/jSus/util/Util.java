@@ -8,8 +8,10 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.jar.Manifest;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.ClassNode;
@@ -79,6 +81,26 @@ public class Util {
                     e.printStackTrace();
                 }
             }
+        }
+
+        try {
+            final Manifest jarManifest = jarFile.getManifest();
+
+            if (jarManifest != null) {
+                final Attributes attrib = jarManifest.getMainAttributes();
+                String obf = attrib.getValue("Obfuscated-By");
+
+                if (obf == null) {
+                    obf = attrib.getValue("Protected-By");
+                }
+
+                if (obf != null) {
+                    System.out.println("Note: jar " + jarFile.getName() + " claims to be obfuscated by " + obf);
+                }
+            }
+        } catch (final IOException e) {
+            System.err.println("Could not get manifest for jar " + jarFile.getName());
+            e.printStackTrace();
         }
 
         if (didFindWeirdObf) {
