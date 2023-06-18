@@ -102,17 +102,17 @@ public class Scanner {
                     for (final TestResult testRes : finalRes.checkerResults) {
                         if (level.ordinal() >= testRes.result.ordinal()) {
                             if (firstLog) {
-                                System.out.println("Found sus for file! " + file.getName());
+                                System.out.println("- Found sus for file! " + file.getName());
                                 firstLog = false;
                             }
 
                             if (firstCheckerLog) {
-                                System.out.println("Sus found by checker " + finalRes.checkerName + "!");
+                                System.out.println("  - Sus found by checker " + finalRes.checkerName + "!");
                                 firstCheckerLog = false;
                             }
 
                             // TODO Use color output based on level
-                            System.out.println("- Sus level " + testRes.result + ": " + testRes.reason);
+                            System.out.println("    - Sus level " + testRes.result + ": " + testRes.reason);
                         }
                     }
                 }
