@@ -39,7 +39,7 @@ public class Checkers {
             susMap.put(virusString, TestResult.TestResultLevel.VIRUS);
         }
 
-        final String strongSusStrings[] = {
+        final String[] strongSusStrings = {
             // Moneyrat
             "/AppData/Roaming/discord/Local Storage/leveldb/",
             "/AppData/Roaming/discordptb/Local Storage/leveldb/",
@@ -224,7 +224,7 @@ public class Checkers {
             susMap.put(susString, TestResult.TestResultLevel.STRONG_SUS);
         }
 
-        final String susStrings[] = {
+        final String[] susStrings = {
             "https://steamcommunity.com/profiles/",
             "\"76(.*?)\"",
             "[nNmM][\\w\\W]{23}\\.[xX][\\w\\W]{5}\\.[\\w\\W]{27}|mfa\\.[\\w\\W]{84}",
@@ -257,8 +257,8 @@ public class Checkers {
             "Crypto/Jaxx",
             "bytecoin\\", ".wallet", "Crypto/Bytecoin",
             "strDataDir", "\\wallet.dat", "Crypto/BitcoinCore",
-            "strDataDir", "\\wallet.dat", "Crypto/DashCore",
-            "strDataDir", "\\wallet.dat", "Crypto/LitecoinCore",
+            "Crypto/DashCore",
+            "Crypto/LitecoinCore",
             "wallet_path", "Crypto/MoneroCore",
             "aHR0cHM6Ly9kaXNjb3JkYXBwLmNvbS9hcGkvdjYvdXNlcnMvQG1l",
             "cHJlbWl1bV90eXBl"
@@ -268,7 +268,7 @@ public class Checkers {
             susMap.put(susString, TestResult.TestResultLevel.SUS);
         }
 
-        final String begignStrings[] = {
+        final String[] begignStrings = {
             // Netty
             "\\AppData\\Local\\Temp",
             "http://checkip.amazonaws.com",

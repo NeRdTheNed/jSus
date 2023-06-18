@@ -11,14 +11,14 @@ import org.objectweb.asm.tree.MethodNode;
 
 public class CallsMethodChecker implements IChecker {
 
-    final private int compareOpcode;
-    final private String compareMethodOwner;
-    final private String compareMethodName;
-    final private String compareMethodDesc;
+    private final int compareOpcode;
+    private final String compareMethodOwner;
+    private final String compareMethodName;
+    private final String compareMethodDesc;
 
-    final private String name;
+    private final String name;
 
-    final private TestResult.TestResultLevel result;
+    private final TestResult.TestResultLevel result;
 
     public CallsMethodChecker(int compareOpcode, String compareMethodOwner, String compareMethodName, String compareMethodDesc, TestResult.TestResultLevel result) {
         assert ((compareOpcode <= Opcodes.INVOKEINTERFACE) && (compareOpcode >= Opcodes.INVOKEVIRTUAL));
