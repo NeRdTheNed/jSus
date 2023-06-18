@@ -28,6 +28,7 @@ public class UncommonJVMInstructionChecker implements IChecker {
     @Override
     public List<TestResult> testClass(ClassNode clazz) {
         final List<TestResult> res = new ArrayList<>();
+        int foundNoOps = 0;
 
         for (final MethodNode methodNode : clazz.methods) {
             for (final AbstractInsnNode ins : methodNode.instructions) {
@@ -36,13 +37,17 @@ public class UncommonJVMInstructionChecker implements IChecker {
                 // TODO More functionality
                 switch (opcode) {
                 case Opcodes.NOP:
-                    res.add(new TestResult(TestResult.TestResultLevel.BENIGN, "Found uncommon JVM opcode " + opcodeName(opcode) + " at class " + clazz.name));
+                    foundNoOps++;
                     break;
 
                 default:
                     break;
                 }
             }
+        }
+
+        if (foundNoOps > 0) {
+            res.add(new TestResult(TestResult.TestResultLevel.BENIGN, "Found " + foundNoOps + " uncommon JVM opcode(s) " + opcodeName(Opcodes.NOP) + " at class " + clazz.name));
         }
 
         return res;
