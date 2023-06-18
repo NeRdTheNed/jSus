@@ -12,6 +12,8 @@ plugins {
 
 apply plugin: 'java'
 
+group = 'com.github.NeRdTheNed.jSus'
+
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
