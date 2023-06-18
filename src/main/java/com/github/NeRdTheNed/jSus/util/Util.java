@@ -33,6 +33,7 @@ public class Util {
     }
 
     private static void findAddNodes(JarFile jarFile, List<ClassNode> nodes) {
+        String obf = null;
         boolean didFindWeirdObf = false;
 
         for (final Enumeration<JarEntry> entries = jarFile.entries(); entries.hasMoreElements();) {
@@ -83,24 +84,26 @@ public class Util {
             }
         }
 
-        try {
-            final Manifest jarManifest = jarFile.getManifest();
+        if (obf == null) {
+            try {
+                final Manifest jarManifest = jarFile.getManifest();
 
-            if (jarManifest != null) {
-                final Attributes attrib = jarManifest.getMainAttributes();
-                String obf = attrib.getValue("Obfuscated-By");
+                if (jarManifest != null) {
+                    final Attributes attrib = jarManifest.getMainAttributes();
+                    obf = attrib.getValue("Obfuscated-By");
 
-                if (obf == null) {
-                    obf = attrib.getValue("Protected-By");
+                    if (obf == null) {
+                        obf = attrib.getValue("Protected-By");
+                    }
                 }
-
-                if (obf != null) {
-                    System.out.println("Note: jar " + jarFile.getName() + " claims to be obfuscated by " + obf);
-                }
+            } catch (final IOException e) {
+                System.err.println("Could not get manifest for jar " + jarFile.getName());
+                e.printStackTrace();
             }
-        } catch (final IOException e) {
-            System.err.println("Could not get manifest for jar " + jarFile.getName());
-            e.printStackTrace();
+        }
+
+        if (obf != null) {
+            System.out.println("Note: jar " + jarFile.getName() + " claims to be obfuscated by " + obf);
         }
 
         if (didFindWeirdObf) {
