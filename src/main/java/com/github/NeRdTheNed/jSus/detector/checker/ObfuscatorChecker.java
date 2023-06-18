@@ -74,6 +74,7 @@ public class ObfuscatorChecker implements IChecker {
             "void",
             "volatile",
             "while",
+            "_",
         };
 
         for (final String reservedName : reservedJavaNames) {
