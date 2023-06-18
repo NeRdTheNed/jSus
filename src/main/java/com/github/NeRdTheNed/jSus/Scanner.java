@@ -96,11 +96,16 @@ public class Scanner {
 
                 if (!finalRes.checkerResults.isEmpty()) {
                     didDetectSus = true;
-                    System.out.println("Found sus for file! " + file.getName());
-                    System.out.println("Sus found by checker " + finalRes.checkerName + "!");
+                    boolean firstLog = true;
 
                     for (final TestResult testRes : finalRes.checkerResults) {
                         if (level.ordinal() >= testRes.result.ordinal()) {
+                            if (firstLog) {
+                                System.out.println("Found sus for file! " + file.getName());
+                                System.out.println("Sus found by checker " + finalRes.checkerName + "!");
+                                firstLog = false;
+                            }
+
                             System.out.println("- Sus level " + testRes.result + ": " + testRes.reason);
                         }
                     }

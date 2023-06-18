@@ -24,7 +24,9 @@ public class CMDMain implements Callable<Integer> {
 
     @Override
     public Integer call() throws Exception {
+        System.out.println("jSus: Starting scan of " + file);
         final boolean didSus = Scanner.detectSus(file, verbose, level);
+        System.out.println("jSus: Finished scan of " + file);
         return didSus ? 1 : CommandLine.ExitCode.OK;
     }
 
