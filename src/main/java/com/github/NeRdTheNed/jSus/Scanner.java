@@ -88,6 +88,7 @@ public class Scanner {
 
         execService.shutdown();
         boolean didDetectSus = false;
+        boolean firstLog = true;
 
         for (int i = 0; i < tasks; i++) {
             try {
@@ -96,14 +97,18 @@ public class Scanner {
 
                 if (!finalRes.checkerResults.isEmpty()) {
                     didDetectSus = true;
-                    boolean firstLog = true;
+                    boolean firstCheckerLog = true;
 
                     for (final TestResult testRes : finalRes.checkerResults) {
                         if (level.ordinal() >= testRes.result.ordinal()) {
                             if (firstLog) {
                                 System.out.println("Found sus for file! " + file.getName());
-                                System.out.println("Sus found by checker " + finalRes.checkerName + "!");
                                 firstLog = false;
+                            }
+
+                            if (firstCheckerLog) {
+                                System.out.println("Sus found by checker " + finalRes.checkerName + "!");
+                                firstCheckerLog = false;
                             }
 
                             // TODO Use color output based on level
