@@ -353,7 +353,9 @@ public class Checkers {
     private static List<IChecker> makeCheckerList() {
         final List<IChecker> list = new ArrayList<>();
         addStringCheckers(list);
-        //list.add(new CallsMethodChecker(Opcodes.INVOKESTATIC, "java/lang/Runtime", "getRuntime", "()Ljava/lang/Runtime;", TestResult.TestResultLevel.BENIGN));
+        list.add(new CallsMethodChecker(-1, "java/lang/Runtime", "getRuntime", null, TestResult.TestResultLevel.VERY_BENIGN));
+        list.add(new CallsMethodChecker(-1, "java/lang/Runtime", "load", null, TestResult.TestResultLevel.VERY_BENIGN));
+        list.add(new CallsMethodChecker(-1, "java/lang/Runtime", "loadLibrary", null, TestResult.TestResultLevel.VERY_BENIGN));
         list.add(new CallsMethodChecker(-1, "java/lang/Runtime", "exec", null, TestResult.TestResultLevel.SUS));
         // TODO handle org.apache.commons.codec.binary.Base16
         // TODO handle org.apache.commons.codec.binary.Base32
@@ -370,7 +372,8 @@ public class Checkers {
         list.add(new CallsMethodChecker(-1, "java/lang/Class", "getMethod", null, TestResult.TestResultLevel.VERY_BENIGN));
         list.add(new CallsMethodChecker(-1, "java/lang/reflect/Method", "invoke", null, TestResult.TestResultLevel.VERY_BENIGN));
         list.add(new CallsMethodChecker(-1, "java.lang.ClassLoader", null, null, TestResult.TestResultLevel.VERY_BENIGN));
-        //list.add(new CallsMethodChecker(-1, "java.lang.ClassLoader", null, null, TestResult.TestResultLevel.VERY_BENIGN));
+        list.add(new CallsMethodChecker(-1, "java.net.URLClassLoader", null, null, TestResult.TestResultLevel.VERY_BENIGN));
+        list.add(new CallsMethodChecker(-1, "java.security.SecureClassLoader", null, null, TestResult.TestResultLevel.VERY_BENIGN));
         list.add(new CallsNekoClientLikeChecker());
         list.add(new WeirdStringConstructionMethodsChecker());
         list.add(new ObfuscatorChecker());
