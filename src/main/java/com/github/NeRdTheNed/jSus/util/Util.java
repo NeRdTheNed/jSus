@@ -15,13 +15,15 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.ClassNode;
 
 public class Util {
-    public static ClassNode streamToClass(InputStream stream) throws IOException {
+    public static ClassNode streamToClass(InputStream stream, String name) throws IOException {
         final ClassReader reader = new ClassReader(stream);
         final ClassNode node = new ClassNode();
 
         try {
             reader.accept(node, 0);
         } catch (final Exception e) {
+            System.err.println("Malformed class " + name);
+            e.printStackTrace();
             return null;
         }
 
@@ -58,7 +60,7 @@ public class Util {
             if (name.endsWith(".class")) {
                 try
                     (InputStream is = jarFile.getInputStream(entry)) {
-                    final ClassNode node = streamToClass(is);
+                    final ClassNode node = streamToClass(is, name);
 
                     if (node != null) {
                         nodes.add(node);
