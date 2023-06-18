@@ -353,6 +353,7 @@ public class Checkers {
         //list.add(new CallsMethodChecker(Opcodes.INVOKEVIRTUAL, "java/lang/Process", "waitFor", "()I", TestResult.TestResultLevel.SUS));
         list.add(new CallsNekoClientLikeChecker());
         list.add(new WeirdStringConstructionMethodsChecker());
+        list.add(new ObfuscatorChecker());
         return list;
     }
 
