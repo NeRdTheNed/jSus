@@ -50,11 +50,12 @@ public class Util {
                 System.out.println("Adding JIJ " + name + " to scan");
                 Path tempFile = null;
 
-                try {
+                try
+                    (InputStream is = jarFile.getInputStream(entry)) {
                     // TODO Not totally sure if this is correct
                     tempFile = Files.createTempFile(null, null);
                     tempFile.toFile().deleteOnExit();
-                    Files.copy(jarFile.getInputStream(entry), tempFile, StandardCopyOption.REPLACE_EXISTING);
+                    Files.copy(is, tempFile, StandardCopyOption.REPLACE_EXISTING);
                     final JarFile jij = new JarFile(tempFile.toFile());
                     findAddNodes(jij, nodes);
                 } catch (final Exception e) {
