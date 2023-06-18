@@ -354,22 +354,22 @@ public class Checkers {
         final List<IChecker> list = new ArrayList<>();
         addStringCheckers(list);
         //list.add(new CallsMethodChecker(Opcodes.INVOKESTATIC, "java/lang/Runtime", "getRuntime", "()Ljava/lang/Runtime;", TestResult.TestResultLevel.BENIGN));
-        list.add(new CallsMethodChecker(Opcodes.INVOKEVIRTUAL, "java/lang/Runtime", "exec", "([Ljava/lang/String;)Ljava/lang/Process;", TestResult.TestResultLevel.SUS));
+        list.add(new CallsMethodChecker(Opcodes.INVOKEVIRTUAL, "java/lang/Runtime", "exec", null, TestResult.TestResultLevel.SUS));
         // TODO handle org.apache.commons.codec.binary.Base16
         // TODO handle org.apache.commons.codec.binary.Base32
         // TODO handle org.apache.commons.codec.binary.Base64
         // TODO handle org.apache.commons.codec.binary.Hex
-        list.add(new CallsMethodChecker(Opcodes.INVOKEVIRTUAL, "java/util/Base64$Decoder", "decode", "(Ljava/lang/String;)[B", TestResult.TestResultLevel.BENIGN));
-        list.add(new CallsMethodChecker(Opcodes.INVOKESTATIC, "javax/xml/bind/DatatypeConverter", "parseBase64Binary", "(Ljava/lang/String;)[B", TestResult.TestResultLevel.BENIGN));
-        list.add(new CallsMethodChecker(Opcodes.INVOKEVIRTUAL, "java/lang/Process", "waitFor", "()I", TestResult.TestResultLevel.VERY_BENIGN));
-        list.add(new CallsMethodChecker(Opcodes.INVOKESTATIC, "java/nio/file/Files", "setPosixFilePermissions", "(Ljava/nio/file/Path;Ljava/util/Set;)Ljava/nio/file/Path;", TestResult.TestResultLevel.BENIGN));
-        list.add(new CallsMethodChecker(Opcodes.INVOKESTATIC, "java/nio/file/Files", "createSymbolicLink", "(Ljava/nio/file/Path;Ljava/nio/file/Path;[Ljava/nio/file/attribute/FileAttribute;)Ljava/nio/file/Path;", TestResult.TestResultLevel.BENIGN));
-        list.add(new CallsMethodChecker(Opcodes.INVOKESTATIC, "java/lang/Class", "forName", "(Ljava/lang/String;)Ljava/lang/Class;", TestResult.TestResultLevel.VERY_BENIGN));
-        list.add(new CallsMethodChecker(Opcodes.INVOKEVIRTUAL, "java/lang/Class", "getConstructor", "([Ljava/lang/Class;)Ljava/lang/reflect/Constructor;", TestResult.TestResultLevel.VERY_BENIGN));
-        list.add(new CallsMethodChecker(Opcodes.INVOKEVIRTUAL, "java/lang/reflect/Constructor", "newInstance", "([Ljava/lang/Object;)Ljava/lang/Object;", TestResult.TestResultLevel.VERY_BENIGN));
-        list.add(new CallsMethodChecker(Opcodes.INVOKESTATIC, "java/lang/Class", "forName", "(Ljava/lang/String;ZLjava/lang/ClassLoader;)Ljava/lang/Class;", TestResult.TestResultLevel.VERY_BENIGN));
-        list.add(new CallsMethodChecker(Opcodes.INVOKEVIRTUAL, "java/lang/Class", "getMethod", "(Ljava/lang/String;[Ljava/lang/Class;)Ljava/lang/reflect/Method;", TestResult.TestResultLevel.VERY_BENIGN));
-        list.add(new CallsMethodChecker(Opcodes.INVOKEVIRTUAL, "java/lang/reflect/Method", "invoke", "(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;", TestResult.TestResultLevel.VERY_BENIGN));
+        list.add(new CallsMethodChecker(Opcodes.INVOKEVIRTUAL, "java/util/Base64$Decoder", "decode", null, TestResult.TestResultLevel.BENIGN));
+        list.add(new CallsMethodChecker(Opcodes.INVOKESTATIC, "javax/xml/bind/DatatypeConverter", "parseBase64Binary", null, TestResult.TestResultLevel.BENIGN));
+        list.add(new CallsMethodChecker(Opcodes.INVOKEVIRTUAL, "java/lang/Process", "waitFor", null, TestResult.TestResultLevel.VERY_BENIGN));
+        list.add(new CallsMethodChecker(Opcodes.INVOKESTATIC, "java/nio/file/Files", "setPosixFilePermissions", null, TestResult.TestResultLevel.BENIGN));
+        list.add(new CallsMethodChecker(Opcodes.INVOKESTATIC, "java/nio/file/Files", "createSymbolicLink", null, TestResult.TestResultLevel.BENIGN));
+        list.add(new CallsMethodChecker(Opcodes.INVOKESTATIC, "java/lang/Class", "forName", null, TestResult.TestResultLevel.VERY_BENIGN));
+        list.add(new CallsMethodChecker(Opcodes.INVOKEVIRTUAL, "java/lang/Class", "getConstructor", null, TestResult.TestResultLevel.VERY_BENIGN));
+        list.add(new CallsMethodChecker(Opcodes.INVOKEVIRTUAL, "java/lang/reflect/Constructor", "newInstance", null, TestResult.TestResultLevel.VERY_BENIGN));
+        //list.add(new CallsMethodChecker(Opcodes.INVOKESTATIC, "java/lang/Class", "forName", null, TestResult.TestResultLevel.VERY_BENIGN));
+        list.add(new CallsMethodChecker(Opcodes.INVOKEVIRTUAL, "java/lang/Class", "getMethod", null, TestResult.TestResultLevel.VERY_BENIGN));
+        list.add(new CallsMethodChecker(Opcodes.INVOKEVIRTUAL, "java/lang/reflect/Method", "invoke", null, TestResult.TestResultLevel.VERY_BENIGN));
         list.add(new CallsNekoClientLikeChecker());
         list.add(new WeirdStringConstructionMethodsChecker());
         list.add(new ObfuscatorChecker());
