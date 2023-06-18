@@ -22,7 +22,8 @@ public class CMDMain implements Callable<Integer> {
     @Option(names = { "--verbose", "-v" }, description = "Enable verbose logging. Separate from sus level.")
     boolean verbose = false;
 
-    @Option(names = { "--colour", "--color", "-c" }, negatable = true, defaultValue = "true", fallbackValue = "true", description = "Enable color output.")
+    // TODO Check if color support works on Windows
+    @Option(names = { "--colour", "--color", "-c" }, negatable = true, defaultValue = "true", fallbackValue = "true", description = "Enable color output (may not work on Windows).")
     boolean color = true;
 
     @Override
