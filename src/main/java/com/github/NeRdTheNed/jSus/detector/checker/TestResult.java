@@ -5,7 +5,8 @@ public class TestResult {
         VIRUS,
         STRONG_SUS,
         SUS,
-        BENIGN
+        BENIGN,
+        VERY_BENIGN
     }
 
     public final TestResultLevel result;

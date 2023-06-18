@@ -11,6 +11,22 @@ import org.objectweb.asm.tree.MethodNode;
 // I have accidentally created a Kotlin detector, send help
 public class UncommonJVMInstructionChecker implements IChecker {
 
+    private static TestResult.TestResultLevel getLevelForNoOpAmount(int amount) {
+        if (amount > 200) {
+            return TestResult.TestResultLevel.STRONG_SUS;
+        }
+
+        if (amount > 100) {
+            return TestResult.TestResultLevel.SUS;
+        }
+
+        if (amount > 20) {
+            return TestResult.TestResultLevel.BENIGN;
+        }
+
+        return TestResult.TestResultLevel.VERY_BENIGN;
+    }
+
     private static String opcodeName(int opcode) {
         switch (opcode) {
         case Opcodes.NOP:
@@ -49,7 +65,7 @@ public class UncommonJVMInstructionChecker implements IChecker {
         }
 
         if (foundNoOps > 0) {
-            res.add(new TestResult(TestResult.TestResultLevel.BENIGN, "Found " + foundNoOps + " uncommon JVM opcode(s) " + opcodeName(Opcodes.NOP) + " at class " + clazz.name));
+            res.add(new TestResult(getLevelForNoOpAmount(foundNoOps), "Found " + foundNoOps + " uncommon JVM opcode(s) " + opcodeName(Opcodes.NOP) + " at class " + clazz.name));
         }
 
         return res;
