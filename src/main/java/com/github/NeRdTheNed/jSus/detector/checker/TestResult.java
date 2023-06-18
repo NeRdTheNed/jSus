@@ -2,11 +2,17 @@ package com.github.NeRdTheNed.jSus.detector.checker;
 
 public class TestResult {
     public enum TestResultLevel {
-        VIRUS,
-        STRONG_SUS,
-        SUS,
-        BENIGN,
-        VERY_BENIGN
+        VIRUS("red"),
+        STRONG_SUS("magenta"),
+        SUS("yellow"),
+        BENIGN("blue"),
+        VERY_BENIGN("green");
+
+        public final String color;
+
+        TestResultLevel(String color) {
+            this.color = color;
+        }
     }
 
     public final TestResultLevel result;

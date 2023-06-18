@@ -17,24 +17,26 @@ import com.github.NeRdTheNed.jSus.detector.checker.IChecker;
 import com.github.NeRdTheNed.jSus.detector.checker.TestResult;
 import com.github.NeRdTheNed.jSus.util.Util;
 
+import picocli.CommandLine.Help.Ansi;
+
 // TODO Use LL-zip
 public class Scanner {
 
-    public static boolean detectSus(File file, boolean verbose, TestResult.TestResultLevel level) throws Exception {
+    public static boolean detectSus(File file, boolean verbose, TestResult.TestResultLevel level, boolean color) throws Exception {
         if (file.isDirectory()) {
-            return detectSusFromDirectory(file, verbose, level);
+            return detectSusFromDirectory(file, verbose, level, color);
         }
 
         try {
             final JarFile jarFile = new JarFile(file);
-            return detectSusFromJar(jarFile, verbose, level);
+            return detectSusFromJar(jarFile, verbose, level, color);
         } catch (final Exception e) {
             System.err.println("Invalid directory or jar file " + file.getAbsolutePath());
             throw e;
         }
     }
 
-    public static boolean detectSusFromDirectory(File dir, boolean verbose, TestResult.TestResultLevel level) {
+    public static boolean detectSusFromDirectory(File dir, boolean verbose, TestResult.TestResultLevel level, boolean color) {
         if (!dir.isDirectory()) {
             System.err.println("Invalid directory " + dir.getAbsolutePath());
             return false;
@@ -45,7 +47,7 @@ public class Scanner {
 
         if (files != null) {
             for (final File file : dir.listFiles()) {
-                if (file.isDirectory() && detectSusFromDirectory(file, verbose, level)) {
+                if (file.isDirectory() && detectSusFromDirectory(file, verbose, level, color)) {
                     foundSus = true;
                 }
 
@@ -56,7 +58,7 @@ public class Scanner {
                 try {
                     final JarFile jarFile = new JarFile(file);
 
-                    if (detectSusFromJar(jarFile, verbose, level)) {
+                    if (detectSusFromJar(jarFile, verbose, level, color)) {
                         foundSus = true;
                     }
                 } catch (final Exception e) {
@@ -69,7 +71,7 @@ public class Scanner {
         return foundSus;
     }
 
-    public static boolean detectSusFromJar(JarFile file, boolean verbose, TestResult.TestResultLevel level) {
+    public static boolean detectSusFromJar(JarFile file, boolean verbose, TestResult.TestResultLevel level, boolean color) {
         if (verbose) {
             System.out.println("Scanning " + file.getName());
         }
@@ -102,7 +104,7 @@ public class Scanner {
                     for (final TestResult testRes : finalRes.checkerResults) {
                         if (level.ordinal() >= testRes.result.ordinal()) {
                             if (firstLog) {
-                                System.out.println("- Found sus for file! " + file.getName());
+                                System.out.println((color ? Ansi.AUTO.string("- @|bold,yellow Found sus for file!|@ ") : "- Found sus for file! ") + file.getName());
                                 firstLog = false;
                             }
 
@@ -111,8 +113,7 @@ public class Scanner {
                                 firstCheckerLog = false;
                             }
 
-                            // TODO Use color output based on level
-                            System.out.println("    - Sus level " + testRes.result + ": " + testRes.reason);
+                            System.out.println("    - Sus level " + (color ? Ansi.AUTO.string("@|" + testRes.result.color + " " + testRes.result + "|@") : testRes.result) + ": " + testRes.reason);
                         }
                     }
                 }

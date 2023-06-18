@@ -22,10 +22,13 @@ public class CMDMain implements Callable<Integer> {
     @Option(names = { "--verbose", "-v" }, description = "Enable verbose logging. Separate from sus level.")
     boolean verbose = false;
 
+    @Option(names = { "--colour", "--color", "-c" }, negatable = true, defaultValue = "true", fallbackValue = "true", description = "Enable color output.")
+    boolean color = true;
+
     @Override
     public Integer call() throws Exception {
         System.out.println("jSus: Starting scan of " + file);
-        final boolean didSus = Scanner.detectSus(file, verbose, level);
+        final boolean didSus = Scanner.detectSus(file, verbose, level, color);
         System.out.println("jSus: Finished scan of " + file);
         return didSus ? 1 : CommandLine.ExitCode.OK;
     }
