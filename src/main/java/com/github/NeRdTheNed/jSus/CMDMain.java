@@ -16,10 +16,10 @@ public class CMDMain implements Callable<Integer> {
     @Parameters(index = "0", description = "The file / directory to scan")
     private File file;
 
-    @Option(names = { "-level", "-l" }, defaultValue = "VERY_BENIGN", description = "What level of sus to log. Valid values: ${COMPLETION-CANDIDATES}")
+    @Option(names = { "--level", "-l" }, defaultValue = "VERY_BENIGN", description = "What level of sus to log. Valid values: ${COMPLETION-CANDIDATES}")
     TestResult.TestResultLevel level;
 
-    @Option(names = { "-verbose", "-v" }, description = "Enable verbose logging. Separate from sus level.")
+    @Option(names = { "--verbose", "-v" }, description = "Enable verbose logging. Separate from sus level.")
     boolean verbose = false;
 
     @Override
