@@ -31,14 +31,20 @@ public class Util {
     }
 
     private static void findAddNodes(JarFile jarFile, List<ClassNode> nodes) {
+        boolean didFindWeirdObf = false;
+
         for (final Enumeration<JarEntry> entries = jarFile.entries(); entries.hasMoreElements();) {
             final JarEntry entry = entries.nextElement();
+            final String name = entry.getName();
+            final boolean weirdClassObf = name.endsWith(".class/") && ((entry.getCompressedSize() > 0) || (entry.getSize() > 0));
 
-            if (entry.isDirectory()) {
+            if (entry.isDirectory() && !weirdClassObf) {
                 continue;
             }
 
-            final String name = entry.getName();
+            if (weirdClassObf) {
+                didFindWeirdObf = true;
+            }
 
             if (name.endsWith(".jar")) {
                 System.out.println("Adding JIJ " + name + " to scan");
@@ -57,7 +63,7 @@ public class Util {
                 }
             }
 
-            if (name.endsWith(".class")) {
+            if (weirdClassObf || name.endsWith(".class")) {
                 try
                     (InputStream is = jarFile.getInputStream(entry)) {
                     final ClassNode node = streamToClass(is, name);
@@ -72,6 +78,10 @@ public class Util {
                     e.printStackTrace();
                 }
             }
+        }
+
+        if (didFindWeirdObf) {
+            System.out.println("Note: Common class obfuscation technique was used in jar " + jarFile.getName());
         }
     }
 
