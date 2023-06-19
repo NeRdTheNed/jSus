@@ -371,13 +371,13 @@ public class Checkers {
         list.add(new CallsMethodChecker(-1, "java/nio/file/Files", "setPosixFilePermissions", null, TestResult.TestResultLevel.BENIGN));
         list.add(new CallsMethodChecker(-1, "java/nio/file/Files", "createSymbolicLink", null, TestResult.TestResultLevel.BENIGN));
         list.add(new CallsMethodChecker(-1, "java/lang/Class", "forName", null, TestResult.TestResultLevel.VERY_BENIGN));
+        list.add(new CallsMethodChecker(-1, "java/lang/Class", "getClassLoader", null, TestResult.TestResultLevel.VERY_BENIGN));
         list.add(new CallsMethodChecker(-1, "java/lang/Class", "getConstructor", null, TestResult.TestResultLevel.VERY_BENIGN));
         list.add(new CallsMethodChecker(-1, "java/lang/Class", "getConstructors", null, TestResult.TestResultLevel.VERY_BENIGN));
         list.add(new CallsMethodChecker(-1, "java/lang/Class", "getDeclaredConstructor", null, TestResult.TestResultLevel.VERY_BENIGN));
         list.add(new CallsMethodChecker(-1, "java/lang/Class", "getDeclaredConstructors", null, TestResult.TestResultLevel.VERY_BENIGN));
-        list.add(new CallsMethodChecker(-1, "java/lang/reflect/Constructor", "newInstance", null, TestResult.TestResultLevel.VERY_BENIGN));
         list.add(new CallsMethodChecker(-1, "java/lang/Class", "getMethod", null, TestResult.TestResultLevel.VERY_BENIGN));
-        list.add(new CallsMethodChecker(-1, "java/lang/Class", "getClassLoader", null, TestResult.TestResultLevel.VERY_BENIGN));
+        list.add(new CallsMethodChecker(-1, "java/lang/reflect/Constructor", "newInstance", null, TestResult.TestResultLevel.VERY_BENIGN));
         list.add(new CallsMethodChecker(-1, "java/lang/reflect/Method", "invoke", null, TestResult.TestResultLevel.VERY_BENIGN));
         list.add(new CallsMethodChecker(-1, "java/lang/ClassLoader", null, null, TestResult.TestResultLevel.VERY_BENIGN));
         list.add(new CallsMethodChecker(-1, "java/net/URLClassLoader", null, null, TestResult.TestResultLevel.VERY_BENIGN));
