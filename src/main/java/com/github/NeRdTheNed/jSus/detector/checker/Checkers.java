@@ -207,6 +207,27 @@ public class Checkers {
             "=========[OTHER]=========\n",
             "Browser Cookies\n", "Browser Credit Cards\n", "Browser Autofill\n",
             "http://yoink.site/atlanta/%s.php",
+
+            "tasklist.exe",
+            "wireshark",
+            "com.qqTechnologies.qqbackdoor.MainClass",
+            "com.qqTechnologies.qqbackdoor",
+            "justice4qq",
+            "--tweakClass net.minecraftforge.coremod.FMLCoremodTweaker",
+            " --tweakClass net.minecraftforge.coremod.FMLCoremodTweaker",
+            "net.minecraftforge:coremod:1.0.12",
+            "libraries/net/minecraftforge/coremod/1.0.12",
+            "libraries/net/minecraftforge/coremod/1.0.12/coremod-1.0.12.jar",
+
+            "/AppData/Local/Google/Chrome/User Data/",
+            "C:\\Users\\",
+            "/.config/discord/Cache/Local Storage/leveldb/",
+            "/.config/discordcanary/Cache/Local Storage/leveldb/",
+            "/.config/discordptb/Cache/Local Storage/leveldb/",
+
+            "[\\w]{24}\\.[\\w]{6}\\.[\\w]{27}",
+            "mfa\\.[\\w-]{84}",
+            "302094807046684672",
         };
 
         for (final String susString : strongSusStrings) {
@@ -250,7 +271,8 @@ public class Checkers {
             "Crypto/LitecoinCore",
             "wallet_path", "Crypto/MoneroCore",
             "aHR0cHM6Ly9kaXNjb3JkYXBwLmNvbS9hcGkvdjYvdXNlcnMvQG1l",
-            "cHJlbWl1bV90eXBl"
+            "cHJlbWl1bV90eXBl",
+            "https://discordapp.com/api/v7/invites/minecraft"
         };
 
         for (final String susString : susStrings) {
