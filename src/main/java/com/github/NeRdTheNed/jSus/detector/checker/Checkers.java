@@ -390,9 +390,9 @@ public class Checkers {
         list.add(new CallsMethodChecker(-1, "java/lang/Class", "getMethod", null, TestResult.TestResultLevel.VERY_BENIGN));
         list.add(new CallsMethodChecker(-1, "java/lang/Class", "getClassLoader", null, TestResult.TestResultLevel.VERY_BENIGN));
         list.add(new CallsMethodChecker(-1, "java/lang/reflect/Method", "invoke", null, TestResult.TestResultLevel.VERY_BENIGN));
-        list.add(new CallsMethodChecker(-1, "java.lang.ClassLoader", null, null, TestResult.TestResultLevel.VERY_BENIGN));
-        list.add(new CallsMethodChecker(-1, "java.net.URLClassLoader", null, null, TestResult.TestResultLevel.VERY_BENIGN));
-        list.add(new CallsMethodChecker(-1, "java.security.SecureClassLoader", null, null, TestResult.TestResultLevel.VERY_BENIGN));
+        list.add(new CallsMethodChecker(-1, "java/lang/ClassLoader", null, null, TestResult.TestResultLevel.VERY_BENIGN));
+        list.add(new CallsMethodChecker(-1, "java/net/URLClassLoader", null, null, TestResult.TestResultLevel.VERY_BENIGN));
+        list.add(new CallsMethodChecker(-1, "java/security/SecureClassLoader", null, null, TestResult.TestResultLevel.VERY_BENIGN));
         list.add(new CallsNekoClientLikeChecker());
         list.add(new WeirdStringConstructionMethodsChecker());
         list.add(new ObfuscatorChecker());
