@@ -3,11 +3,12 @@ package com.github.NeRdTheNed.jSus.detector.checker;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
+
+import com.github.NeRdTheNed.jSus.util.Util;
 
 public class CallsMethodChecker implements IChecker {
 
@@ -23,11 +24,11 @@ public class CallsMethodChecker implements IChecker {
     private final TestResult.TestResultLevel result;
 
     private final boolean compareOpcodeMatchWilcard(int toComp) {
-        if ((compareOpcode <= Opcodes.INVOKEINTERFACE) && (compareOpcode >= Opcodes.INVOKEVIRTUAL)) {
+        if (Util.isOpcodeMethodInvoke(compareOpcode)) {
             return compareOpcode == toComp;
         }
 
-        return ((toComp <= Opcodes.INVOKEINTERFACE) && (toComp >= Opcodes.INVOKEVIRTUAL));
+        return Util.isOpcodeMethodInvoke(toComp);
     }
 
     public CallsMethodChecker(int compareOpcode, String compareMethodOwner, String compareMethodName, String compareMethodDesc, TestResult.TestResultLevel result) {

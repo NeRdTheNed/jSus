@@ -14,6 +14,7 @@ import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
 import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.util.Printer;
 
@@ -123,5 +124,9 @@ public class Util {
 
     public static String opcodeName(int opcode) {
         return ((opcode >= 0) && (opcode < Printer.OPCODES.length)) ? Printer.OPCODES[opcode] : Integer.toString(opcode);
+    }
+
+    public static boolean isOpcodeMethodInvoke(int opcode) {
+        return ((opcode <= Opcodes.INVOKEINTERFACE) && (opcode >= Opcodes.INVOKEVIRTUAL));
     }
 }
