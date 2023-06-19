@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.objectweb.asm.Opcodes;
-
 
 public class Checkers {
 
@@ -344,10 +342,27 @@ public class Checkers {
         list.add(susTest);
     }
 
+    private static void addGregChecker(List<IChecker> list) {
+        final HashMap<String, TestResult.TestResultLevel> susMap = new HashMap<>();
+        susMap.put("https://kryptongta.com/images/kryptonlogo.png", TestResult.TestResultLevel.BENIGN);
+        susMap.put("https://kryptongta.com/images/kryptonlogodark.png", TestResult.TestResultLevel.BENIGN);
+        susMap.put("https://kryptongta.com/images/kryptontitle2.png", TestResult.TestResultLevel.BENIGN);
+        susMap.put("https://kryptongta.com", TestResult.TestResultLevel.BENIGN);
+        susMap.put("https://kryptongta.com/images/kryptonlogowide.png", TestResult.TestResultLevel.BENIGN);
+        susMap.put("https://your.awesome/image.png", TestResult.TestResultLevel.BENIGN);
+        susMap.put("Java-DiscordWebhook-BY-Gelox_", TestResult.TestResultLevel.BENIGN);
+        susMap.put("Set content or add at least one EmbedObject", TestResult.TestResultLevel.BENIGN);
+        susMap.put("welp he fell for it easy money", TestResult.TestResultLevel.STRONG_SUS);
+        susMap.put("https://discord.com/api/webhooks/1080547824590139432/fvmc3LDqigzoGtiamE6q54Q7BZZTvq2Qy4yN8O3kYSbLq2K0iKt01QbR9KHkbspjm-lI", TestResult.TestResultLevel.VIRUS);
+        final StringChecker susTest = new StringChecker("greg", susMap);
+        list.add(susTest);
+    }
+
     private static void addStringCheckers(List<IChecker> list) {
         addNekoClientChecker(list);
         addSkyrageChecker(list);
         addYoinkRatChecker(list);
+        addGregChecker(list);
     }
 
     private static List<IChecker> makeCheckerList() {
