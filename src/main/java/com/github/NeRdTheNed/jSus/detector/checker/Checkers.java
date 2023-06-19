@@ -306,8 +306,8 @@ public class Checkers {
         susMap.put("REPLACE HEREEEE", TestResult.TestResultLevel.SUS);
         susMap.put("LWphc", TestResult.TestResultLevel.SUS);
         susMap.put("-Dgnu=", TestResult.TestResultLevel.SUS);
-        susMap.put("/bin/java", TestResult.TestResultLevel.BENIGN);
-        susMap.put("\\bin\\javaw.exe", TestResult.TestResultLevel.BENIGN);
+        susMap.put("/bin/java", TestResult.TestResultLevel.SUS);
+        susMap.put("\\bin\\javaw.exe", TestResult.TestResultLevel.SUS);
         final StringChecker susTest = new StringChecker("Skyrage", susMap);
         list.add(susTest);
     }
@@ -319,7 +319,7 @@ public class Checkers {
         susMap.put("dos:system", TestResult.TestResultLevel.BENIGN);
         susMap.put("run.bat", TestResult.TestResultLevel.BENIGN);
         susMap.put("System32", TestResult.TestResultLevel.BENIGN);
-        susMap.put("reg.exe", TestResult.TestResultLevel.BENIGN);
+        susMap.put("reg.exe", TestResult.TestResultLevel.SUS);
         susMap.put("@echo off%nstart /B \"\" \"%s\" -jar \"%s\"", TestResult.TestResultLevel.SUS);
         susMap.put("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", TestResult.TestResultLevel.SUS);
         susMap.put("[Unit]%nDescription=%s%n%n[Service]%nType=simple%nRestart=always%nExecStart=\"%s\" -jar \"%s\"%nWorkingDirectory=%s%n%n[Install]%nWantedBy=multi-user.target%n", TestResult.TestResultLevel.SUS);
@@ -358,8 +358,8 @@ public class Checkers {
         final List<IChecker> list = new ArrayList<>();
         addStringCheckers(list);
         list.add(new CallsMethodChecker(-1, "java/lang/Runtime", "getRuntime", null, TestResult.TestResultLevel.VERY_BENIGN));
-        list.add(new CallsMethodChecker(-1, "java/lang/Runtime", "load", null, TestResult.TestResultLevel.VERY_BENIGN));
-        list.add(new CallsMethodChecker(-1, "java/lang/Runtime", "loadLibrary", null, TestResult.TestResultLevel.VERY_BENIGN));
+        list.add(new CallsMethodChecker(-1, "java/lang/Runtime", "load", null, TestResult.TestResultLevel.SUS));
+        list.add(new CallsMethodChecker(-1, "java/lang/Runtime", "loadLibrary", null, TestResult.TestResultLevel.SUS));
         list.add(new CallsMethodChecker(-1, "java/lang/Runtime", "exec", null, TestResult.TestResultLevel.SUS));
         // TODO handle org.apache.commons.codec.binary.Base16
         // TODO handle org.apache.commons.codec.binary.Base32
