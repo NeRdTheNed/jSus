@@ -8,6 +8,8 @@ import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
 
+import com.github.NeRdTheNed.jSus.util.Util;
+
 // I have accidentally created a Kotlin detector, send help
 public class UncommonJVMInstructionChecker implements IChecker {
 
@@ -25,16 +27,6 @@ public class UncommonJVMInstructionChecker implements IChecker {
         }
 
         return TestResult.TestResultLevel.VERY_BENIGN;
-    }
-
-    private static String opcodeName(int opcode) {
-        switch (opcode) {
-        case Opcodes.NOP:
-            return "no-op";
-
-        default:
-            return Integer.toString(opcode);
-        }
     }
 
     @Override
@@ -65,7 +57,7 @@ public class UncommonJVMInstructionChecker implements IChecker {
         }
 
         if (foundNoOps > 0) {
-            res.add(new TestResult(getLevelForNoOpAmount(foundNoOps), "Found uncommon JVM opcode " + opcodeName(Opcodes.NOP) + " at class " + clazz.name, foundNoOps));
+            res.add(new TestResult(getLevelForNoOpAmount(foundNoOps), "Found uncommon JVM opcode " + Util.opcodeName(Opcodes.NOP) + " at class " + clazz.name, foundNoOps));
         }
 
         return res;

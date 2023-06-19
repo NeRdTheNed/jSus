@@ -15,6 +15,7 @@ import java.util.jar.Manifest;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.util.Printer;
 
 public class Util {
     public static ClassNode streamToClass(InputStream stream, String name) throws IOException {
@@ -118,5 +119,9 @@ public class Util {
         final List<ClassNode> nodes = new ArrayList<>();
         findAddNodes(jarFile, nodes, verbose);
         return nodes;
+    }
+
+    public static String opcodeName(int opcode) {
+        return ((opcode >= 0) && (opcode < Printer.OPCODES.length)) ? Printer.OPCODES[opcode] : Integer.toString(opcode);
     }
 }
