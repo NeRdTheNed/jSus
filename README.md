@@ -1,7 +1,10 @@
 # jSus
 
 <p align="center">
-    <img src="assets/jSus.png" alt="A screenshot of suspicious behaviour jSus found from scanning a file" style='width: 100%; object-fit: contain'/>
+    <picture>
+        <source media="(prefers-color-scheme: dark)" srcset="assets/jSus-dark.png">
+        <img src="assets/jSus-light.png" alt="A screenshot of suspicious behaviour jSus found from scanning a file" style='width: 100%; object-fit: contain'/>
+    </picture>
 </p>
 
 WIP Java / Minecraft focused malware false positive generator.
