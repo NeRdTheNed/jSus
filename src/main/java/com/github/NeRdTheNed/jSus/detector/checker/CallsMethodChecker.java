@@ -16,6 +16,8 @@ public class CallsMethodChecker implements IChecker {
     private final String compareMethodName;
     private final String compareMethodDesc;
 
+    private final boolean fuzzyList;
+
     private final String name;
 
     private final TestResult.TestResultLevel result;
@@ -34,6 +36,7 @@ public class CallsMethodChecker implements IChecker {
         this.compareMethodName = compareMethodName;
         this.compareMethodDesc = compareMethodDesc;
         this.result = result;
+        fuzzyList = (compareMethodOwner == null) || (compareMethodName == null);
         name = "Calls " + (compareMethodOwner == null ? "*" : compareMethodOwner) + "." + (compareMethodName == null ? "*" : compareMethodName) + " checker";
     }
 
@@ -45,6 +48,7 @@ public class CallsMethodChecker implements IChecker {
     @Override
     public List<TestResult> testClass(ClassNode clazz) {
         final List<TestResult> res = new ArrayList<>();
+        int foundNonFuzzy = 0;
 
         for (final MethodNode methodNode : clazz.methods) {
             for (final AbstractInsnNode ins : methodNode.instructions) {
@@ -59,10 +63,18 @@ public class CallsMethodChecker implements IChecker {
                     if (((compareMethodName == null) || compareMethodName.equals(methodName)) &&
                             ((compareMethodDesc == null) || compareMethodDesc.equals(methodDesc)) &&
                             ((compareMethodOwner == null) || compareMethodOwner.equals(methodOwner))) {
-                        res.add(new TestResult(result, "Call to method " + methodOwner + "." + methodName + " found at class " + clazz.name));
+                        if (fuzzyList) {
+                            res.add(new TestResult(result, "Call to method " + methodOwner + "." + methodName + " found at class " + clazz.name, 1));
+                        } else {
+                            foundNonFuzzy++;
+                        }
                     }
                 }
             }
+        }
+
+        if (foundNonFuzzy > 0) {
+            res.add(new TestResult(result, "Call to method " + compareMethodOwner + "." + compareMethodName + " found at class " + clazz.name, foundNonFuzzy));
         }
 
         return res;

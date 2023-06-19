@@ -1,6 +1,7 @@
 package com.github.NeRdTheNed.jSus.detector.checker;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,17 +20,18 @@ public class StringChecker implements IChecker {
         this.susMap = susMap;
     }
 
-    private void testString(List<TestResult> res, String toCheck, ClassNode clazz) {
+    private void testString(Map<String, Integer> foundStrings, String toCheck) {
         final TestResult.TestResultLevel testResult = susMap.get(toCheck);
 
         if (testResult != null) {
-            res.add(new TestResult(testResult, "String " + toCheck + " found at class " + clazz.name));
+            foundStrings.merge(toCheck, 1, Integer::sum);
         }
     }
 
     @Override
     public List<TestResult> testClass(ClassNode clazz) {
         final List<TestResult> res = new ArrayList<>();
+        final Map<String, Integer> foundStrings = new HashMap<>();
 
         for (final MethodNode methodNode : clazz.methods) {
             for (final AbstractInsnNode ins : methodNode.instructions) {
@@ -40,7 +42,7 @@ public class StringChecker implements IChecker {
 
                     if (ldc.cst instanceof String) {
                         final String toCheck = (String) ldc.cst;
-                        testString(res, toCheck, clazz);
+                        testString(foundStrings, toCheck);
                     }
                 } /* else if (opcode == Opcodes.INVOKESPECIAL) {
 
@@ -56,6 +58,7 @@ public class StringChecker implements IChecker {
             }
         }
 
+        foundStrings.forEach((k, v) -> res.add(new TestResult(susMap.get(k), "String " + k + " found at class " + clazz.name, v)));
         return res;
     }
 

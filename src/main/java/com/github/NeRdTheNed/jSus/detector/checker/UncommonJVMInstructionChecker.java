@@ -65,7 +65,7 @@ public class UncommonJVMInstructionChecker implements IChecker {
         }
 
         if (foundNoOps > 0) {
-            res.add(new TestResult(getLevelForNoOpAmount(foundNoOps), "Found " + foundNoOps + " uncommon JVM opcode(s) " + opcodeName(Opcodes.NOP) + " at class " + clazz.name));
+            res.add(new TestResult(getLevelForNoOpAmount(foundNoOps), "Found uncommon JVM opcode " + opcodeName(Opcodes.NOP) + " at class " + clazz.name, foundNoOps));
         }
 
         return res;

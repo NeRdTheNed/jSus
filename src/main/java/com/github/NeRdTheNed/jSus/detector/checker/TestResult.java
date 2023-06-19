@@ -17,10 +17,12 @@ public class TestResult {
 
     public final TestResultLevel result;
     public final String reason;
+    public final int amount;
 
-    public TestResult(TestResultLevel result, String reason) {
+    public TestResult(TestResultLevel result, String reason, int amount) {
         this.result = result;
         this.reason = reason;
+        this.amount = amount;
     }
 
 }

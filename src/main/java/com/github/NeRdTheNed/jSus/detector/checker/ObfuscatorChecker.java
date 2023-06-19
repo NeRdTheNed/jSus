@@ -100,11 +100,11 @@ public class ObfuscatorChecker implements IChecker {
         final String processedClassName = className.substring(className.lastIndexOf("/") + 1);
 
         if (processedClassName.isEmpty() || !Character.isJavaIdentifierStart(processedClassName.charAt(0))) {
-            res.add(new TestResult(TestResult.TestResultLevel.BENIGN, "Found common obfuscated classname technique at class " + className));
+            res.add(new TestResult(TestResult.TestResultLevel.BENIGN, "Found common obfuscated classname technique at class " + className, 1));
         } else if ((processedClassName.length() == 1) || commonObfNamesListCaseSensitive.contains(processedClassName) || commonObfNamesList.contains(processedClassName.toLowerCase())) {
-            res.add(new TestResult(TestResult.TestResultLevel.BENIGN, "Found common obfuscated classname " + className));
+            res.add(new TestResult(TestResult.TestResultLevel.BENIGN, "Found common obfuscated classname " + className, 1));
         } else if (processedClassName.length() == 2) {
-            res.add(new TestResult(TestResult.TestResultLevel.VERY_BENIGN, "Class name may be obfuscated " + className));
+            res.add(new TestResult(TestResult.TestResultLevel.VERY_BENIGN, "Class name may be obfuscated " + className, 1));
         }
 
         return res;

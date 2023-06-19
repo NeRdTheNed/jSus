@@ -44,7 +44,7 @@ public class CallsNekoClientLikeChecker implements IChecker {
                                 final BigInteger part2 = new BigInteger(methodName.substring(17, 33), 16);
                                 new UUID(part1.longValue(), part2.longValue());
                                 // Valid UUID: likely NekoClient
-                                res.add(new TestResult(TestResult.TestResultLevel.STRONG_SUS, "Call to method " + methodOwner + "." + methodName + " found at class " + clazz.name));
+                                res.add(new TestResult(TestResult.TestResultLevel.STRONG_SUS, "Call to method " + methodOwner + "." + methodName + " found at class " + clazz.name, 1));
                             } catch (final Exception e) {
                                 // Ignored
                             }

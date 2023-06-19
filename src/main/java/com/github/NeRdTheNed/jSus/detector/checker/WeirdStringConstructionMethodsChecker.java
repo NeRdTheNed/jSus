@@ -21,6 +21,7 @@ public class WeirdStringConstructionMethodsChecker implements IChecker {
     @Override
     public List<TestResult> testClass(ClassNode clazz) {
         final List<TestResult> res = new ArrayList<>();
+        int foundFixedByteArrayConstructions = 0;
 
         for (final MethodNode methodNode : clazz.methods) {
             for (final AbstractInsnNode ins : methodNode.instructions) {
@@ -38,7 +39,7 @@ public class WeirdStringConstructionMethodsChecker implements IChecker {
                         final int previousOpcode = prev.getOpcode();
 
                         if (previousOpcode == Opcodes.BASTORE) {
-                            res.add(new TestResult(TestResult.TestResultLevel.SUS, "Constructing String from fixed byte array at class " + clazz.name));
+                            foundFixedByteArrayConstructions++;
                         } else if (previousOpcode == Opcodes.INVOKEVIRTUAL) {
                             // TODO Handle previous operations like concat
                             final MethodInsnNode prevMethodInsNode = (MethodInsnNode) prev;
@@ -59,7 +60,7 @@ public class WeirdStringConstructionMethodsChecker implements IChecker {
 
                                     if (ldc.cst instanceof String) {
                                         final String base64 = (String) ldc.cst;
-                                        res.add(new TestResult(TestResult.TestResultLevel.SUS, "Constructing String from fixed Base64 " + base64 + " at class " + clazz.name));
+                                        res.add(new TestResult(TestResult.TestResultLevel.SUS, "Constructing String from fixed Base64 " + base64 + " at class " + clazz.name, 1));
                                     }
                                 }
                             }
@@ -67,6 +68,10 @@ public class WeirdStringConstructionMethodsChecker implements IChecker {
                     }
                 }
             }
+        }
+
+        if (foundFixedByteArrayConstructions > 0) {
+            res.add(new TestResult(TestResult.TestResultLevel.SUS, "Constructing String from fixed byte array at class " + clazz.name, foundFixedByteArrayConstructions));
         }
 
         return res;

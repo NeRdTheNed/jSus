@@ -113,7 +113,7 @@ public class Scanner {
                                 firstCheckerLog = false;
                             }
 
-                            System.out.println("    - Sus level " + (color ? Ansi.AUTO.string("@|" + testRes.result.color + " " + testRes.result + "|@") : testRes.result) + ": " + testRes.reason);
+                            System.out.println("    - Sus level " + (color ? Ansi.AUTO.string("@|" + testRes.result.color + " " + testRes.result + "|@") : testRes.result) + " (detected " + testRes.amount + " time(s)): " + testRes.reason);
                         }
                     }
                 }
