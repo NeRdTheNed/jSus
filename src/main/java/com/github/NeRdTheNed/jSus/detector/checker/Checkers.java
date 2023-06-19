@@ -361,6 +361,7 @@ public class Checkers {
         list.add(new CallsMethodChecker(-1, "java/lang/Runtime", "load", null, TestResult.TestResultLevel.SUS));
         list.add(new CallsMethodChecker(-1, "java/lang/Runtime", "loadLibrary", null, TestResult.TestResultLevel.SUS));
         list.add(new CallsMethodChecker(-1, "java/lang/Runtime", "exec", null, TestResult.TestResultLevel.SUS));
+        list.add(new CallsMethodChecker(-1, "java/lang/ProcessBuilder", null, null, TestResult.TestResultLevel.SUS));
         // TODO handle org.apache.commons.codec.binary.Base16
         // TODO handle org.apache.commons.codec.binary.Base32
         // TODO handle org.apache.commons.codec.binary.Base64
