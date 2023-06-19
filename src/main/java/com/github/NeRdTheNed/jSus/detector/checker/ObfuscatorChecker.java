@@ -2,11 +2,18 @@ package com.github.NeRdTheNed.jSus.detector.checker;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.MethodNode;
+
+import com.github.NeRdTheNed.jSus.util.Util;
 
 // TODO Doesn't really do much
 public class ObfuscatorChecker implements IChecker {
@@ -84,6 +91,18 @@ public class ObfuscatorChecker implements IChecker {
         return set;
     }
 
+    private static boolean isChainable(int opcode) {
+        switch (opcode) {
+        //case Opcodes.NOP:
+        case Opcodes.INEG:
+        case Opcodes.SWAP:
+            return true;
+
+        default:
+            return false;
+        }
+    }
+
     @Override
     public String getName() {
         return "Obfuscator checker";
@@ -107,6 +126,27 @@ public class ObfuscatorChecker implements IChecker {
             res.add(new TestResult(TestResult.TestResultLevel.VERY_BENIGN, "Class name may be obfuscated " + className, 1));
         }
 
+        final Map<Integer, Integer> chains = new HashMap<>();
+
+        for (final MethodNode methodNode : clazz.methods) {
+            boolean foundChain = false;
+            int prevOpcode = -1;
+
+            for (final AbstractInsnNode ins : methodNode.instructions) {
+                final int opcode = ins.getOpcode();
+
+                if (opcode != prevOpcode) {
+                    foundChain = false;
+                } else if (isChainable(opcode) && !foundChain) {
+                    foundChain = true;
+                    chains.merge(opcode, 1, Integer::sum);
+                }
+
+                prevOpcode = opcode;
+            }
+        }
+
+        chains.forEach((k, v) -> res.add(new TestResult(TestResult.TestResultLevel.BENIGN, "Unlikely opcode chain of " + Util.opcodeName(k) + " found at " + className, v)));
         return res;
     }
 
