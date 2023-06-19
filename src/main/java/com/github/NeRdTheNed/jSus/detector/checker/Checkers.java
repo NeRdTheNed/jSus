@@ -377,6 +377,7 @@ public class Checkers {
         list.add(new CallsMethodChecker(-1, "java/lang/Class", "getDeclaredConstructor", null, TestResult.TestResultLevel.VERY_BENIGN));
         list.add(new CallsMethodChecker(-1, "java/lang/Class", "getDeclaredConstructors", null, TestResult.TestResultLevel.VERY_BENIGN));
         list.add(new CallsMethodChecker(-1, "java/lang/Class", "getMethod", null, TestResult.TestResultLevel.VERY_BENIGN));
+        list.add(new CallsMethodChecker(-1, "java/lang/Class", "newInstance", null, TestResult.TestResultLevel.VERY_BENIGN));
         list.add(new CallsMethodChecker(-1, "java/lang/reflect/Constructor", "newInstance", null, TestResult.TestResultLevel.VERY_BENIGN));
         list.add(new CallsMethodChecker(-1, "java/lang/reflect/Method", "invoke", null, TestResult.TestResultLevel.VERY_BENIGN));
         list.add(new CallsMethodChecker(-1, "java/lang/ClassLoader", null, null, TestResult.TestResultLevel.VERY_BENIGN));
