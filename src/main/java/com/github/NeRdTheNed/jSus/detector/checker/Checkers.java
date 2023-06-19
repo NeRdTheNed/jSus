@@ -383,7 +383,7 @@ public class Checkers {
         list.add(new CallsMethodChecker(-1, "java/lang/reflect/Method", "invoke", null, TestResult.TestResultLevel.VERY_BENIGN));
         list.add(new CallsMethodChecker(-1, "java/lang/reflect/Field", "set", null, TestResult.TestResultLevel.VERY_BENIGN));
         list.add(new CallsMethodChecker(-1, "java/lang/reflect/Field", "setAccessible", null, TestResult.TestResultLevel.VERY_BENIGN));
-        list.add(new CallsMethodChecker(-1, "java/lang/invoke/MethodType", null, null, TestResult.TestResultLevel.VERY_BENIGN));
+        //list.add(new CallsMethodChecker(-1, "java/lang/invoke/MethodType", null, null, TestResult.TestResultLevel.VERY_BENIGN));
         list.add(new CallsMethodChecker(-1, "java/lang/ClassLoader", null, null, TestResult.TestResultLevel.VERY_BENIGN));
         list.add(new CallsMethodChecker(-1, "java/net/URLClassLoader", null, null, TestResult.TestResultLevel.VERY_BENIGN));
         list.add(new CallsMethodChecker(-1, "java/security/SecureClassLoader", null, null, TestResult.TestResultLevel.VERY_BENIGN));
