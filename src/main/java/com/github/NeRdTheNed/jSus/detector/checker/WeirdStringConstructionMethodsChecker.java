@@ -60,7 +60,7 @@ public class WeirdStringConstructionMethodsChecker implements IChecker {
 
                                     if (ldc.cst instanceof String) {
                                         final String base64 = (String) ldc.cst;
-                                        res.add(new TestResult(TestResult.TestResultLevel.SUS, "Constructing String from fixed Base64 " + base64 + " at class " + clazz.name, 1));
+                                        res.add(new TestResult(TestResult.TestResultLevel.STRONG_SUS, "Constructing String from fixed Base64 " + base64 + " at class " + clazz.name, 1));
                                     }
                                 }
                             }
@@ -71,7 +71,7 @@ public class WeirdStringConstructionMethodsChecker implements IChecker {
         }
 
         if (foundFixedByteArrayConstructions > 0) {
-            res.add(new TestResult(TestResult.TestResultLevel.SUS, "Constructing String from fixed byte array at class " + clazz.name, foundFixedByteArrayConstructions));
+            res.add(new TestResult(TestResult.TestResultLevel.STRONG_SUS, "Constructing String from fixed byte array at class " + clazz.name, foundFixedByteArrayConstructions));
         }
 
         return res;
