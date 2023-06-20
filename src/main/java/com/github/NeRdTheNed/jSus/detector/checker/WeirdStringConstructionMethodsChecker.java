@@ -39,34 +39,28 @@ public class WeirdStringConstructionMethodsChecker implements IChecker {
                         // TODO Handle more scenarios
                         final AbstractInsnNode prev = ins.getPrevious();
 
-                        if (prev == null) {
-                            continue;
-                        }
+                        if (prev != null) {
+                            final int previousOpcode = prev.getOpcode();
 
-                        final int previousOpcode = prev.getOpcode();
+                            if (previousOpcode == Opcodes.BASTORE) {
+                                foundFixedByteArrayConstructions++;
+                            } else if (previousOpcode == Opcodes.INVOKEVIRTUAL) {
+                                // TODO Handle previous operations like concat
+                                final MethodInsnNode prevMethodInsNode = (MethodInsnNode) prev;
+                                final String prevMethodName = prevMethodInsNode.name;
+                                final String prevMethodOwner = prevMethodInsNode.owner;
+                                final String prevMethodDesc = prevMethodInsNode.desc;
 
-                        if (previousOpcode == Opcodes.BASTORE) {
-                            foundFixedByteArrayConstructions++;
-                        } else if (previousOpcode == Opcodes.INVOKEVIRTUAL) {
-                            // TODO Handle previous operations like concat
-                            final MethodInsnNode prevMethodInsNode = (MethodInsnNode) prev;
-                            final String prevMethodName = prevMethodInsNode.name;
-                            final String prevMethodOwner = prevMethodInsNode.owner;
-                            final String prevMethodDesc = prevMethodInsNode.desc;
+                                if (Util.isCommonBase64DecodeMethod(previousOpcode, prevMethodOwner, prevMethodName, prevMethodDesc)) {
+                                    final AbstractInsnNode prev2 = prev.getPrevious();
 
-                            if (Util.isCommonBase64DecodeMethod(previousOpcode, prevMethodOwner, prevMethodName, prevMethodDesc)) {
-                                final AbstractInsnNode prev2 = prev.getPrevious();
+                                    if ((prev2 != null) && (prev2.getOpcode() == Opcodes.LDC)) {
+                                        final LdcInsnNode ldc = (LdcInsnNode) prev2;
 
-                                if (prev2 == null) {
-                                    continue;
-                                }
-
-                                if (prev2.getOpcode() == Opcodes.LDC) {
-                                    final LdcInsnNode ldc = (LdcInsnNode) prev2;
-
-                                    if (ldc.cst instanceof String) {
-                                        final String base64 = (String) ldc.cst;
-                                        res.add(new TestResult(TestResult.TestResultLevel.STRONG_SUS, "Constructing String from fixed Base64 " + base64 + " at class " + clazz.name, 1));
+                                        if (ldc.cst instanceof String) {
+                                            final String base64 = (String) ldc.cst;
+                                            res.add(new TestResult(TestResult.TestResultLevel.STRONG_SUS, "Constructing String from fixed Base64 " + base64 + " at class " + clazz.name, 1));
+                                        }
                                     }
                                 }
                             }
