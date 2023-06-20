@@ -224,6 +224,12 @@ public class Util {
         }
     }
 
+    // Returns the computed value of a String constant at the earliest point possible
+    // (e.g. if two Strings are concatenated, at the start of the concatenation,
+    // if a String is constructed from a byte array, at the point where NEW java/lang/String is called).
+    // This is to support figuring out where a previous stack value is (for String concatenations ect).
+    // If the String is null, it was unable to be computed at the given point,
+    // either because it can't be determined, or my code doesn't support figuring it out yet.
     private static Pair<AbstractInsnNode, String> tryComputeString(AbstractInsnNode stringOnStack) {
         if (stringOnStack == null) {
             return new Pair<>(stringOnStack, null);
