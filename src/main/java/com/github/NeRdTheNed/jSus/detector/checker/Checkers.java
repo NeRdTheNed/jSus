@@ -315,8 +315,10 @@ public class Checkers {
             "KguQvFBPWsHhudivS2ccfrWv1IgzKb9r5vfjM4Vlj8A=",
             "first.throwable.in",
             "t23e7v6uz8idz87ehugwq.skyrage.de",
-            "kernel-certs-debug4917.log",
             "http://files.skyrage.de/mvd",
+            "aHR0cDovL2ZpbGVzLnNreXJhZ2UuZGUvdXBkYXRl",
+            "aHR0cDovL2ZpbGVzLnNreXJhZ2UuZGUvdXBkYXR",
+            "http://files.skyrage.de/update",
         };
 
         for (final String virusString : virusStrings) {
