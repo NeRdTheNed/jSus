@@ -10,6 +10,8 @@ import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
+import com.github.NeRdTheNed.jSus.util.Util;
+
 public class WeirdStringConstructionMethodsChecker implements IChecker {
 
     @Override
@@ -52,12 +54,7 @@ public class WeirdStringConstructionMethodsChecker implements IChecker {
                             final String prevMethodOwner = prevMethodInsNode.owner;
                             final String prevMethodDesc = prevMethodInsNode.desc;
 
-                            // TODO handle org.apache.commons.codec.binary.Base16
-                            // TODO handle org.apache.commons.codec.binary.Base32
-                            // TODO handle org.apache.commons.codec.binary.Base64
-                            // TODO handle org.apache.commons.codec.binary.Hex
-
-                            if ("java/util/Base64$Decoder".equals(prevMethodOwner) && "decode".equals(prevMethodName) && "(Ljava/lang/String;)[B".equals(prevMethodDesc)) {
+                            if (Util.isCommonBase64DecodeMethod(previousOpcode, prevMethodOwner, prevMethodName, prevMethodDesc)) {
                                 final AbstractInsnNode prev2 = prev.getPrevious();
 
                                 if (prev2.getOpcode() == Opcodes.LDC) {
