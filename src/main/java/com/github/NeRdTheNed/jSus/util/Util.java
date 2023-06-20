@@ -18,6 +18,7 @@ import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.LdcInsnNode;
+import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.util.Printer;
 
 public class Util {
@@ -148,19 +149,58 @@ public class Util {
         return false;
     }
 
-    public static String tryComputeConstantString(AbstractInsnNode stringOnStack) {
+    private static class Pair<K, V> {
+        public final K k;
+        public final V v;
+        public Pair(K k, V v) {
+            this.k = k;
+            this.v = v;
+        }
+    }
+
+    private static Pair<AbstractInsnNode, String> tryComputeString(AbstractInsnNode stringOnStack) {
         if (stringOnStack == null) {
-            return null;
+            return new Pair<>(stringOnStack, null);
         }
 
-        if (stringOnStack.getOpcode() == Opcodes.LDC) {
+        final int opcode = stringOnStack.getOpcode();
+
+        if (opcode == Opcodes.LDC) {
             final LdcInsnNode ldc = (LdcInsnNode) stringOnStack;
 
             if (ldc.cst instanceof String) {
-                return (String) ldc.cst;
+                return new Pair<>(stringOnStack, (String) ldc.cst);
             }
         }
 
-        return null;
+        // TODO Real analysis
+        if (isOpcodeMethodInvoke(opcode)) {
+            final MethodInsnNode methodInsNode = (MethodInsnNode) stringOnStack;
+            final String methodOwner = methodInsNode.owner;
+            final String methodName = methodInsNode.name;
+            final String methodDesc = methodInsNode.desc;
+
+            // TODO Support more methods
+            if ((opcode == Opcodes.INVOKEVIRTUAL)
+                    && "java/lang/String".equals(methodOwner)
+                    && "concat".equals(methodName)
+                    && "(Ljava/lang/String;)Ljava/lang/String;".equals(methodDesc)) {
+                final Pair<AbstractInsnNode, String> firstPair = tryComputeString(stringOnStack.getPrevious());
+
+                if ((firstPair.v != null) && (firstPair.k != null)) {
+                    final Pair<AbstractInsnNode, String> secondPair = tryComputeString(firstPair.k.getPrevious());
+
+                    if (secondPair.v != null) {
+                        return new Pair<>(secondPair.k, secondPair.v + firstPair.v);
+                    }
+                }
+            }
+        }
+
+        return new Pair<>(stringOnStack, null);
+    }
+
+    public static String tryComputeConstantString(AbstractInsnNode stringOnStack) {
+        return tryComputeString(stringOnStack).v;
     }
 }
