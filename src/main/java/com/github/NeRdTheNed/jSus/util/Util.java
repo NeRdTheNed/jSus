@@ -31,7 +31,7 @@ public class Util {
         final ClassNode node = new ClassNode();
 
         try {
-            reader.accept(node, 0);
+            reader.accept(node, ClassReader.SKIP_DEBUG);
         } catch (final Exception e) {
             System.err.println("Malformed class " + name);
             e.printStackTrace();
