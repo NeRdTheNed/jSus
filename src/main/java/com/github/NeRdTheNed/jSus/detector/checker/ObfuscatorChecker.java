@@ -127,10 +127,11 @@ public class ObfuscatorChecker implements IChecker {
         }
 
         final Map<Integer, Integer> chains = new HashMap<>();
+        int allatoriDemoCount = 0;
 
         for (final MethodNode methodNode : clazz.methods) {
             if (methodNode.name.contains("ALLATORIxDEMO")) {
-                res.add(new TestResult(TestResult.TestResultLevel.BENIGN, "Allatori demo detected at class " + className, 1));
+                allatoriDemoCount++;
             }
 
             boolean foundChain = false;
@@ -148,6 +149,10 @@ public class ObfuscatorChecker implements IChecker {
 
                 prevOpcode = opcode;
             }
+        }
+
+        if (allatoriDemoCount > 0) {
+            res.add(new TestResult(TestResult.TestResultLevel.BENIGN, "Allatori demo detected at class " + className, allatoriDemoCount));
         }
 
         chains.forEach((k, v) -> res.add(new TestResult(TestResult.TestResultLevel.BENIGN, "Unlikely opcode chain of " + Util.opcodeName(k) + " found at " + className, v)));
