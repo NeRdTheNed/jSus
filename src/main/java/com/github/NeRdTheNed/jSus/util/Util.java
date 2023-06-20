@@ -139,6 +139,10 @@ public class Util {
             return true;
         }
 
+        if ("javax/xml/bind/DatatypeConverter".equals(owner) && "parseBase64Binary".equals(name) && "(Ljava/lang/String;)[B".equals(signature)) {
+            return true;
+        }
+
         return false;
     }
 }
