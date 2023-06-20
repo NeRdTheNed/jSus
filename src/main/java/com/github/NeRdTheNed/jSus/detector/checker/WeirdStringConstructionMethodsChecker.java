@@ -57,6 +57,10 @@ public class WeirdStringConstructionMethodsChecker implements IChecker {
                             if (Util.isCommonBase64DecodeMethod(previousOpcode, prevMethodOwner, prevMethodName, prevMethodDesc)) {
                                 final AbstractInsnNode prev2 = prev.getPrevious();
 
+                                if (prev2 == null) {
+                                    continue;
+                                }
+
                                 if (prev2.getOpcode() == Opcodes.LDC) {
                                     final LdcInsnNode ldc = (LdcInsnNode) prev2;
 
