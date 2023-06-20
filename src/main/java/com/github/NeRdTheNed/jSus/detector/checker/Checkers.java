@@ -412,7 +412,11 @@ public class Checkers {
         list.add(new CallsMethodChecker(-1, "java/security/SecureClassLoader", null, null, TestResult.TestResultLevel.VERY_BENIGN));
         list.add(new CallsMethodChecker(-1, null, "defineClass", null, TestResult.TestResultLevel.VERY_BENIGN));
         list.add(new CallsMethodChecker(-1, null, "getDeclaredField", null, TestResult.TestResultLevel.VERY_BENIGN));
+        //list.add(new CallsMethodChecker(-1, "java/lang/StackTraceElement", "getClassName", null, TestResult.TestResultLevel.VERY_BENIGN));
         //list.add(new CallsMethodChecker(-1, "java/lang/StackTraceElement", "getMethodName", null, TestResult.TestResultLevel.VERY_BENIGN));
+        //list.add(new CallsMethodChecker(-1, "java/lang/RuntimeException", "<init>", null, TestResult.TestResultLevel.VERY_BENIGN));
+        //list.add(new CallsMethodChecker(-1, "java/lang/RuntimeException", "getStackTrace", null, TestResult.TestResultLevel.VERY_BENIGN));
+        //list.add(new CallsMethodChecker(-1, "java/lang/Thread", "getStackTrace", null, TestResult.TestResultLevel.VERY_BENIGN));
         list.add(new CallsNekoClientLikeChecker());
         list.add(new WeirdStringConstructionMethodsChecker());
         list.add(new ObfuscatorChecker());
