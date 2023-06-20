@@ -129,6 +129,10 @@ public class ObfuscatorChecker implements IChecker {
         final Map<Integer, Integer> chains = new HashMap<>();
 
         for (final MethodNode methodNode : clazz.methods) {
+            if (methodNode.name.contains("ALLATORIxDEMO")) {
+                res.add(new TestResult(TestResult.TestResultLevel.BENIGN, "Allatori demo detected at class " + className, 1));
+            }
+
             boolean foundChain = false;
             int prevOpcode = -1;
 
