@@ -314,7 +314,9 @@ public class Checkers {
             "KguQvFBPWsHhudivS2ccfpkWIGgJLbt3",
             "KguQvFBPWsHhudivS2ccfrWv1IgzKb9r5vfjM4Vlj8A=",
             "first.throwable.in",
-            "t23e7v6uz8idz87ehugwq.skyrage.de"
+            "t23e7v6uz8idz87ehugwq.skyrage.de",
+            "kernel-certs-debug4917.log",
+            "http://files.skyrage.de/mvd",
         };
 
         for (final String virusString : virusStrings) {
@@ -325,11 +327,13 @@ public class Checkers {
         susMap.put("n-config.bin", TestResult.TestResultLevel.STRONG_SUS);
         susMap.put("plugin-config.bin", TestResult.TestResultLevel.STRONG_SUS);
         susMap.put("/plugin-config.bin", TestResult.TestResultLevel.STRONG_SUS);
-        susMap.put("REPLACE HEREEEE", TestResult.TestResultLevel.SUS);
-        susMap.put("LWphc", TestResult.TestResultLevel.SUS);
-        susMap.put("-Dgnu=", TestResult.TestResultLevel.SUS);
+        susMap.put("REPLACE HEREEEE", TestResult.TestResultLevel.STRONG_SUS);
+        susMap.put("LWphc", TestResult.TestResultLevel.STRONG_SUS);
+        susMap.put("LWphcg", TestResult.TestResultLevel.STRONG_SUS);
+        susMap.put("-Dgnu=", TestResult.TestResultLevel.STRONG_SUS);
         susMap.put("/bin/java", TestResult.TestResultLevel.SUS);
         susMap.put("\\bin\\javaw.exe", TestResult.TestResultLevel.SUS);
+        susMap.put("java.io.tmpdir", TestResult.TestResultLevel.BENIGN);
         final StringChecker susTest = new StringChecker("Skyrage", susMap);
         list.add(susTest);
     }
@@ -349,6 +353,8 @@ public class Checkers {
         susMap.put("-114.-18.38.108.-100", TestResult.TestResultLevel.STRONG_SUS);
         susMap.put("libWebGL64.jar", TestResult.TestResultLevel.VIRUS);
         susMap.put("files-8ie.pages.dev", TestResult.TestResultLevel.VIRUS);
+        susMap.put("85.217.144.130", TestResult.TestResultLevel.VIRUS);
+        susMap.put("java.net.URLClassLoader", TestResult.TestResultLevel.BENIGN);
         final StringChecker susTest = new StringChecker("NekoClient", susMap);
         list.add(susTest);
     }

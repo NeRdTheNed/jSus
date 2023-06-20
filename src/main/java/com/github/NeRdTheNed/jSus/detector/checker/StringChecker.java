@@ -11,6 +11,8 @@ import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
+import com.github.NeRdTheNed.jSus.util.Util;
+
 public class StringChecker implements IChecker {
     private final String name;
     private final Map<String, TestResult.TestResultLevel> susMap;
@@ -44,17 +46,13 @@ public class StringChecker implements IChecker {
                         final String toCheck = (String) ldc.cst;
                         testString(foundStrings, toCheck);
                     }
-                } /* else if (opcode == Opcodes.INVOKESPECIAL) {
+                } else {
+                    final String possibleString = Util.tryComputeConstantString(ins);
 
-                    final MethodInsnNode methodInsNode = (MethodInsnNode) ins;
-                    final String methodName = methodInsNode.name;
-                    final String methodOwner = methodInsNode.owner;
-                    final String methodDesc = methodInsNode.desc;
-
-                    if ("java/lang/String".equals(methodOwner) && "([B)V".equals(methodDesc) && "<init>".equals(methodName)) {
-                        // TODO
+                    if (possibleString != null) {
+                        testString(foundStrings, possibleString);
                     }
-                } */
+                }
             }
         }
 
