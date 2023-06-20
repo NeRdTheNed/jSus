@@ -272,7 +272,9 @@ public class Util {
                     && "java/lang/String".equals(methodOwner)
                     && "<init>".equals(methodName)
                     && "([B)V".equals(methodDesc)) {
-                // This is Not Good
+                // This matches the pattern that javac uses to construct Strings from code like
+                // new String(new byte[] { some, bytes, ect });
+                // The code is Not Good
                 final Map<Integer, Byte> indexToByte = new HashMap<>();
                 AbstractInsnNode storeNextByte = stringOnStack.getPrevious();
 
