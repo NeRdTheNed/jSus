@@ -376,9 +376,7 @@ public class Checkers {
         addGregChecker(list);
     }
 
-    private static List<IChecker> makeCheckerList() {
-        final List<IChecker> list = new ArrayList<>();
-        addStringCheckers(list);
+    private static void addMethodCheckers(List<IChecker> list) {
         list.add(new CallsMethodChecker(-1, "java/lang/Runtime", "getRuntime", null, TestResult.TestResultLevel.VERY_BENIGN));
         list.add(new CallsMethodChecker(-1, "java/lang/Runtime", "load", null, TestResult.TestResultLevel.SUS));
         list.add(new CallsMethodChecker(-1, "java/lang/Runtime", "loadLibrary", null, TestResult.TestResultLevel.SUS));
@@ -417,6 +415,12 @@ public class Checkers {
         //list.add(new CallsMethodChecker(-1, "java/lang/RuntimeException", "<init>", null, TestResult.TestResultLevel.VERY_BENIGN));
         //list.add(new CallsMethodChecker(-1, "java/lang/RuntimeException", "getStackTrace", null, TestResult.TestResultLevel.VERY_BENIGN));
         //list.add(new CallsMethodChecker(-1, "java/lang/Thread", "getStackTrace", null, TestResult.TestResultLevel.VERY_BENIGN));
+    }
+
+    private static List<IChecker> makeCheckerList() {
+        final List<IChecker> list = new ArrayList<>();
+        addStringCheckers(list);
+        addMethodCheckers(list);
         list.add(new CallsNekoClientLikeChecker());
         list.add(new WeirdStringConstructionMethodsChecker());
         list.add(new ObfuscatorChecker());
