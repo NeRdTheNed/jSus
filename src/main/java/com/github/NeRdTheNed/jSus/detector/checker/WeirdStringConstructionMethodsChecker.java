@@ -1,7 +1,6 @@
 package com.github.NeRdTheNed.jSus.detector.checker;
 
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 
 import org.objectweb.asm.Opcodes;
@@ -13,7 +12,6 @@ import org.objectweb.asm.tree.MethodNode;
 import com.github.NeRdTheNed.jSus.util.Util;
 
 public class WeirdStringConstructionMethodsChecker implements IChecker {
-    private static final Base64.Decoder decoder = Base64.getDecoder();
 
     @Override
     public String getName() {
@@ -63,7 +61,7 @@ public class WeirdStringConstructionMethodsChecker implements IChecker {
 
                                     if (possibleString != null) {
                                         try {
-                                            final String decoded = new String(decoder.decode(possibleString));
+                                            final String decoded = new String(Util.decoder.decode(possibleString));
                                             res.add(new TestResult(TestResult.TestResultLevel.STRONG_SUS, "Constructing String from fixed Base64 " + possibleString + " (decoded: " + decoded + ") at class " + clazz.name, 1));
                                         } catch (final IllegalArgumentException e) {
                                             res.add(new TestResult(TestResult.TestResultLevel.STRONG_SUS, "Constructing String from invalid (?) fixed Base64 " + possibleString + " at class " + clazz.name, 1));

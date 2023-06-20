@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +27,8 @@ import org.objectweb.asm.tree.TypeInsnNode;
 import org.objectweb.asm.util.Printer;
 
 public class Util {
+    public static final Base64.Decoder decoder = Base64.getDecoder();
+
     public static ClassNode streamToClass(InputStream stream, String name) throws IOException {
         final ClassReader reader = new ClassReader(stream);
         final ClassNode node = new ClassNode();
