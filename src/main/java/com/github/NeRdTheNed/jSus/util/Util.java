@@ -227,6 +227,119 @@ public class Util {
         }
     }
 
+    private static Pair<AbstractInsnNode, byte[]> tryComputeArray(AbstractInsnNode arrayOnStack) {
+        if (arrayOnStack == null) {
+            return new Pair<>(arrayOnStack, null);
+        }
+
+        final int opcode = arrayOnStack.getOpcode();
+
+        if (opcode == Opcodes.BASTORE) {
+            // This matches the pattern that javac uses to construct Strings from code like
+            // new String(new byte[] { some, bytes, ect });
+            // The code is Not Good
+            final Map<Integer, Byte> indexToByte = new HashMap<>();
+            AbstractInsnNode storeNextByte = arrayOnStack;
+
+            while ((storeNextByte != null) && (storeNextByte.getOpcode() == Opcodes.BASTORE)) {
+                final AbstractInsnNode valueIns = storeNextByte.getPrevious();
+
+                if (valueIns == null) {
+                    break;
+                }
+
+                final Number value = getValueOrNull(valueIns);
+
+                if (value == null) {
+                    break;
+                }
+
+                final AbstractInsnNode indexIns = valueIns.getPrevious();
+
+                if (indexIns == null) {
+                    break;
+                }
+
+                final Number index = getValueOrNull(indexIns);
+
+                if (index == null) {
+                    break;
+                }
+
+                final AbstractInsnNode dup = indexIns.getPrevious();
+
+                if ((dup == null) || (dup.getOpcode() != Opcodes.DUP)) {
+                    break;
+                }
+
+                indexToByte.putIfAbsent(index.intValue(), value.byteValue());
+                storeNextByte = dup.getPrevious();
+            }
+
+            final AbstractInsnNode newArrayIns = storeNextByte;
+
+            if ((newArrayIns != null) && (newArrayIns.getOpcode() == Opcodes.NEWARRAY)) {
+                final IntInsnNode newArray = (IntInsnNode) newArrayIns;
+
+                if (newArray.operand == Opcodes.T_BYTE) {
+                    final AbstractInsnNode newArrayLengthIns = newArrayIns.getPrevious();
+
+                    if (newArrayLengthIns != null) {
+                        final Number value = getValueOrNull(newArrayLengthIns);
+
+                        if (value != null) {
+                            final byte[] computedBytes = new byte[value.intValue()];
+                            indexToByte.forEach((k, v) -> {
+                                if (k < computedBytes.length) {
+                                    computedBytes[k]
+                                    = v;
+                                } else {
+                                    System.err.println("grievous error: index out of bounds when reconstructing fixed byte array, index " + k + " value " + v);
+                                }
+                            });
+                            return new Pair<>(newArrayLengthIns, computedBytes);
+                        }
+                    }
+                }
+            }
+        } else if (isOpcodeMethodInvoke(opcode)) {
+            final MethodInsnNode methodInsNode = (MethodInsnNode) arrayOnStack;
+            final String methodOwner = methodInsNode.owner;
+            final String methodName = methodInsNode.name;
+            final String methodDesc = methodInsNode.desc;
+
+            // TODO Support more methods
+            if ((opcode == Opcodes.INVOKEVIRTUAL)
+                    && "java/util/Base64$Decoder".equals(methodOwner)
+                    && "decode".equals(methodName)
+                    && "([B)[B".equals(methodDesc)) {
+                final Pair<AbstractInsnNode, byte[]> computedArray = tryComputeArray(arrayOnStack.getPrevious());
+
+                if (computedArray.v != null) {
+                    final AbstractInsnNode prev = computedArray.k.getPrevious();
+                    final int prevOpcode = prev.getOpcode();
+
+                    if ((prev != null) && isOpcodeMethodInvoke(prevOpcode)) {
+                        final MethodInsnNode prevMethodInsNode = (MethodInsnNode) prev;
+                        final String prevMethodOwner = prevMethodInsNode.owner;
+                        final String prevMethodName = prevMethodInsNode.name;
+                        final String prevMethodDesc = prevMethodInsNode.desc;
+
+                        if ((prevOpcode == Opcodes.INVOKESTATIC)
+                                && "java/util/Base64".equals(prevMethodOwner)
+                                && "getDecoder".equals(prevMethodName)
+                                && "()Ljava/util/Base64$Decoder;".equals(prevMethodDesc)) {
+                            final byte[] decoded = Base64.getDecoder().decode(computedArray.v);
+                            return new Pair<>(prev, decoded);
+                        }
+                    }
+                }
+            }
+        }
+
+        return new Pair<>(arrayOnStack, null);
+    }
+
     // Returns the computed value of a String constant at the earliest point possible
     // (e.g. if two Strings are concatenated, at the start of the concatenation,
     // if a String is constructed from a byte array, at the point where NEW java/lang/String is called).
@@ -298,86 +411,23 @@ public class Util {
                             }
                         }
                     }
-                } else if (prevOpcode == Opcodes.BASTORE) {
-                    // This matches the pattern that javac uses to construct Strings from code like
-                    // new String(new byte[] { some, bytes, ect });
-                    // The code is Not Good
-                    final Map<Integer, Byte> indexToByte = new HashMap<>();
-                    AbstractInsnNode storeNextByte = prev;
+                }
 
-                    while ((storeNextByte != null) && (storeNextByte.getOpcode() == Opcodes.BASTORE)) {
-                        final AbstractInsnNode valueIns = storeNextByte.getPrevious();
+                final Pair<AbstractInsnNode, byte[]> computedArray = tryComputeArray(prev);
 
-                        if (valueIns == null) {
-                            break;
-                        }
+                if (computedArray.v != null) {
+                    final AbstractInsnNode newArrayLengthIns = computedArray.k;
+                    final AbstractInsnNode firstDup = newArrayLengthIns.getPrevious();
 
-                        final Number value = getValueOrNull(valueIns);
+                    if ((firstDup != null) && (firstDup.getOpcode() == Opcodes.DUP)) {
+                        final AbstractInsnNode firstNewIns = firstDup.getPrevious();
 
-                        if (value == null) {
-                            break;
-                        }
+                        if ((firstNewIns != null) && (firstNewIns.getOpcode() == Opcodes.NEW)) {
+                            final TypeInsnNode firstNew = (TypeInsnNode) firstNewIns;
 
-                        final AbstractInsnNode indexIns = valueIns.getPrevious();
-
-                        if (indexIns == null) {
-                            break;
-                        }
-
-                        final Number index = getValueOrNull(indexIns);
-
-                        if (index == null) {
-                            break;
-                        }
-
-                        final AbstractInsnNode dup = indexIns.getPrevious();
-
-                        if ((dup == null) || (dup.getOpcode() != Opcodes.DUP)) {
-                            break;
-                        }
-
-                        indexToByte.putIfAbsent(index.intValue(), value.byteValue());
-                        storeNextByte = dup.getPrevious();
-                    }
-
-                    if (storeNextByte != null) {
-                        final AbstractInsnNode newArrayIns = storeNextByte;
-
-                        if ((newArrayIns != null) && (newArrayIns.getOpcode() == Opcodes.NEWARRAY)) {
-                            final IntInsnNode newArray = (IntInsnNode) newArrayIns;
-
-                            if (newArray.operand == Opcodes.T_BYTE) {
-                                final AbstractInsnNode newArrayLengthIns = newArrayIns.getPrevious();
-
-                                if (newArrayLengthIns != null) {
-                                    final Number value = getValueOrNull(newArrayLengthIns);
-
-                                    if (value != null) {
-                                        final AbstractInsnNode firstDup = newArrayLengthIns.getPrevious();
-
-                                        if ((firstDup != null) && (firstDup.getOpcode() == Opcodes.DUP)) {
-                                            final AbstractInsnNode firstNewIns = firstDup.getPrevious();
-
-                                            if ((firstNewIns != null) && (firstNewIns.getOpcode() == Opcodes.NEW)) {
-                                                final TypeInsnNode firstNew = (TypeInsnNode) firstNewIns;
-
-                                                if ("java/lang/String".equals(firstNew.desc)) {
-                                                    final byte[] stringBytes = new byte[value.intValue()];
-                                                    indexToByte.forEach((k, v) -> {
-                                                        if (k < stringBytes.length) {
-                                                            stringBytes[k]
-                                                            = v;
-                                                        } else {
-                                                            System.err.println("grievous error: index out of bounds when constructing String from fixed byte array, index " + k + " value " + v);
-                                                        }
-                                                    });
-                                                    final String str = new String(stringBytes);
-                                                    return new Pair<>(firstNew, str);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
+                            if ("java/lang/String".equals(firstNew.desc)) {
+                                final String str = new String(computedArray.v);
+                                return new Pair<>(firstNew, str);
                             }
                         }
                     }
