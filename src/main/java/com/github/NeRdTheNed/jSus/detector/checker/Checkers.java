@@ -376,21 +376,33 @@ public class Checkers {
         addGregChecker(list);
     }
 
-    private static void addMethodCheckers(List<IChecker> list) {
+    private static void addRuntimeExecCheckers(List<IChecker> list) {
         list.add(new CallsMethodChecker(-1, "java/lang/Runtime", "getRuntime", null, TestResult.TestResultLevel.VERY_BENIGN));
-        list.add(new CallsMethodChecker(-1, "java/lang/Runtime", "load", null, TestResult.TestResultLevel.SUS));
-        list.add(new CallsMethodChecker(-1, "java/lang/Runtime", "loadLibrary", null, TestResult.TestResultLevel.SUS));
         list.add(new CallsMethodChecker(-1, "java/lang/Runtime", "exec", null, TestResult.TestResultLevel.SUS));
         list.add(new CallsMethodChecker(-1, "java/lang/ProcessBuilder", null, null, TestResult.TestResultLevel.SUS));
+        list.add(new CallsMethodChecker(-1, "java/lang/Process", "waitFor", null, TestResult.TestResultLevel.VERY_BENIGN));
+    }
+
+    private static void addLoadNativesCheckers(List<IChecker> list) {
+        list.add(new CallsMethodChecker(-1, "java/lang/Runtime", "load", null, TestResult.TestResultLevel.SUS));
+        list.add(new CallsMethodChecker(-1, "java/lang/Runtime", "loadLibrary", null, TestResult.TestResultLevel.SUS));
+    }
+
+    private static void addDecodeStringCheckers(List<IChecker> list) {
         // TODO handle org.apache.commons.codec.binary.Base16
         // TODO handle org.apache.commons.codec.binary.Base32
         // TODO handle org.apache.commons.codec.binary.Base64
         // TODO handle org.apache.commons.codec.binary.Hex
         list.add(new CallsMethodChecker(-1, "java/util/Base64$Decoder", "decode", null, TestResult.TestResultLevel.BENIGN));
         list.add(new CallsMethodChecker(-1, "javax/xml/bind/DatatypeConverter", "parseBase64Binary", null, TestResult.TestResultLevel.BENIGN));
-        list.add(new CallsMethodChecker(-1, "java/lang/Process", "waitFor", null, TestResult.TestResultLevel.VERY_BENIGN));
+    }
+
+    private static void addSusFileOperationsCheckers(List<IChecker> list) {
         list.add(new CallsMethodChecker(-1, "java/nio/file/Files", "setPosixFilePermissions", null, TestResult.TestResultLevel.BENIGN));
         list.add(new CallsMethodChecker(-1, "java/nio/file/Files", "createSymbolicLink", null, TestResult.TestResultLevel.BENIGN));
+    }
+
+    private static void addReflectionAndClassloadingCheckers(List<IChecker> list) {
         list.add(new CallsMethodChecker(-1, "java/lang/Class", "forName", null, TestResult.TestResultLevel.VERY_BENIGN));
         list.add(new CallsMethodChecker(-1, "java/lang/Class", "getClassLoader", null, TestResult.TestResultLevel.VERY_BENIGN));
         list.add(new CallsMethodChecker(-1, "java/lang/Class", "getConstructor", null, TestResult.TestResultLevel.VERY_BENIGN));
@@ -410,11 +422,23 @@ public class Checkers {
         list.add(new CallsMethodChecker(-1, "java/security/SecureClassLoader", null, null, TestResult.TestResultLevel.VERY_BENIGN));
         list.add(new CallsMethodChecker(-1, null, "defineClass", null, TestResult.TestResultLevel.VERY_BENIGN));
         list.add(new CallsMethodChecker(-1, null, "getDeclaredField", null, TestResult.TestResultLevel.VERY_BENIGN));
+    }
+
+    private static void addGetCallingClassnameCheckers(List<IChecker> list) {
         //list.add(new CallsMethodChecker(-1, "java/lang/StackTraceElement", "getClassName", null, TestResult.TestResultLevel.VERY_BENIGN));
         //list.add(new CallsMethodChecker(-1, "java/lang/StackTraceElement", "getMethodName", null, TestResult.TestResultLevel.VERY_BENIGN));
         //list.add(new CallsMethodChecker(-1, "java/lang/RuntimeException", "<init>", null, TestResult.TestResultLevel.VERY_BENIGN));
         //list.add(new CallsMethodChecker(-1, "java/lang/RuntimeException", "getStackTrace", null, TestResult.TestResultLevel.VERY_BENIGN));
         //list.add(new CallsMethodChecker(-1, "java/lang/Thread", "getStackTrace", null, TestResult.TestResultLevel.VERY_BENIGN));
+    }
+
+    private static void addMethodCheckers(List<IChecker> list) {
+        addRuntimeExecCheckers(list);
+        addLoadNativesCheckers(list);
+        addDecodeStringCheckers(list);
+        addSusFileOperationsCheckers(list);
+        addReflectionAndClassloadingCheckers(list);
+        addGetCallingClassnameCheckers(list);
     }
 
     private static List<IChecker> makeCheckerList() {
