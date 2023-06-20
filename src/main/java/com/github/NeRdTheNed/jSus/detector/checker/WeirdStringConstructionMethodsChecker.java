@@ -6,7 +6,6 @@ import java.util.List;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
@@ -52,15 +51,10 @@ public class WeirdStringConstructionMethodsChecker implements IChecker {
                                 final String prevMethodDesc = prevMethodInsNode.desc;
 
                                 if (Util.isCommonBase64DecodeMethod(previousOpcode, prevMethodOwner, prevMethodName, prevMethodDesc)) {
-                                    final AbstractInsnNode prev2 = prev.getPrevious();
+                                    final String possibleString = Util.tryComputeConstantString(prev.getPrevious());
 
-                                    if ((prev2 != null) && (prev2.getOpcode() == Opcodes.LDC)) {
-                                        final LdcInsnNode ldc = (LdcInsnNode) prev2;
-
-                                        if (ldc.cst instanceof String) {
-                                            final String base64 = (String) ldc.cst;
-                                            res.add(new TestResult(TestResult.TestResultLevel.STRONG_SUS, "Constructing String from fixed Base64 " + base64 + " at class " + clazz.name, 1));
-                                        }
+                                    if (possibleString != null) {
+                                        res.add(new TestResult(TestResult.TestResultLevel.STRONG_SUS, "Constructing String from fixed Base64 " + possibleString + " at class " + clazz.name, 1));
                                     }
                                 }
                             }

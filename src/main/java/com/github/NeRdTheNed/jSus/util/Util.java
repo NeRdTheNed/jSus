@@ -15,7 +15,9 @@ import java.util.jar.Manifest;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.util.Printer;
 
 public class Util {
@@ -144,5 +146,21 @@ public class Util {
         }
 
         return false;
+    }
+
+    public static String tryComputeConstantString(AbstractInsnNode stringOnStack) {
+        if (stringOnStack == null) {
+            return null;
+        }
+
+        if (stringOnStack.getOpcode() == Opcodes.LDC) {
+            final LdcInsnNode ldc = (LdcInsnNode) stringOnStack;
+
+            if (ldc.cst instanceof String) {
+                return (String) ldc.cst;
+            }
+        }
+
+        return null;
     }
 }
