@@ -46,6 +46,7 @@ public class CallsMethodChecker implements IChecker {
         return name;
     }
 
+    // TODO Add option to print constants used in parameters to calls
     @Override
     public List<TestResult> testClass(ClassNode clazz) {
         final List<TestResult> res = new ArrayList<>();
