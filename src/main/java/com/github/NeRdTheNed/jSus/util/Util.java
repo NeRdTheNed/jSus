@@ -7,7 +7,9 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -17,8 +19,10 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.IntInsnNode;
 import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
+import org.objectweb.asm.tree.TypeInsnNode;
 import org.objectweb.asm.util.Printer;
 
 public class Util {
@@ -149,6 +153,68 @@ public class Util {
         return false;
     }
 
+    private static Number getValueOrNull(AbstractInsnNode load) {
+        switch (load.getOpcode()) {
+        case Opcodes.ICONST_M1:
+            return Integer.valueOf(-1);
+
+        case Opcodes.ICONST_0:
+            return Integer.valueOf(0);
+
+        case Opcodes.ICONST_1:
+            return Integer.valueOf(1);
+
+        case Opcodes.ICONST_2:
+            return Integer.valueOf(2);
+
+        case Opcodes.ICONST_3:
+            return Integer.valueOf(3);
+
+        case Opcodes.ICONST_4:
+            return Integer.valueOf(4);
+
+        case Opcodes.ICONST_5:
+            return Integer.valueOf(5);
+
+        case Opcodes.LCONST_0:
+            return Long.valueOf(0);
+
+        case Opcodes.LCONST_1:
+            return Long.valueOf(1);
+
+        case Opcodes.FCONST_0:
+            return Float.valueOf(0f);
+
+        case Opcodes.FCONST_1:
+            return Float.valueOf(1f);
+
+        case Opcodes.FCONST_2:
+            return Float.valueOf(2f);
+
+        case Opcodes.DCONST_0:
+            return Double.valueOf(0d);
+
+        case Opcodes.DCONST_1:
+            return Double.valueOf(1d);
+
+        case Opcodes.BIPUSH:
+        case Opcodes.SIPUSH:
+            return Integer.valueOf(((IntInsnNode) load).operand);
+
+        case Opcodes.LDC:
+            final LdcInsnNode ldc = (LdcInsnNode) load;
+
+            if (ldc.cst instanceof Number) {
+                return (Number) ldc.cst;
+            }
+
+        // Fall through
+
+        default:
+            return null;
+        }
+    }
+
     private static class Pair<K, V> {
         public final K k;
         public final V v;
@@ -192,6 +258,92 @@ public class Util {
 
                     if (secondPair.v != null) {
                         return new Pair<>(secondPair.k, secondPair.v + firstPair.v);
+                    }
+                }
+            }
+
+            if ((opcode == Opcodes.INVOKESPECIAL)
+                    && "java/lang/String".equals(methodOwner)
+                    && "<init>".equals(methodName)
+                    && "([B)V".equals(methodDesc)) {
+                // This is Not Good
+                final Map<Integer, Byte> indexToByte = new HashMap<>();
+                AbstractInsnNode storeNextByte = stringOnStack.getPrevious();
+
+                while ((storeNextByte != null) && (storeNextByte.getOpcode() == Opcodes.BASTORE)) {
+                    final AbstractInsnNode valueIns = storeNextByte.getPrevious();
+
+                    if (valueIns == null) {
+                        break;
+                    }
+
+                    final Number value = getValueOrNull(valueIns);
+
+                    if (value == null) {
+                        break;
+                    }
+
+                    final AbstractInsnNode indexIns = valueIns.getPrevious();
+
+                    if (indexIns == null) {
+                        break;
+                    }
+
+                    final Number index = getValueOrNull(indexIns);
+
+                    if (index == null) {
+                        break;
+                    }
+
+                    final AbstractInsnNode dup = indexIns.getPrevious();
+
+                    if ((dup == null) || (dup.getOpcode() != Opcodes.DUP)) {
+                        break;
+                    }
+
+                    indexToByte.putIfAbsent(index.intValue(), value.byteValue());
+                    storeNextByte = dup.getPrevious();
+                }
+
+                if (storeNextByte != null) {
+                    final AbstractInsnNode newArrayIns = storeNextByte;
+
+                    if ((newArrayIns != null) && (newArrayIns.getOpcode() == Opcodes.NEWARRAY)) {
+                        final IntInsnNode newArray = (IntInsnNode) newArrayIns;
+
+                        if (newArray.operand == Opcodes.T_BYTE) {
+                            final AbstractInsnNode newArrayLengthIns = newArrayIns.getPrevious();
+
+                            if (newArrayLengthIns != null) {
+                                final Number value = getValueOrNull(newArrayLengthIns);
+
+                                if (value != null) {
+                                    final AbstractInsnNode firstDup = newArrayLengthIns.getPrevious();
+
+                                    if ((firstDup != null) && (firstDup.getOpcode() == Opcodes.DUP)) {
+                                        final AbstractInsnNode firstNewIns = firstDup.getPrevious();
+
+                                        if ((firstNewIns != null) && (firstNewIns.getOpcode() == Opcodes.NEW)) {
+                                            final TypeInsnNode firstNew = (TypeInsnNode) firstNewIns;
+
+                                            if ("java/lang/String".equals(firstNew.desc)) {
+                                                final byte[] stringBytes = new byte[value.intValue()];
+                                                indexToByte.forEach((k, v) -> {
+                                                    if (k < stringBytes.length) {
+                                                        stringBytes[k]
+                                                        = v;
+                                                    } else {
+                                                        System.err.println("grievous error: index out of bounds when constructing String from fixed byte array, index " + k + " value " + v);
+                                                    }
+                                                });
+                                                final String str = new String(stringBytes);
+                                                return new Pair<>(firstNew, str);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

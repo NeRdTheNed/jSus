@@ -42,7 +42,13 @@ public class WeirdStringConstructionMethodsChecker implements IChecker {
                             final int previousOpcode = prev.getOpcode();
 
                             if (previousOpcode == Opcodes.BASTORE) {
-                                foundFixedByteArrayConstructions++;
+                                final String possibleString = Util.tryComputeConstantString(ins);
+
+                                if (possibleString == null) {
+                                    foundFixedByteArrayConstructions++;
+                                } else {
+                                    res.add(new TestResult(TestResult.TestResultLevel.STRONG_SUS, "Constructing String " + possibleString +  " from fixed byte array at class " + clazz.name, 1));
+                                }
                             } else if (previousOpcode == Opcodes.INVOKEVIRTUAL) {
                                 // TODO Handle previous operations like concat
                                 final MethodInsnNode prevMethodInsNode = (MethodInsnNode) prev;
@@ -65,7 +71,7 @@ public class WeirdStringConstructionMethodsChecker implements IChecker {
         }
 
         if (foundFixedByteArrayConstructions > 0) {
-            res.add(new TestResult(TestResult.TestResultLevel.STRONG_SUS, "Constructing String from fixed byte array at class " + clazz.name, foundFixedByteArrayConstructions));
+            res.add(new TestResult(TestResult.TestResultLevel.STRONG_SUS, "Constructing unknown String from fixed byte array at class " + clazz.name, foundFixedByteArrayConstructions));
         }
 
         return res;
