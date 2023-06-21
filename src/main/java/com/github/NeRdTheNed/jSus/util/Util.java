@@ -354,20 +354,23 @@ public class Util {
 
                 if (computedArray.v != null) {
                     final AbstractInsnNode prev = computedArray.k.getPrevious();
-                    final int prevOpcode = prev.getOpcode();
 
-                    if ((prev != null) && isOpcodeMethodInvoke(prevOpcode)) {
-                        final MethodInsnNode prevMethodInsNode = (MethodInsnNode) prev;
-                        final String prevMethodOwner = prevMethodInsNode.owner;
-                        final String prevMethodName = prevMethodInsNode.name;
-                        final String prevMethodDesc = prevMethodInsNode.desc;
+                    if (prev != null) {
+                        final int prevOpcode = prev.getOpcode();
 
-                        if ((prevOpcode == Opcodes.INVOKESTATIC)
-                                && "java/util/Base64".equals(prevMethodOwner)
-                                && "getDecoder".equals(prevMethodName)
-                                && "()Ljava/util/Base64$Decoder;".equals(prevMethodDesc)) {
-                            final byte[] decoded = Base64.getDecoder().decode(computedArray.v);
-                            return new Pair<>(prev, decoded);
+                        if (isOpcodeMethodInvoke(prevOpcode)) {
+                            final MethodInsnNode prevMethodInsNode = (MethodInsnNode) prev;
+                            final String prevMethodOwner = prevMethodInsNode.owner;
+                            final String prevMethodName = prevMethodInsNode.name;
+                            final String prevMethodDesc = prevMethodInsNode.desc;
+
+                            if ((prevOpcode == Opcodes.INVOKESTATIC)
+                                    && "java/util/Base64".equals(prevMethodOwner)
+                                    && "getDecoder".equals(prevMethodName)
+                                    && "()Ljava/util/Base64$Decoder;".equals(prevMethodDesc)) {
+                                final byte[] decoded = Base64.getDecoder().decode(computedArray.v);
+                                return new Pair<>(prev, decoded);
+                            }
                         }
                     }
                 }
