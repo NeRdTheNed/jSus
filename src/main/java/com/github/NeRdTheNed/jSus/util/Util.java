@@ -1,5 +1,6 @@
 package com.github.NeRdTheNed.jSus.util;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -26,22 +27,58 @@ import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.TypeInsnNode;
 import org.objectweb.asm.util.Printer;
 
+import me.coley.cafedude.classfile.ClassFile;
+import me.coley.cafedude.io.ClassFileReader;
+import me.coley.cafedude.io.ClassFileWriter;
+import me.coley.cafedude.transform.IllegalStrippingTransformer;
+
 public class Util {
     public static final Base64.Decoder decoder = Base64.getDecoder();
 
-    public static ClassNode streamToClass(InputStream stream, String name) throws IOException {
-        final ClassReader reader = new ClassReader(stream);
-        final ClassNode node = new ClassNode();
+    public static byte[] convertInputStreamToBytes(InputStream in) throws IOException {
+        final ByteArrayOutputStream result = new ByteArrayOutputStream();
+        final byte[] buffer = new byte[1024];
+        int length;
 
-        try {
-            reader.accept(node, ClassReader.SKIP_DEBUG);
-        } catch (final Exception e) {
-            System.err.println("Malformed class " + name);
-            e.printStackTrace();
-            return null;
+        while ((length = in.read(buffer)) != -1) {
+            result.write(buffer, 0, length);
         }
 
-        return node;
+        return result.toByteArray();
+    }
+
+    public static ClassNode streamToClass(InputStream stream, String name) throws IOException {
+        final byte[] classBytes = convertInputStreamToBytes(stream);
+        return bytesToClass(classBytes, name);
+    }
+
+    public static ClassNode bytesToClass(byte[] clazz, String name) {
+        try {
+            final ClassReader reader = new ClassReader(clazz);
+            final ClassNode node = new ClassNode();
+            reader.accept(node, ClassReader.SKIP_DEBUG);
+            return node;
+        } catch (final Exception e) {
+            System.err.println("Malformed class " + name + ", trying to read with CAFED00D");
+            e.printStackTrace();
+        }
+
+        try {
+            final ClassFileReader classFileReader = new ClassFileReader();
+            final ClassFile classFile = classFileReader.read(clazz);
+            // Try to remove junk data that confuses ASM
+            new IllegalStrippingTransformer(classFile).transform();
+            final byte[] fixedClass = new ClassFileWriter().write(classFile);
+            final ClassReader reader = new ClassReader(fixedClass);
+            final ClassNode node = new ClassNode();
+            reader.accept(node, ClassReader.SKIP_DEBUG);
+            return node;
+        } catch (final Exception e) {
+            System.err.println("Malformed class " + name + ", could not read with CAFED00D");
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     private static void findAddNodes(JarFile jarFile, List<ClassNode> nodes, boolean verbose) {
