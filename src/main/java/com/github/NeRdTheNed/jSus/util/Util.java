@@ -384,6 +384,26 @@ public class Util {
         return tryComputeArray(stringOnStack).v;
     }
 
+    private static Pair<AbstractInsnNode, String> getStringConstructPoint(AbstractInsnNode postInit, String str) {
+        if (postInit != null) {
+            final AbstractInsnNode firstDup = postInit.getPrevious();
+
+            if ((firstDup != null) && (firstDup.getOpcode() == Opcodes.DUP)) {
+                final AbstractInsnNode firstNewIns = firstDup.getPrevious();
+
+                if ((firstNewIns != null) && (firstNewIns.getOpcode() == Opcodes.NEW)) {
+                    final TypeInsnNode firstNew = (TypeInsnNode) firstNewIns;
+
+                    if ("java/lang/String".equals(firstNew.desc)) {
+                        return new Pair<>(firstNew, str);
+                    }
+                }
+            }
+        }
+
+        return new Pair<>(null, str);
+    }
+
     // Returns the computed value of a String constant at the earliest point possible
     // (e.g. if two Strings are concatenated, at the start of the concatenation,
     // if a String is constructed from a byte array, at the point where NEW java/lang/String is called).
@@ -447,11 +467,39 @@ public class Util {
                             final Pair<AbstractInsnNode, String> passedBase64 = tryComputeString(prev.getPrevious());
 
                             if (passedBase64.v != null) {
+                                AbstractInsnNode postInit = null;
+
+                                if (prevOpcode == Opcodes.INVOKESTATIC) {
+                                    postInit = passedBase64.k;
+                                } else if (passedBase64.k != null) {
+                                    final AbstractInsnNode preBase64 = passedBase64.k.getPrevious();
+
+                                    if (preBase64 != null) {
+                                        final int preBase64Opcode = preBase64.getOpcode();
+
+                                        if (isOpcodeMethodInvoke(preBase64Opcode)) {
+                                            final MethodInsnNode prevMethodInsNode = (MethodInsnNode) preBase64;
+                                            final String preBase64MethodOwner = prevMethodInsNode.owner;
+                                            final String preBase64MethodName = prevMethodInsNode.name;
+                                            final String preBase64MethodDesc = prevMethodInsNode.desc;
+
+                                            if ((preBase64Opcode == Opcodes.INVOKESTATIC)
+                                                    && "java/util/Base64".equals(preBase64MethodOwner)
+                                                    && "getDecoder".equals(preBase64MethodName)
+                                                    && "()Ljava/util/Base64$Decoder;".equals(preBase64MethodDesc)) {
+                                                postInit = preBase64;
+                                            }
+                                        } else if (preBase64Opcode == Opcodes.ALOAD) {
+                                            postInit = preBase64;
+                                        }
+                                    }
+                                }
+
                                 final String possibleString = passedBase64.v;
 
                                 try {
                                     final String decoded = new String(decoder.decode(possibleString));
-                                    return new Pair<>(passedBase64.k, decoded);
+                                    return getStringConstructPoint(postInit, decoded);
                                 } catch (final IllegalArgumentException e) {
                                     // Invalid Base64?
                                 }
@@ -462,21 +510,8 @@ public class Util {
                     final Pair<AbstractInsnNode, byte[]> computedArray = tryComputeArray(prev);
 
                     if (computedArray.v != null) {
-                        final AbstractInsnNode newArrayLengthIns = computedArray.k;
-                        final AbstractInsnNode firstDup = newArrayLengthIns.getPrevious();
-
-                        if ((firstDup != null) && (firstDup.getOpcode() == Opcodes.DUP)) {
-                            final AbstractInsnNode firstNewIns = firstDup.getPrevious();
-
-                            if ((firstNewIns != null) && (firstNewIns.getOpcode() == Opcodes.NEW)) {
-                                final TypeInsnNode firstNew = (TypeInsnNode) firstNewIns;
-
-                                if ("java/lang/String".equals(firstNew.desc)) {
-                                    final String str = new String(computedArray.v);
-                                    return new Pair<>(firstNew, str);
-                                }
-                            }
-                        }
+                        final String str = new String(computedArray.v);
+                        return getStringConstructPoint(computedArray.k, str);
                     }
                 }
             }
