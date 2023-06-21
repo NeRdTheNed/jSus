@@ -264,6 +264,39 @@ public class Util {
         }
     }
 
+    private static Pair<AbstractInsnNode, byte[]> getArrayConstructPoint(AbstractInsnNode postInit, Map<Integer, Byte> indexToByte) {
+        if (postInit != null) {
+            final AbstractInsnNode newArrayIns = postInit.getPrevious();
+
+            if ((newArrayIns != null) && (newArrayIns.getOpcode() == Opcodes.NEWARRAY)) {
+                final IntInsnNode newArray = (IntInsnNode) newArrayIns;
+
+                if (newArray.operand == Opcodes.T_BYTE) {
+                    final AbstractInsnNode newArrayLengthIns = newArrayIns.getPrevious();
+
+                    if (newArrayLengthIns != null) {
+                        final Number value = getValueOrNull(newArrayLengthIns);
+
+                        if (value != null) {
+                            final byte[] computedBytes = new byte[value.intValue()];
+                            indexToByte.forEach((k, v) -> {
+                                if (k < computedBytes.length) {
+                                    computedBytes[k]
+                                    = v;
+                                } else {
+                                    System.err.println("grievous error: index out of bounds when reconstructing fixed byte array, index " + k + " value " + v);
+                                }
+                            });
+                            return new Pair<>(newArrayLengthIns, computedBytes);
+                        }
+                    }
+                }
+            }
+        }
+
+        return new Pair<>(null, null);
+    }
+
     private static Pair<AbstractInsnNode, byte[]> tryComputeArray(AbstractInsnNode arrayOnStack) {
         if (arrayOnStack == null) {
             return new Pair<>(arrayOnStack, null);
@@ -313,31 +346,8 @@ public class Util {
                 storeNextByte = dup.getPrevious();
             }
 
-            final AbstractInsnNode newArrayIns = storeNextByte;
-
-            if ((newArrayIns != null) && (newArrayIns.getOpcode() == Opcodes.NEWARRAY)) {
-                final IntInsnNode newArray = (IntInsnNode) newArrayIns;
-
-                if (newArray.operand == Opcodes.T_BYTE) {
-                    final AbstractInsnNode newArrayLengthIns = newArrayIns.getPrevious();
-
-                    if (newArrayLengthIns != null) {
-                        final Number value = getValueOrNull(newArrayLengthIns);
-
-                        if (value != null) {
-                            final byte[] computedBytes = new byte[value.intValue()];
-                            indexToByte.forEach((k, v) -> {
-                                if (k < computedBytes.length) {
-                                    computedBytes[k]
-                                    = v;
-                                } else {
-                                    System.err.println("grievous error: index out of bounds when reconstructing fixed byte array, index " + k + " value " + v);
-                                }
-                            });
-                            return new Pair<>(newArrayLengthIns, computedBytes);
-                        }
-                    }
-                }
+            if (storeNextByte != null) {
+                return getArrayConstructPoint(storeNextByte.getNext(), indexToByte);
             }
         } else if (isOpcodeMethodInvoke(opcode)) {
             final MethodInsnNode methodInsNode = (MethodInsnNode) arrayOnStack;
@@ -352,26 +362,40 @@ public class Util {
                     && "([B)[B".equals(methodDesc)) {
                 final Pair<AbstractInsnNode, byte[]> computedArray = tryComputeArray(arrayOnStack.getPrevious());
 
-                if ((computedArray.v != null) && (computedArray.k != null)) {
-                    final AbstractInsnNode prev = computedArray.k.getPrevious();
+                if (computedArray.v != null) {
+                    AbstractInsnNode postInit = null;
 
-                    if (prev != null) {
-                        final int prevOpcode = prev.getOpcode();
+                    if (opcode == Opcodes.INVOKESTATIC) {
+                        postInit = computedArray.k;
+                    } else if (computedArray.k != null) {
+                        final AbstractInsnNode prev = computedArray.k.getPrevious();
 
-                        if (isOpcodeMethodInvoke(prevOpcode)) {
-                            final MethodInsnNode prevMethodInsNode = (MethodInsnNode) prev;
-                            final String prevMethodOwner = prevMethodInsNode.owner;
-                            final String prevMethodName = prevMethodInsNode.name;
-                            final String prevMethodDesc = prevMethodInsNode.desc;
+                        if (prev != null) {
+                            final int prevOpcode = prev.getOpcode();
 
-                            if ((prevOpcode == Opcodes.INVOKESTATIC)
-                                    && "java/util/Base64".equals(prevMethodOwner)
-                                    && "getDecoder".equals(prevMethodName)
-                                    && "()Ljava/util/Base64$Decoder;".equals(prevMethodDesc)) {
-                                final byte[] decoded = Base64.getDecoder().decode(computedArray.v);
-                                return new Pair<>(prev, decoded);
+                            if (isOpcodeMethodInvoke(prevOpcode)) {
+                                final MethodInsnNode prevMethodInsNode = (MethodInsnNode) prev;
+                                final String prevMethodOwner = prevMethodInsNode.owner;
+                                final String prevMethodName = prevMethodInsNode.name;
+                                final String prevMethodDesc = prevMethodInsNode.desc;
+
+                                if ((prevOpcode == Opcodes.INVOKESTATIC)
+                                        && "java/util/Base64".equals(prevMethodOwner)
+                                        && "getDecoder".equals(prevMethodName)
+                                        && "()Ljava/util/Base64$Decoder;".equals(prevMethodDesc)) {
+                                    postInit = prev;
+                                }
+                            } else if (prevOpcode == Opcodes.ALOAD) {
+                                postInit = prev;
                             }
                         }
+                    }
+
+                    try {
+                        final byte[] decoded = decoder.decode(computedArray.v);
+                        return new Pair<>(postInit, decoded);
+                    } catch (final IllegalArgumentException e) {
+                        // Invalid Base64?
                     }
                 }
             }
