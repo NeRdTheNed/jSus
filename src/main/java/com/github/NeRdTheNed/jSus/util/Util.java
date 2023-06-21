@@ -515,6 +515,14 @@ public class Util {
                     }
                 }
             }
+
+            if ((opcode == Opcodes.INVOKESPECIAL)
+                    && "java/lang/String".equals(methodOwner)
+                    && "<init>".equals(methodName)
+                    && "(Ljava/lang/String;)V".equals(methodDesc)) {
+                final Pair<AbstractInsnNode, String> prevString = tryComputeString(stringOnStack.getPrevious());
+                return getStringConstructPoint(prevString.k, prevString.v);
+            }
         }
 
         return new Pair<>(stringOnStack, null);
