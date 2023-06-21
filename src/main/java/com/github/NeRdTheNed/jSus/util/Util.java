@@ -352,7 +352,7 @@ public class Util {
                     && "([B)[B".equals(methodDesc)) {
                 final Pair<AbstractInsnNode, byte[]> computedArray = tryComputeArray(arrayOnStack.getPrevious());
 
-                if (computedArray.v != null) {
+                if ((computedArray.v != null) && (computedArray.k != null)) {
                     final AbstractInsnNode prev = computedArray.k.getPrevious();
 
                     if (prev != null) {
@@ -433,45 +433,48 @@ public class Util {
                     && "<init>".equals(methodName)
                     && "([B)V".equals(methodDesc)) {
                 final AbstractInsnNode prev = stringOnStack.getPrevious();
-                final int prevOpcode = prev.getOpcode();
 
-                if (isOpcodeMethodInvoke(prevOpcode)) {
-                    final MethodInsnNode possibleBase64 = (MethodInsnNode) prev;
-                    final String prevMethodOwner = possibleBase64.owner;
-                    final String prevMethodName = possibleBase64.name;
-                    final String prevMethodDesc = possibleBase64.desc;
+                if (prev != null) {
+                    final int prevOpcode = prev.getOpcode();
 
-                    if (isCommonBase64DecodeMethod(prevOpcode, prevMethodOwner, prevMethodName, prevMethodDesc)) {
-                        final Pair<AbstractInsnNode, String> passedBase64 = tryComputeString(prev.getPrevious());
+                    if (isOpcodeMethodInvoke(prevOpcode)) {
+                        final MethodInsnNode possibleBase64 = (MethodInsnNode) prev;
+                        final String prevMethodOwner = possibleBase64.owner;
+                        final String prevMethodName = possibleBase64.name;
+                        final String prevMethodDesc = possibleBase64.desc;
 
-                        if (passedBase64.v != null) {
-                            final String possibleString = passedBase64.v;
+                        if (isCommonBase64DecodeMethod(prevOpcode, prevMethodOwner, prevMethodName, prevMethodDesc)) {
+                            final Pair<AbstractInsnNode, String> passedBase64 = tryComputeString(prev.getPrevious());
 
-                            try {
-                                final String decoded = new String(decoder.decode(possibleString));
-                                return new Pair<>(passedBase64.k, decoded);
-                            } catch (final IllegalArgumentException e) {
-                                // Invalid Base64?
+                            if (passedBase64.v != null) {
+                                final String possibleString = passedBase64.v;
+
+                                try {
+                                    final String decoded = new String(decoder.decode(possibleString));
+                                    return new Pair<>(passedBase64.k, decoded);
+                                } catch (final IllegalArgumentException e) {
+                                    // Invalid Base64?
+                                }
                             }
                         }
                     }
-                }
 
-                final Pair<AbstractInsnNode, byte[]> computedArray = tryComputeArray(prev);
+                    final Pair<AbstractInsnNode, byte[]> computedArray = tryComputeArray(prev);
 
-                if (computedArray.v != null) {
-                    final AbstractInsnNode newArrayLengthIns = computedArray.k;
-                    final AbstractInsnNode firstDup = newArrayLengthIns.getPrevious();
+                    if (computedArray.v != null) {
+                        final AbstractInsnNode newArrayLengthIns = computedArray.k;
+                        final AbstractInsnNode firstDup = newArrayLengthIns.getPrevious();
 
-                    if ((firstDup != null) && (firstDup.getOpcode() == Opcodes.DUP)) {
-                        final AbstractInsnNode firstNewIns = firstDup.getPrevious();
+                        if ((firstDup != null) && (firstDup.getOpcode() == Opcodes.DUP)) {
+                            final AbstractInsnNode firstNewIns = firstDup.getPrevious();
 
-                        if ((firstNewIns != null) && (firstNewIns.getOpcode() == Opcodes.NEW)) {
-                            final TypeInsnNode firstNew = (TypeInsnNode) firstNewIns;
+                            if ((firstNewIns != null) && (firstNewIns.getOpcode() == Opcodes.NEW)) {
+                                final TypeInsnNode firstNew = (TypeInsnNode) firstNewIns;
 
-                            if ("java/lang/String".equals(firstNew.desc)) {
-                                final String str = new String(computedArray.v);
-                                return new Pair<>(firstNew, str);
+                                if ("java/lang/String".equals(firstNew.desc)) {
+                                    final String str = new String(computedArray.v);
+                                    return new Pair<>(firstNew, str);
+                                }
                             }
                         }
                     }
