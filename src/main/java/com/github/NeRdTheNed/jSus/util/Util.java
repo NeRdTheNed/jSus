@@ -377,6 +377,10 @@ public class Util {
         return new Pair<>(arrayOnStack, null);
     }
 
+    public static byte[] tryComputeConstantBytes(AbstractInsnNode stringOnStack) {
+        return tryComputeArray(stringOnStack).v;
+    }
+
     // Returns the computed value of a String constant at the earliest point possible
     // (e.g. if two Strings are concatenated, at the start of the concatenation,
     // if a String is constructed from a byte array, at the point where NEW java/lang/String is called).

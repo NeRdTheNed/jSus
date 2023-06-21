@@ -39,9 +39,11 @@ public class WeirdStringConstructionMethodsChecker implements IChecker {
                         final AbstractInsnNode prev = ins.getPrevious();
 
                         if (prev != null) {
+                            boolean foundString = false;
                             final int previousOpcode = prev.getOpcode();
 
                             if (previousOpcode == Opcodes.BASTORE) {
+                                foundString = true;
                                 final String possibleString = Util.tryComputeConstantString(ins);
 
                                 if (possibleString == null) {
@@ -49,7 +51,7 @@ public class WeirdStringConstructionMethodsChecker implements IChecker {
                                 } else {
                                     res.add(new TestResult(TestResult.TestResultLevel.STRONG_SUS, "Constructing String " + possibleString +  " from fixed byte array at class " + clazz.name, 1));
                                 }
-                            } else if (previousOpcode == Opcodes.INVOKEVIRTUAL) {
+                            } else if (Util.isOpcodeMethodInvoke(previousOpcode)) {
                                 // TODO Handle previous operations like concat
                                 final MethodInsnNode prevMethodInsNode = (MethodInsnNode) prev;
                                 final String prevMethodName = prevMethodInsNode.name;
@@ -60,6 +62,8 @@ public class WeirdStringConstructionMethodsChecker implements IChecker {
                                     final String possibleString = Util.tryComputeConstantString(prev.getPrevious());
 
                                     if (possibleString != null) {
+                                        foundString = true;
+
                                         try {
                                             final String decoded = new String(Util.decoder.decode(possibleString));
                                             res.add(new TestResult(TestResult.TestResultLevel.STRONG_SUS, "Constructing String from fixed Base64 " + possibleString + " (decoded: " + decoded + ") at class " + clazz.name, 1));
@@ -67,6 +71,22 @@ public class WeirdStringConstructionMethodsChecker implements IChecker {
                                             res.add(new TestResult(TestResult.TestResultLevel.STRONG_SUS, "Constructing String from invalid (?) fixed Base64 " + possibleString + " at class " + clazz.name, 1));
                                         }
                                     }
+                                } else {
+                                    final byte[] possibleBytes = Util.tryComputeConstantBytes(prev);
+
+                                    if (possibleBytes != null) {
+                                        final String possibleString = new String(possibleBytes);
+                                        foundString = true;
+                                        res.add(new TestResult(TestResult.TestResultLevel.STRONG_SUS, "Constructing String " + possibleString + " from fixed byte array through method " + prevMethodOwner + "." + prevMethodName + " at class " + clazz.name, 1));
+                                    }
+                                }
+                            }
+
+                            if (!foundString) {
+                                final String possibleString = Util.tryComputeConstantString(ins);
+
+                                if (possibleString != null) {
+                                    res.add(new TestResult(TestResult.TestResultLevel.STRONG_SUS, "Constructing String " + possibleString + " through unknown means (?) at class " + clazz.name, 1));
                                 }
                             }
                         }
