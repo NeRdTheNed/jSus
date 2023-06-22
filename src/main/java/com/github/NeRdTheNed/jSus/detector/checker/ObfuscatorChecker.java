@@ -94,8 +94,8 @@ public class ObfuscatorChecker implements IChecker {
     private static boolean checkChains(int opcode) {
         switch (opcode) {
         //case Opcodes.NOP:
-        //case Opcodes.DUP:
-        //case Opcodes.POP:
+        case Opcodes.DUP:
+        case Opcodes.POP:
         case Opcodes.INEG:
         case Opcodes.LNEG:
         case Opcodes.FNEG:
@@ -120,6 +120,18 @@ public class ObfuscatorChecker implements IChecker {
 
         default:
             return false;
+        }
+    }
+
+    private static int chainSize(int opcode) {
+        switch (opcode) {
+        //case Opcodes.NOP:
+        case Opcodes.DUP:
+        case Opcodes.POP:
+            return 2;
+
+        default:
+            return 1;
         }
     }
 
@@ -155,6 +167,7 @@ public class ObfuscatorChecker implements IChecker {
             }
 
             boolean foundChain = false;
+            int currentChainSize = 0;
             int prevOpcode = -1;
 
             for (final AbstractInsnNode ins : methodNode.instructions) {
@@ -162,9 +175,14 @@ public class ObfuscatorChecker implements IChecker {
 
                 if (opcode != prevOpcode) {
                     foundChain = false;
+                    currentChainSize = 0;
                 } else if (checkChains(opcode) && !foundChain) {
-                    foundChain = true;
-                    chains.merge(opcode, 1, Integer::sum);
+                    currentChainSize++;
+
+                    if (currentChainSize >= chainSize(opcode)) {
+                        foundChain = true;
+                        chains.merge(opcode, 1, Integer::sum);
+                    }
                 }
 
                 prevOpcode = opcode;
