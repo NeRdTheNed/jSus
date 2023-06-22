@@ -320,6 +320,7 @@ public class Checkers {
             "aHR0cDovL2ZpbGVzLnNreXJhZ2UuZGUvdXBkYXR",
             "http://files.skyrage.de/update",
             "http://first.throwable.in/update",
+            "http://first.throwable.in/mvd",
         };
 
         for (final String virusString : virusStrings) {
