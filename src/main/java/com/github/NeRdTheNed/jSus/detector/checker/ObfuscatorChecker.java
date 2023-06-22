@@ -91,7 +91,7 @@ public class ObfuscatorChecker implements IChecker {
         return set;
     }
 
-    private static boolean isChainable(int opcode) {
+    private static boolean checkChains(int opcode) {
         switch (opcode) {
         //case Opcodes.NOP:
         //case Opcodes.DUP:
@@ -162,7 +162,7 @@ public class ObfuscatorChecker implements IChecker {
 
                 if (opcode != prevOpcode) {
                     foundChain = false;
-                } else if (isChainable(opcode) && !foundChain) {
+                } else if (checkChains(opcode) && !foundChain) {
                     foundChain = true;
                     chains.merge(opcode, 1, Integer::sum);
                 }
