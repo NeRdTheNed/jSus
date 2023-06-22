@@ -308,7 +308,8 @@ public class Checkers {
         susPatternMap.put(Pattern.compile("/users/@me/billing"), TestResult.TestResultLevel.STRONG_SUS);
         susPatternMap.put(Pattern.compile("AppData"), TestResult.TestResultLevel.SUS);
         susPatternMap.put(Pattern.compile("Application Support"), TestResult.TestResultLevel.SUS);
-        susPatternMap.put(Pattern.compile("Default[/|\\\\](Login Data|Local Storage|Web Data|Cookies|Network)"), TestResult.TestResultLevel.SUS);
+        susPatternMap.put(Pattern.compile("Default[/|\\\\](Login Data|Local Storage|Web Data|Cookies|Network)"), TestResult.TestResultLevel.STRONG_SUS);
+        susPatternMap.put(Pattern.compile("User Data[/|\\\\](Local State|Default)"), TestResult.TestResultLevel.STRONG_SUS);
         final StringChecker susTest = new StringChecker("YoinkRat", susMap, susPatternMap);
         list.add(susTest);
     }
