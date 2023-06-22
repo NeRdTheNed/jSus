@@ -311,6 +311,8 @@ public class Checkers {
         susPatternMap.put(Pattern.compile("Default[/|\\\\](Login Data|Local Storage|Web Data|Cookies|Network)"), TestResult.TestResultLevel.STRONG_SUS);
         susPatternMap.put(Pattern.compile("User Data[/|\\\\](Local State|Default)"), TestResult.TestResultLevel.STRONG_SUS);
         susPatternMap.put(Pattern.compile("Local Storage[/|\\\\]leveldb"), TestResult.TestResultLevel.STRONG_SUS);
+        // Regex from https://github.com/MinnDevelopment/discord-webhooks/blob/bbbd1e0a7ff1bdeef64df3d7a769105e118a60af/src/main/java/club/minnced/discord/webhook/WebhookClientBuilder.java#L46
+        susPatternMap.put(Pattern.compile("(?:https?://)?(?:\\w+\\.)?discord(?:app)?\\.com/api(?:/v\\d+)?/webhooks/(\\d+)/([\\w-]+)(?:/(?:\\w+)?)?"), TestResult.TestResultLevel.SUS);
         final StringChecker susTest = new StringChecker("YoinkRat", susMap, susPatternMap);
         list.add(susTest);
     }
