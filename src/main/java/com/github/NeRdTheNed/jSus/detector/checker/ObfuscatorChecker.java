@@ -93,7 +93,7 @@ public class ObfuscatorChecker implements IChecker {
 
     private static boolean checkChains(int opcode) {
         switch (opcode) {
-        //case Opcodes.NOP:
+        case Opcodes.NOP:
         case Opcodes.DUP:
         case Opcodes.POP:
         case Opcodes.INEG:
@@ -125,7 +125,9 @@ public class ObfuscatorChecker implements IChecker {
 
     private static int chainSize(int opcode) {
         switch (opcode) {
-        //case Opcodes.NOP:
+        case Opcodes.NOP:
+            return 3;
+
         case Opcodes.DUP:
         case Opcodes.POP:
             return 2;
