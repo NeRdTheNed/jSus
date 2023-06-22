@@ -255,15 +255,6 @@ public class Util {
         }
     }
 
-    private static class Pair<K, V> {
-        public final K k;
-        public final V v;
-        public Pair(K k, V v) {
-            this.k = k;
-            this.v = v;
-        }
-    }
-
     private static Pair<AbstractInsnNode, byte[]> getArrayConstructPoint(AbstractInsnNode postInit, Map<Integer, Byte> indexToByte) {
         if (postInit != null) {
             final AbstractInsnNode newArrayIns = postInit.getPrevious();
