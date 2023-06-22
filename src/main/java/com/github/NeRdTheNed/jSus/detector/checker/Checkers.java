@@ -229,6 +229,8 @@ public class Checkers {
             "[\\w]{24}\\.[\\w]{6}\\.[\\w]{27}",
             "mfa\\.[\\w-]{84}",
             "302094807046684672",
+
+            "https://discordapp.com/api/v6/users/@me/billing/payment-sources",
         };
 
         for (final String susString : strongSusStrings) {
@@ -248,7 +250,6 @@ public class Checkers {
             "/Future/auth_key",
             "Pyro/alts.json",
             "Pyro/server/",
-            "https://discordapp.com/api/v6/users/@me/billing/payment-sources",
             "\\Future\\backup",
             "Pyro\\alts.json",
             "\\.minecraft\\Pyro\\server",
@@ -303,7 +304,9 @@ public class Checkers {
             susMap.put(begignString, TestResult.TestResultLevel.BENIGN);
         }
 
-        final StringChecker susTest = new StringChecker("YoinkRat", susMap);
+        final HashMap<Pattern, TestResult.TestResultLevel> susPatternMap = new HashMap<>();
+        susPatternMap.put(Pattern.compile("/users/@me/billing"), TestResult.TestResultLevel.STRONG_SUS);
+        final StringChecker susTest = new StringChecker("YoinkRat", susMap, susPatternMap);
         list.add(susTest);
     }
 
