@@ -3,6 +3,7 @@ package com.github.NeRdTheNed.jSus.detector.checker;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Pattern;
 
 
 public class Checkers {
