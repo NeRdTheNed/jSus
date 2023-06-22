@@ -146,7 +146,8 @@ public class ObfuscatorChecker implements IChecker {
         // TODO Find a better balance
         final boolean checkVeryShortNameLength = isClassName;
         final boolean checkShortNameLength = isClassName;
-        final boolean notValidJavaStart = name.isEmpty() || !Character.isJavaIdentifierStart(name.charAt(0));
+        final char firstChar;
+        final boolean notValidJavaStart = name.isEmpty() || (!Character.isJavaIdentifierStart(firstChar = name.charAt(0)) && (firstChar != '-'));
 
         if (!isClassName && notValidJavaStart && ("<init>".equals(name) || "<clinit>".equals(name))) {
             return;
