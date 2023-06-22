@@ -193,14 +193,16 @@ public class ObfuscatorChecker implements IChecker {
         checkName(processedClassName, true, className, foundBenign, foundVeryBenign);
         final Map<Integer, Integer> chains = new HashMap<>();
         int allatoriDemoCount = 0;
+        int branchlockCount = 0;
 
         for (final MethodNode methodNode : clazz.methods) {
             if (methodNode.name.contains("ALLATORIxDEMO")) {
                 allatoriDemoCount++;
-            } else {
-                checkName(methodNode.name, false, className, foundBenign, foundVeryBenign);
+            } else if (methodNode.name.contains("branchlock.net")) {
+                branchlockCount++;
             }
 
+            checkName(methodNode.name, false, className, foundBenign, foundVeryBenign);
             boolean foundChain = false;
             int currentChainSize = 0;
             int prevOpcode = -1;
@@ -225,7 +227,11 @@ public class ObfuscatorChecker implements IChecker {
         }
 
         if (allatoriDemoCount > 0) {
-            res.add(new TestResult(TestResult.TestResultLevel.BENIGN, "Allatori demo detected at class " + className, allatoriDemoCount));
+            res.add(new TestResult(TestResult.TestResultLevel.BENIGN, "Obfuscator Allatori demo detected at class " + className, allatoriDemoCount));
+        }
+
+        if (branchlockCount > 0) {
+            res.add(new TestResult(TestResult.TestResultLevel.BENIGN, "Obfuscator Branchlock detected at class " + className, branchlockCount));
         }
 
         foundBenign.forEach((k, v) -> res.add(new TestResult(TestResult.TestResultLevel.BENIGN, k, v)));
