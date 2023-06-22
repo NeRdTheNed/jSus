@@ -10,6 +10,21 @@ public class Checkers {
 
     public static final List<IChecker> checkerList = makeCheckerList();
 
+    private static void addGenericRatChecker(List<IChecker> list) {
+        final HashMap<String, TestResult.TestResultLevel> susMap = new HashMap<>();
+        final HashMap<Pattern, TestResult.TestResultLevel> susPatternMap = new HashMap<>();
+        susPatternMap.put(Pattern.compile("/users/@me/billing"), TestResult.TestResultLevel.STRONG_SUS);
+        susPatternMap.put(Pattern.compile("AppData"), TestResult.TestResultLevel.SUS);
+        susPatternMap.put(Pattern.compile("Application Support"), TestResult.TestResultLevel.SUS);
+        susPatternMap.put(Pattern.compile("Default[/|\\\\](Login Data|Local Storage|Web Data|Cookies|Network)"), TestResult.TestResultLevel.STRONG_SUS);
+        susPatternMap.put(Pattern.compile("User Data[/|\\\\](Local State|Default)"), TestResult.TestResultLevel.STRONG_SUS);
+        susPatternMap.put(Pattern.compile("Local Storage[/|\\\\]leveldb"), TestResult.TestResultLevel.STRONG_SUS);
+        // Regex from https://github.com/MinnDevelopment/discord-webhooks/blob/bbbd1e0a7ff1bdeef64df3d7a769105e118a60af/src/main/java/club/minnced/discord/webhook/WebhookClientBuilder.java#L46
+        susPatternMap.put(Pattern.compile("(?:https?://)?(?:\\w+\\.)?discord(?:app)?\\.com/api(?:/v\\d+)?/webhooks/(\\d+)/([\\w-]+)(?:/(?:\\w+)?)?"), TestResult.TestResultLevel.SUS);
+        final StringChecker susTest = new StringChecker("Possible RAT / stealer", susMap, susPatternMap);
+        list.add(susTest);
+    }
+
     private static void addYoinkRatChecker(List<IChecker> list) {
         final HashMap<String, TestResult.TestResultLevel> susMap = new HashMap<>();
         final String[] virusStrings = {
@@ -304,16 +319,7 @@ public class Checkers {
             susMap.put(begignString, TestResult.TestResultLevel.BENIGN);
         }
 
-        final HashMap<Pattern, TestResult.TestResultLevel> susPatternMap = new HashMap<>();
-        susPatternMap.put(Pattern.compile("/users/@me/billing"), TestResult.TestResultLevel.STRONG_SUS);
-        susPatternMap.put(Pattern.compile("AppData"), TestResult.TestResultLevel.SUS);
-        susPatternMap.put(Pattern.compile("Application Support"), TestResult.TestResultLevel.SUS);
-        susPatternMap.put(Pattern.compile("Default[/|\\\\](Login Data|Local Storage|Web Data|Cookies|Network)"), TestResult.TestResultLevel.STRONG_SUS);
-        susPatternMap.put(Pattern.compile("User Data[/|\\\\](Local State|Default)"), TestResult.TestResultLevel.STRONG_SUS);
-        susPatternMap.put(Pattern.compile("Local Storage[/|\\\\]leveldb"), TestResult.TestResultLevel.STRONG_SUS);
-        // Regex from https://github.com/MinnDevelopment/discord-webhooks/blob/bbbd1e0a7ff1bdeef64df3d7a769105e118a60af/src/main/java/club/minnced/discord/webhook/WebhookClientBuilder.java#L46
-        susPatternMap.put(Pattern.compile("(?:https?://)?(?:\\w+\\.)?discord(?:app)?\\.com/api(?:/v\\d+)?/webhooks/(\\d+)/([\\w-]+)(?:/(?:\\w+)?)?"), TestResult.TestResultLevel.SUS);
-        final StringChecker susTest = new StringChecker("YoinkRat", susMap, susPatternMap);
+        final StringChecker susTest = new StringChecker("YoinkRat", susMap);
         list.add(susTest);
     }
 
@@ -394,6 +400,7 @@ public class Checkers {
     }
 
     private static void addStringCheckers(List<IChecker> list) {
+        addGenericRatChecker(list);
         addNekoClientChecker(list);
         addSkyrageChecker(list);
         addYoinkRatChecker(list);
