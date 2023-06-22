@@ -143,17 +143,20 @@ public class ObfuscatorChecker implements IChecker {
     }
 
     private static void checkName(String name, boolean isClassName, String className, Map<String, Integer> foundBenign, Map<String, Integer> foundVeryBenign) {
+        // TODO Find a better balance
+        final boolean checkVeryShortNameLength = isClassName;
+        final boolean checkShortNameLength = isClassName;
+
         if (name.isEmpty() || !Character.isJavaIdentifierStart(name.charAt(0))) {
             if (isClassName || (!"<init>".equals(name) && !"<clinit>".equals(name))) {
                 final String str = isClassName ? "Found common obfuscated classname technique at class " + className : "Found common obfuscated method name technique for method " + name + " at class " + className;
                 foundBenign.merge(str, 1, Integer::sum);
             }
-        } else if ((name.length() == 1) || commonObfNamesListCaseSensitive.contains(name) || commonObfNamesList.contains(name.toLowerCase())) {
+        } else if ((checkVeryShortNameLength && (name.length() == 1)) || commonObfNamesListCaseSensitive.contains(name) || commonObfNamesList.contains(name.toLowerCase())) {
             final String str = isClassName ? "Found common obfuscated classname " + className : "Found common obfuscated method name " + name + " at class " + className;
             foundBenign.merge(str, 1, Integer::sum);
-        } else if (isClassName && (name.length() == 2)) {
-            //String str = isClassName ? "Class name may be obfuscated " + className : "Method name " + name + " may be obfuscated at class " + className;
-            final String str = "Class name may be obfuscated " + className;
+        } else if (checkShortNameLength && (name.length() == 2)) {
+            final String str = isClassName ? "Class name may be obfuscated " + className : "Method name " + name + " may be obfuscated at class " + className;
             foundVeryBenign.merge(str, 1, Integer::sum);
         }
     }
