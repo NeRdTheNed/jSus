@@ -142,6 +142,22 @@ public class ObfuscatorChecker implements IChecker {
         return "Obfuscator checker";
     }
 
+    private static void checkName(String name, boolean isClassName, String className, Map<String, Integer> foundBenign, Map<String, Integer> foundVeryBenign) {
+        if (name.isEmpty() || !Character.isJavaIdentifierStart(name.charAt(0))) {
+            if (isClassName || (!"<init>".equals(name) && !"<clinit>".equals(name))) {
+                final String str = isClassName ? "Found common obfuscated classname technique at class " + className : "Found common obfuscated method name technique for method " + name + " at class " + className;
+                foundBenign.merge(str, 1, Integer::sum);
+            }
+        } else if ((name.length() == 1) || commonObfNamesListCaseSensitive.contains(name) || commonObfNamesList.contains(name.toLowerCase())) {
+            final String str = isClassName ? "Found common obfuscated classname " + className : "Found common obfuscated method name " + name + " at class " + className;
+            foundBenign.merge(str, 1, Integer::sum);
+        } else if (isClassName && (name.length() == 2)) {
+            //String str = isClassName ? "Class name may be obfuscated " + className : "Method name " + name + " may be obfuscated at class " + className;
+            final String str = "Class name may be obfuscated " + className;
+            foundVeryBenign.merge(str, 1, Integer::sum);
+        }
+    }
+
     // TODO https://github.com/java-deobfuscator/deobfuscator/tree/master/src/main/java/com/javadeobfuscator/deobfuscator/rules
     // TODO Handle cases like foo$illegalname$bar
     // TODO Check for sequences of bytecode Javac wouldn't produce
@@ -149,23 +165,19 @@ public class ObfuscatorChecker implements IChecker {
     @Override
     public List<TestResult> testClass(ClassNode clazz) {
         final List<TestResult> res = new ArrayList<>();
+        final Map<String, Integer> foundBenign = new HashMap<>();
+        final Map<String, Integer> foundVeryBenign = new HashMap<>();
         final String className = clazz.name;
         final String processedClassName = className.substring(className.lastIndexOf("/") + 1);
-
-        if (processedClassName.isEmpty() || !Character.isJavaIdentifierStart(processedClassName.charAt(0))) {
-            res.add(new TestResult(TestResult.TestResultLevel.BENIGN, "Found common obfuscated classname technique at class " + className, 1));
-        } else if ((processedClassName.length() == 1) || commonObfNamesListCaseSensitive.contains(processedClassName) || commonObfNamesList.contains(processedClassName.toLowerCase())) {
-            res.add(new TestResult(TestResult.TestResultLevel.BENIGN, "Found common obfuscated classname " + className, 1));
-        } else if (processedClassName.length() == 2) {
-            res.add(new TestResult(TestResult.TestResultLevel.VERY_BENIGN, "Class name may be obfuscated " + className, 1));
-        }
-
+        checkName(processedClassName, true, className, foundBenign, foundVeryBenign);
         final Map<Integer, Integer> chains = new HashMap<>();
         int allatoriDemoCount = 0;
 
         for (final MethodNode methodNode : clazz.methods) {
             if (methodNode.name.contains("ALLATORIxDEMO")) {
                 allatoriDemoCount++;
+            } else {
+                checkName(methodNode.name, false, className, foundBenign, foundVeryBenign);
             }
 
             boolean foundChain = false;
@@ -195,6 +207,8 @@ public class ObfuscatorChecker implements IChecker {
             res.add(new TestResult(TestResult.TestResultLevel.BENIGN, "Allatori demo detected at class " + className, allatoriDemoCount));
         }
 
+        foundBenign.forEach((k, v) -> res.add(new TestResult(TestResult.TestResultLevel.BENIGN, k, v)));
+        foundVeryBenign.forEach((k, v) -> res.add(new TestResult(TestResult.TestResultLevel.VERY_BENIGN, k, v)));
         chains.forEach((k, v) -> res.add(new TestResult(TestResult.TestResultLevel.BENIGN, "Unlikely opcode chain of " + Util.opcodeName(k) + " found at " + className, v)));
         return res;
     }
