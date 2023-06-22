@@ -448,10 +448,10 @@ public class Checkers {
     private static void addDecodeStringCheckers(List<IChecker> list) {
         // TODO handle org.apache.commons.codec.binary.Base16
         // TODO handle org.apache.commons.codec.binary.Base32
-        // TODO handle org.apache.commons.codec.binary.Base64
         // TODO handle org.apache.commons.codec.binary.Hex
         list.add(new CallsMethodChecker(-1, "java/util/Base64$Decoder", "decode", null, TestResult.TestResultLevel.BENIGN));
         list.add(new CallsMethodChecker(-1, "javax/xml/bind/DatatypeConverter", "parseBase64Binary", null, TestResult.TestResultLevel.BENIGN));
+        list.add(new CallsMethodChecker(-1, "org/apache/commons/codec/binary/Base64", "decodeBase64", null, TestResult.TestResultLevel.BENIGN));
     }
 
     private static void addSusFileOperationsCheckers(List<IChecker> list) {

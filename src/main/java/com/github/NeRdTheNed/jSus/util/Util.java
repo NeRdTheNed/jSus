@@ -180,13 +180,16 @@ public class Util {
     public static boolean isCommonBase64DecodeMethod(int opcode, String owner, String name, String signature) {
         // TODO handle org.apache.commons.codec.binary.Base16
         // TODO handle org.apache.commons.codec.binary.Base32
-        // TODO handle org.apache.commons.codec.binary.Base64
         // TODO handle org.apache.commons.codec.binary.Hex
         if ("java/util/Base64$Decoder".equals(owner) && "decode".equals(name) && "(Ljava/lang/String;)[B".equals(signature)) {
             return true;
         }
 
         if ("javax/xml/bind/DatatypeConverter".equals(owner) && "parseBase64Binary".equals(name) && "(Ljava/lang/String;)[B".equals(signature)) {
+            return true;
+        }
+
+        if ("org/apache/commons/codec/binary/Base64".equals(owner) && "decodeBase64".equals(name) && "(Ljava/lang/String;)[B".equals(signature)) {
             return true;
         }
 
