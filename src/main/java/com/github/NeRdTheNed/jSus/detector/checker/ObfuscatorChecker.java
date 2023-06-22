@@ -94,13 +94,13 @@ public class ObfuscatorChecker implements IChecker {
     private static boolean isChainable(int opcode) {
         switch (opcode) {
         //case Opcodes.NOP:
+        //case Opcodes.DUP:
         //case Opcodes.POP:
         case Opcodes.INEG:
         case Opcodes.LNEG:
         case Opcodes.FNEG:
         case Opcodes.DNEG:
         case Opcodes.SWAP:
-        case Opcodes.DUP:
         case Opcodes.I2L:
         case Opcodes.I2F:
         case Opcodes.I2D:
