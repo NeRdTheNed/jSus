@@ -96,6 +96,7 @@ public class ObfuscatorChecker implements IChecker {
         //case Opcodes.NOP:
         case Opcodes.INEG:
         case Opcodes.SWAP:
+        case Opcodes.DUP:
             return true;
 
         default:
