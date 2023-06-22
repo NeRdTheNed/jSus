@@ -146,12 +146,15 @@ public class ObfuscatorChecker implements IChecker {
         // TODO Find a better balance
         final boolean checkVeryShortNameLength = isClassName;
         final boolean checkShortNameLength = isClassName;
+        final boolean notValidJavaStart = name.isEmpty() || !Character.isJavaIdentifierStart(name.charAt(0));
 
-        if (name.isEmpty() || !Character.isJavaIdentifierStart(name.charAt(0))) {
-            if (isClassName || (!"<init>".equals(name) && !"<clinit>".equals(name))) {
-                final String str = isClassName ? "Found common obfuscated classname technique at class " + className : "Found common obfuscated method name technique for method " + name + " at class " + className;
-                foundBenign.merge(str, 1, Integer::sum);
-            }
+        if (!isClassName && notValidJavaStart && ("<init>".equals(name) || "<clinit>".equals(name))) {
+            return;
+        }
+
+        if (notValidJavaStart) {
+            final String str = isClassName ? "Found common obfuscated classname technique at class " + className : "Found common obfuscated method name technique for method " + name + " at class " + className;
+            foundBenign.merge(str, 1, Integer::sum);
         } else if ((checkVeryShortNameLength && (name.length() == 1)) || commonObfNamesListCaseSensitive.contains(name) || commonObfNamesList.contains(name.toLowerCase())) {
             final String str = isClassName ? "Found common obfuscated classname " + className : "Found common obfuscated method name " + name + " at class " + className;
             foundBenign.merge(str, 1, Integer::sum);
