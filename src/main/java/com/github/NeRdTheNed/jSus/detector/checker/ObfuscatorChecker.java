@@ -147,13 +147,27 @@ public class ObfuscatorChecker implements IChecker {
         final boolean checkVeryShortNameLength = isClassName;
         final boolean checkShortNameLength = isClassName;
         final char firstChar;
-        final boolean notValidJavaStart = name.isEmpty() || (!Character.isJavaIdentifierStart(firstChar = name.charAt(0)) && (firstChar != '-'));
+        boolean notValidJavaIdent = name.isEmpty() || (!Character.isJavaIdentifierStart(firstChar = name.charAt(0)) && (firstChar != '-'));
 
-        if (!isClassName && notValidJavaStart && ("<init>".equals(name) || "<clinit>".equals(name))) {
+        if (!isClassName && notValidJavaIdent && ("<init>".equals(name) || "<clinit>".equals(name))) {
             return;
         }
 
-        if (notValidJavaStart) {
+        for (int i = 1; !notValidJavaIdent && (i < name.length()); i++) {
+            final char currentChar = name.charAt(i);
+
+            if (!Character.isJavaIdentifierPart(currentChar) && (currentChar != '$') && (currentChar != '-')) {
+                notValidJavaIdent = true;
+            }
+        }
+
+        /*
+         if (isClassName && notValidJavaIdent && ("package-info".equals(name) || "module-info".equals(name))) {
+            return;
+        }
+        */
+
+        if (notValidJavaIdent) {
             final String str = isClassName ? "Found common obfuscated classname technique at class " + className : "Found common obfuscated method name technique for method " + name + " at class " + className;
             foundBenign.merge(str, 1, Integer::sum);
         } else if ((checkVeryShortNameLength && (name.length() == 1)) || commonObfNamesListCaseSensitive.contains(name) || commonObfNamesList.contains(name.toLowerCase())) {
