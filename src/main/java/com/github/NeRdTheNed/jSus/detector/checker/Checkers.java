@@ -306,6 +306,9 @@ public class Checkers {
 
         final HashMap<Pattern, TestResult.TestResultLevel> susPatternMap = new HashMap<>();
         susPatternMap.put(Pattern.compile("/users/@me/billing"), TestResult.TestResultLevel.STRONG_SUS);
+        susPatternMap.put(Pattern.compile("AppData"), TestResult.TestResultLevel.SUS);
+        susPatternMap.put(Pattern.compile("Application Support"), TestResult.TestResultLevel.SUS);
+        susPatternMap.put(Pattern.compile("Default[/|\\\\](Login Data|Local Storage|Web Data|Cookies|Network)"), TestResult.TestResultLevel.SUS);
         final StringChecker susTest = new StringChecker("YoinkRat", susMap, susPatternMap);
         list.add(susTest);
     }
