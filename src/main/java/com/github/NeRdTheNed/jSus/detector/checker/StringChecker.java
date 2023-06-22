@@ -33,7 +33,7 @@ public class StringChecker implements IChecker {
         this.susPatternMap = susPatternMap;
     }
 
-    private void testString(Map<Pair<String, TestResult.TestResultLevel>, Integer> foundStrings, String toCheck) {
+    private void testStringImpl(Map<Pair<String, TestResult.TestResultLevel>, Integer> foundStrings, String toCheck) {
         TestResult.TestResultLevel testResult = susMap.get(toCheck);
 
         if (testResult == null) {
@@ -48,6 +48,17 @@ public class StringChecker implements IChecker {
         if (testResult != null) {
             foundStrings.merge(new Pair<>(toCheck, testResult), 1, Integer::sum);
         }
+    }
+
+    private void testString(Map<Pair<String, TestResult.TestResultLevel>, Integer> foundStrings, String toCheck) {
+        testStringImpl(foundStrings, toCheck);
+        // TODO Try figuring out a better way to do this
+        /*try {
+            final String possibleStr = new String(Util.decoder.decode(toCheck));
+            testStringImpl(foundStrings, possibleStr);
+        } catch (final IllegalArgumentException e) {
+            // Invalid Base64, ignored
+        }*/
     }
 
     @Override
