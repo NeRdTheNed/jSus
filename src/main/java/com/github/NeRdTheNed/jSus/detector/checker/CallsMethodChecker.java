@@ -23,7 +23,7 @@ public class CallsMethodChecker implements IChecker {
 
     private final TestResult.TestResultLevel result;
 
-    private final boolean compareOpcodeMatchWilcard(int toComp) {
+    private boolean compareOpcodeMatchWildcard(int toComp) {
         if (Util.isOpcodeMethodInvoke(compareOpcode)) {
             return compareOpcode == toComp;
         }
@@ -56,7 +56,7 @@ public class CallsMethodChecker implements IChecker {
             for (final AbstractInsnNode ins : methodNode.instructions) {
                 final int opcode = ins.getOpcode();
 
-                if (compareOpcodeMatchWilcard(opcode)) {
+                if (compareOpcodeMatchWildcard(opcode)) {
                     final MethodInsnNode methodInsNode = (MethodInsnNode) ins;
                     final String methodOwner = methodInsNode.owner;
                     final String methodName = methodInsNode.name;

@@ -46,7 +46,7 @@ public class Scanner {
         final File[] files = dir.listFiles();
 
         if (files != null) {
-            for (final File file : dir.listFiles()) {
+            for (final File file : files) {
                 if (file.isDirectory() && detectSusFromDirectory(file, verbose, level, color)) {
                     foundSus = true;
                 }

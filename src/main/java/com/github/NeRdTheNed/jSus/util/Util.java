@@ -103,12 +103,10 @@ public class Util {
                     System.out.println("- Adding JIJ " + name + " to scan");
                 }
 
-                Path tempFile = null;
-
                 try
                     (InputStream is = jarFile.getInputStream(entry)) {
                     // TODO Not totally sure if this is correct
-                    tempFile = Files.createTempFile(null, null);
+                    final Path tempFile = Files.createTempFile(null, null);
                     tempFile.toFile().deleteOnExit();
                     Files.copy(is, tempFile, StandardCopyOption.REPLACE_EXISTING);
                     final JarFile jij = new JarFile(tempFile.toFile());
@@ -189,60 +187,56 @@ public class Util {
             return true;
         }
 
-        if ("org/apache/commons/codec/binary/Base64".equals(owner) && "decodeBase64".equals(name) && "(Ljava/lang/String;)[B".equals(signature)) {
-            return true;
-        }
-
-        return false;
+        return "org/apache/commons/codec/binary/Base64".equals(owner) && "decodeBase64".equals(name) && "(Ljava/lang/String;)[B".equals(signature);
     }
 
     private static Number getValueOrNull(AbstractInsnNode load) {
         switch (load.getOpcode()) {
         case Opcodes.ICONST_M1:
-            return Integer.valueOf(-1);
+            return -1;
 
         case Opcodes.ICONST_0:
-            return Integer.valueOf(0);
+            return 0;
 
         case Opcodes.ICONST_1:
-            return Integer.valueOf(1);
+            return 1;
 
         case Opcodes.ICONST_2:
-            return Integer.valueOf(2);
+            return 2;
 
         case Opcodes.ICONST_3:
-            return Integer.valueOf(3);
+            return 3;
 
         case Opcodes.ICONST_4:
-            return Integer.valueOf(4);
+            return 4;
 
         case Opcodes.ICONST_5:
-            return Integer.valueOf(5);
+            return 5;
 
         case Opcodes.LCONST_0:
-            return Long.valueOf(0);
+            return 0L;
 
         case Opcodes.LCONST_1:
-            return Long.valueOf(1);
+            return 1L;
 
         case Opcodes.FCONST_0:
-            return Float.valueOf(0f);
+            return 0f;
 
         case Opcodes.FCONST_1:
-            return Float.valueOf(1f);
+            return 1f;
 
         case Opcodes.FCONST_2:
-            return Float.valueOf(2f);
+            return 2f;
 
         case Opcodes.DCONST_0:
-            return Double.valueOf(0d);
+            return 0d;
 
         case Opcodes.DCONST_1:
-            return Double.valueOf(1d);
+            return 1d;
 
         case Opcodes.BIPUSH:
         case Opcodes.SIPUSH:
-            return Integer.valueOf(((IntInsnNode) load).operand);
+            return ((IntInsnNode) load).operand;
 
         case Opcodes.LDC:
             final LdcInsnNode ldc = (LdcInsnNode) load;
@@ -293,7 +287,7 @@ public class Util {
 
     private static Pair<AbstractInsnNode, byte[]> tryComputeArray(AbstractInsnNode arrayOnStack) {
         if (arrayOnStack == null) {
-            return new Pair<>(arrayOnStack, null);
+            return new Pair<>(null, null);
         }
 
         final int opcode = arrayOnStack.getOpcode();
@@ -430,7 +424,7 @@ public class Util {
     // either because it can't be determined, or my code doesn't support figuring it out yet.
     private static Pair<AbstractInsnNode, String> tryComputeString(AbstractInsnNode stringOnStack) {
         if (stringOnStack == null) {
-            return new Pair<>(stringOnStack, null);
+            return new Pair<>(null, null);
         }
 
         final int opcode = stringOnStack.getOpcode();
