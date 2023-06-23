@@ -12,49 +12,7 @@ public class Checkers {
 
     private static void addGenericRatChecker(List<IChecker> list) {
         final HashMap<String, TestResult.TestResultLevel> susMap = new HashMap<>();
-        final HashMap<Pattern, TestResult.TestResultLevel> susPatternMap = new HashMap<>();
-        susPatternMap.put(Pattern.compile("/users/@me/billing"), TestResult.TestResultLevel.STRONG_SUS);
-        susPatternMap.put(Pattern.compile("AppData"), TestResult.TestResultLevel.SUS);
-        susPatternMap.put(Pattern.compile("Application Support"), TestResult.TestResultLevel.SUS);
-        susPatternMap.put(Pattern.compile("Default[/|\\\\](Login Data|Local Storage|Web Data|Cookies|Network)"), TestResult.TestResultLevel.STRONG_SUS);
-        susPatternMap.put(Pattern.compile("User Data[/|\\\\](Local State|Default)"), TestResult.TestResultLevel.STRONG_SUS);
-        susPatternMap.put(Pattern.compile("Local Storage[/|\\\\]leveldb"), TestResult.TestResultLevel.STRONG_SUS);
-        // Regex from https://github.com/MinnDevelopment/discord-webhooks/blob/bbbd1e0a7ff1bdeef64df3d7a769105e118a60af/src/main/java/club/minnced/discord/webhook/WebhookClientBuilder.java#L46
-        susPatternMap.put(Pattern.compile("(?:https?://)?(?:\\w+\\.)?discord(?:app)?\\.com/api(?:/v\\d+)?/webhooks/(\\d+)/([\\w-]+)(?:/(?:\\w+)?)?"), TestResult.TestResultLevel.SUS);
-        final StringChecker susTest = new StringChecker("Possible RAT / stealer", susMap, susPatternMap);
-        list.add(susTest);
-    }
-
-    private static void addYoinkRatChecker(List<IChecker> list) {
-        final HashMap<String, TestResult.TestResultLevel> susMap = new HashMap<>();
-        final String[] virusStrings = {
-            // Moneyrat
-            ".apiloader.APILoader",
-            "net.minecraftforge:apiloader:1.0.4",
-            " --tweakClass net.minecraftforge.apiloader.APILoader",
-            "net.minecraftforge.apiloader.APILoader",
-            "libraries/net/minecraftforge/apiloader/1.0.4/apiloader-1.0.4.jar",
-            "APILoader - 28 Dec 2020\n\n",
-            // v1
-            "--tweakClass net.minecraftforge.apiloader.APILoader",
-            "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvNzk5MDk5MzU4MDg3MzQ4MzE1L1VyTjQtV2psTDBsQUJNckF3dVpiMUdUUDJkUFdJbG1jR0JEbmJKalFYMmhwdE4taF8xXzBfeUxROXlSR0JNeGc4X0dK",
-            "http://yoink.site/ukraine/rat.jar",
-            "the rat is running out of the game",
-            "https://cdn-107.anonfiles.com/xe9fG219y7/1a2d8176-1659361918/build.exe",
-            "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTAwODQzNTUwNzc5MDg5MzA2Ny9GTjVoYmhjWkJNY183ZnVrR1MyX3JjQnFWWkc3dDhGaURlZlBrVGpIZVRkRFhrU0liWEh6Z3plQmhpcWd1SUVUV0QwRw==",
-            "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvODMwNTQ5ODg5NzgzNTYyMjcwL193OW8zQlgyck1zNzl2ZmMtdGNWWm9BZlYtLTVxQXJDdFFhbEJBZ09VMzdHZ3J3SENyLWgzdXVLVmVZeWJnY3g1N20t",
-            "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvODMwNTgwNjUzNjA2Njk5MDIwLzROaFBRcWlhY3NKREFOYnZ5YlFxMFZDZTJWOE5OaldwLUl1SXR6cF96QVZzZG54SVRwWUdIbkF5LVhHb1Rqb29vc0Zo",
-            "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvODMwNTgwNzczNTM0MzAyMjE5L1ZLd2dlUzh0NnQtTlJ2ZTFGN19HOTdGR29FQUxIdnoxb3VrbmdhU2lVV2dPYThGalZCbE4xS2dnZEVhbFJWYlRVNW9V",
-            "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvODMwNTgwODY1NjQxMDg3MDI3Ly1MN21lWFlJZDJTVHVYbVhsYmFoczd1ekFJTVEyQWlBU2NyQUIwbVVQbFI1dHJlOVF0dUdHYUhFUm02bFpVUEU1bjQy",
-            "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvODMwNTgwOTczMDE5NDYzNzMxL0UteUNKTnF1ODhrT2g4VDZxdVJHbEFMYmR0ZTFLSW5LMU9uZkw2cS1rZklSM2dWSks3WXR0WXZYQ2xfVVFaa3NpLUNS",
-        };
-
-        for (final String virusString : virusStrings) {
-            susMap.put(virusString, TestResult.TestResultLevel.VIRUS);
-        }
-
         final String[] strongSusStrings = {
-            // Moneyrat
             "/.metadata/.plugins/org.eclipse.buildship.ui/dialog_settings.xml",
             "/AppData/Local/BraveSoftware/Brave-Browser/User Data/Default/Local Storage/leveldb/",
             "/AppData/Local/Google/Chrome/User Data/Default/Local Storage/leveldb/",
@@ -77,43 +35,10 @@ public class Checkers {
             "/Library/Application Support/Firefox/Profiles/",
             "/Library/Application Support/Google/Chrome/User Data/Default/Local Storage/leveldb/",
             "/options/recentProjects.xml",
-            "\nAdditional discord data:\n",
-            //"\nDesktop folder:\n"
-            "\nDiscord token[s]: \n",
-            //"\nDownloads folder:\n"
-            "\nEclipse workspaces:\n",
-            "\nFileZilla hosts:\n",
-            "\nFuture accounts: \n",
-            "\nFuture loader credentials:\n",
-            "\nFuture waypoints: \n",
-            "\nIntellij workspaces:\n",
-            "\nJourneyMap waypoints: \n",
-            "\nKAMI Blue waypoints: \n",
-            "\nMinecraft data: \n",
-            //"\nMinecraft mods:\n"
-            "\nMultiMC accounts.json: \n",
-            "\nPyro accounts:\n",
-            "\nPyro loader credentials: \n",
-            "\nPyro waypoints:\n",
-            //"\nRunning processes:\n"
-            "\nRusherHack accounts:\n",
-            "\nRusherHack loader credentials: \n",
-            "\nRusherHack waypoints:\n",
-            //"\nuser.home:\n"
-            "<item key=\"project_location\" ",
-            "<option name=\"recentPaths\">",
-            "428A487E3361EF9C5FC20233485EA236",
-            "89D85BE00F56ACE593BC029C686E9BA5",
-            "99CE85B34778C8C765CD2F222748EF11",
-            "F6DA144461738529DB35B7DC4E2578B2",
-            "http://dengimod.cf/discordhook/sendstuff2.php",
-            "https://pastebin.com/raw/eiv5znvZ",
-            "https://pastebin.com/raw/X5UHFxtM",
+
             "ps -e -o command",
-            "rusherhack/alts.json",
-            "rusherhack/waypoints.json",
             "wmic process get name,executablepath",
-            // V1
+
             "[\\w\\W]{24}\\.[\\w\\W]{6}\\.[\\w\\W]{27}|mfa\\.[\\w\\W]{84}",
             "\\BraveSoftware\\Brave-Browser\\User Data\\Default",
             "\\Future\\accounts.txt",
@@ -126,9 +51,7 @@ public class Checkers {
             "\\Opera Software\\Opera Stable",
             "\\Yandex\\YandexBrowser\\User Data\\Default",
             "\u0024USER_HOME\u0024",
-            "https://pastebin.com/raw/jdiVNVZ2",
-            "https://pastebin.com/raw/ZrMLRRar",
-            // 1.5
+
             "/.config/BraveSoftware/Brave-Browser/Default/Login Data",
             "/.config/BraveSoftware/Brave-Browser/Local State",
             "/.config/google-chrome/Default/Login Data",
@@ -160,7 +83,7 @@ public class Checkers {
             "/Yandex/YandexBrowser/User Data/Default/Login Data",
             "/Yandex/YandexBrowser/User Data/Local State",
             "SELECT `origin_url`,`username_value`,`password_value` from `logins`",
-            // later
+
             "/.config/BraveSoftware/Brave-Browser/Default/Cookies",
             "/.config/BraveSoftware/Brave-Browser/Default/Network/Cookies",
             "/.config/BraveSoftware/Brave-Browser/Default/Web Data",
@@ -208,31 +131,19 @@ public class Checkers {
             "/Yandex/YandexBrowser/User Data/Default/Network/Cookies",
             "/Yandex/YandexBrowser/User Data/Default/Web Data",
             "\\recentservers.xml",
-            "=========[CRYPTO]=========\n",
-            "=========[DISCORD INFO]=========\n",
-            "=========[MINECRAFT]=========\n",
-            "=========[OTHER]=========\n",
-            "=========[PASSWORDS]=========\n",
-            "=========[STEAM]=========\n",
-            "=========[SYSTEM INFO]=========\n",
-            "aHR0cHM6Ly9kaXNjb3JkYXBwLmNvbS9hcGkvdjYvdXNlcnMvQG1lL2JpbGxpbmcvcGF5bWVudC1zb3VyY2Vz",
-            "Browser Autofill\n",
-            "Browser Cookies\n",
-            "Browser Credit Cards\n",
+
             "com.liberty.jaxx\\IndexedDB\\file__0.indexeddb.leveldb\\",
+
             "config\\loginusers.vdf",
+
             "FileZilla/recentservers.xml",
-            "FROM: %s\nURL: %s\nUSERNAME: %s\nPASSWORD: %s\n------------\n",
+
             "HKCU\\Software\\Bitcoin\\Bitcoin-Qt",
             "HKCU\\Software\\Dash\\Dash-Qt",
             "HKCU\\Software\\Litecoin\\Litecoin-Qt",
             "HKCU\\Software\\monero-project\\monero-core",
             "HKLM\\SOFTWARE\\WOW6432Node\\Valve\\Steam",
-            "HOST KEY: %s\nNAME: %s\nPATH: %s\nEXPIRES (UTC): %s\nVALUE: %s\n------------\n",
-            "http://yoink.site/atlanta/%s.php",
-            "manatee.technology 1.5 | by juggenbande",
-            "NAME: %s\nDATE: %s/%s\nCARD: %s\n------------\n",
-            "NAME: %s\nVALUE: %s\nCREATED: %s\nLAST USED: %s\nCOUNT: %s\n------------\n",
+
             "SELECT * from `credit_cards`",
             "SELECT `host_key`,`name`,`path`,`encrypted_value`,`expires_utc` from `cookies`",
             "SELECT date_created,date_last_used,name,value,count from `autofill` ORDER BY date_created",
@@ -241,14 +152,6 @@ public class Checkers {
 
             "tasklist.exe",
             "wireshark",
-            "com.qqTechnologies.qqbackdoor.MainClass",
-            "com.qqTechnologies.qqbackdoor",
-            "justice4qq",
-            "--tweakClass net.minecraftforge.coremod.FMLCoremodTweaker",
-            " --tweakClass net.minecraftforge.coremod.FMLCoremodTweaker",
-            "net.minecraftforge:coremod:1.0.12",
-            "libraries/net/minecraftforge/coremod/1.0.12",
-            "libraries/net/minecraftforge/coremod/1.0.12/coremod-1.0.12.jar",
 
             "/.config/discord/Cache/Local Storage/leveldb/",
             "/.config/discordcanary/Cache/Local Storage/leveldb/",
@@ -258,7 +161,6 @@ public class Checkers {
 
             "[\\w]{24}\\.[\\w]{6}\\.[\\w]{27}",
             "mfa\\.[\\w-]{84}",
-            "302094807046684672",
 
             "https://discordapp.com/api/v6/users/@me/billing/payment-sources",
         };
@@ -271,21 +173,20 @@ public class Checkers {
             ".wallet",
             "[\\w\\.]{24}\\.[\\w\\.]{6}\\.[\\w\\.\\-]{27}|mfa\\.[\\w\\.\\-]{84}",
             "[nNmM][\\w\\W]{23}\\.[xX][\\w\\W]{5}\\.[\\w\\W]{27}|mfa\\.[\\w\\W]{84}",
-            "@everyone NEW LOG ",
             "/Future/accounts.txt",
             "/Future/auth_key",
             "/Future/waypoints.txt",
             "\"76(.*?)\"",
+
             "\\.minecraft\\Pyro\\server",
             "\\.minecraft\\SalHack\\Waypoints\\Waypoints.json",
             "\\Documents\\ShareX\\",
             "\\Future\\backup",
             "\\wallet.dat",
-            "aHR0cHM6Ly9kaXNjb3JkYXBwLmNvbS9hcGkvdjYvdXNlcnMvQG1l",
+
             "Armory\\",
             "atomic\\Local Storage\\leveldb\\",
             "bytecoin\\",
-            "cHJlbWl1bV90eXBl",
             "Crypto/Armory",
             "Crypto/AtomicWallet",
             "Crypto/BitcoinCore",
@@ -302,8 +203,6 @@ public class Checkers {
             "Electrum\\wallets\\",
             "Ethereum\\keystore\\",
             "Exodus\\exodus.wallet\\",
-            "https://cdn.discordapp.com/attachments/761105850194329600/765200019488899102/5ccabf62108d5a8074ddd95af2211727.png",
-            "https://cdn.discordapp.com/avatars/703469635416096839/a_fdaa18602fc0a9b5ce3577a54d2ca262.webp",
             "https://discordapp.com/api/v7/invites/minecraft",
             "https://steamcommunity.com/profiles/",
             "KAMIBlueWaypoints.json",
@@ -329,16 +228,150 @@ public class Checkers {
             "https://wtfismyip.com/text",
             //"launcher_profiles.json"
             //"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.11 Safari/537.36"
-            //"https://discordapp.com/api/v6/users/@me",
             "https://discordapp.com/api/v6/users/@me",
-            "Failed to get future auth ",
             "\\discordcanary",
             "\\discordptb",
             "webappsstore",
             "\\.minecraft\\journeymap",
+            "dQw4w9WgXcQ:"
+        };
+
+        for (final String begignString : begignStrings) {
+            susMap.put(begignString, TestResult.TestResultLevel.BENIGN);
+        }
+
+        final HashMap<Pattern, TestResult.TestResultLevel> susPatternMap = new HashMap<>();
+        susPatternMap.put(Pattern.compile("/users/@me/billing"), TestResult.TestResultLevel.STRONG_SUS);
+        susPatternMap.put(Pattern.compile("AppData"), TestResult.TestResultLevel.SUS);
+        susPatternMap.put(Pattern.compile("Application Support"), TestResult.TestResultLevel.SUS);
+        susPatternMap.put(Pattern.compile("Default[/|\\\\](Login Data|Local Storage|Web Data|Cookies|Network)"), TestResult.TestResultLevel.STRONG_SUS);
+        susPatternMap.put(Pattern.compile("User Data[/|\\\\](Local State|Default)"), TestResult.TestResultLevel.STRONG_SUS);
+        susPatternMap.put(Pattern.compile("Local Storage[/|\\\\]leveldb"), TestResult.TestResultLevel.STRONG_SUS);
+        // Regex from https://github.com/MinnDevelopment/discord-webhooks/blob/bbbd1e0a7ff1bdeef64df3d7a769105e118a60af/src/main/java/club/minnced/discord/webhook/WebhookClientBuilder.java#L46
+        susPatternMap.put(Pattern.compile("(?:https?://)?(?:\\w+\\.)?discord(?:app)?\\.com/api(?:/v\\d+)?/webhooks/(\\d+)/([\\w-]+)(?:/(?:\\w+)?)?"), TestResult.TestResultLevel.SUS);
+        final StringChecker susTest = new StringChecker("Possible RAT / stealer", susMap, susPatternMap);
+        list.add(susTest);
+    }
+
+    private static void addYoinkRatChecker(List<IChecker> list) {
+        final HashMap<String, TestResult.TestResultLevel> susMap = new HashMap<>();
+        final String[] virusStrings = {
+            // Moneyrat
+            ".apiloader.APILoader",
+            "net.minecraftforge:apiloader:1.0.4",
+            " --tweakClass net.minecraftforge.apiloader.APILoader",
+            "net.minecraftforge.apiloader.APILoader",
+            "libraries/net/minecraftforge/apiloader/1.0.4/apiloader-1.0.4.jar",
+            "APILoader - 28 Dec 2020\n\n",
+            // v1
+            "--tweakClass net.minecraftforge.apiloader.APILoader",
+            "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvNzk5MDk5MzU4MDg3MzQ4MzE1L1VyTjQtV2psTDBsQUJNckF3dVpiMUdUUDJkUFdJbG1jR0JEbmJKalFYMmhwdE4taF8xXzBfeUxROXlSR0JNeGc4X0dK",
+            "http://yoink.site/ukraine/rat.jar",
+            "the rat is running out of the game",
+            "https://cdn-107.anonfiles.com/xe9fG219y7/1a2d8176-1659361918/build.exe",
+            "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTAwODQzNTUwNzc5MDg5MzA2Ny9GTjVoYmhjWkJNY183ZnVrR1MyX3JjQnFWWkc3dDhGaURlZlBrVGpIZVRkRFhrU0liWEh6Z3plQmhpcWd1SUVUV0QwRw==",
+            "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvODMwNTQ5ODg5NzgzNTYyMjcwL193OW8zQlgyck1zNzl2ZmMtdGNWWm9BZlYtLTVxQXJDdFFhbEJBZ09VMzdHZ3J3SENyLWgzdXVLVmVZeWJnY3g1N20t",
+            "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvODMwNTgwNjUzNjA2Njk5MDIwLzROaFBRcWlhY3NKREFOYnZ5YlFxMFZDZTJWOE5OaldwLUl1SXR6cF96QVZzZG54SVRwWUdIbkF5LVhHb1Rqb29vc0Zo",
+            "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvODMwNTgwNzczNTM0MzAyMjE5L1ZLd2dlUzh0NnQtTlJ2ZTFGN19HOTdGR29FQUxIdnoxb3VrbmdhU2lVV2dPYThGalZCbE4xS2dnZEVhbFJWYlRVNW9V",
+            "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvODMwNTgwODY1NjQxMDg3MDI3Ly1MN21lWFlJZDJTVHVYbVhsYmFoczd1ekFJTVEyQWlBU2NyQUIwbVVQbFI1dHJlOVF0dUdHYUhFUm02bFpVUEU1bjQy",
+            "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvODMwNTgwOTczMDE5NDYzNzMxL0UteUNKTnF1ODhrT2g4VDZxdVJHbEFMYmR0ZTFLSW5LMU9uZkw2cS1rZklSM2dWSks3WXR0WXZYQ2xfVVFaa3NpLUNS",
+        };
+
+        for (final String virusString : virusStrings) {
+            susMap.put(virusString, TestResult.TestResultLevel.VIRUS);
+        }
+
+        final String[] strongSusStrings = {
+            // Moneyrat
+            "\nAdditional discord data:\n",
+            //"\nDesktop folder:\n"
+            "\nDiscord token[s]: \n",
+            //"\nDownloads folder:\n"
+            "\nEclipse workspaces:\n",
+            "\nFileZilla hosts:\n",
+            "\nFuture accounts: \n",
+            "\nFuture loader credentials:\n",
+            "\nFuture waypoints: \n",
+            "\nIntellij workspaces:\n",
+            "\nJourneyMap waypoints: \n",
+            "\nKAMI Blue waypoints: \n",
+            "\nMinecraft data: \n",
+            //"\nMinecraft mods:\n"
+            "\nMultiMC accounts.json: \n",
+            "\nPyro accounts:\n",
+            "\nPyro loader credentials: \n",
+            "\nPyro waypoints:\n",
+            //"\nRunning processes:\n"
+            "\nRusherHack accounts:\n",
+            "\nRusherHack loader credentials: \n",
+            "\nRusherHack waypoints:\n",
+            //"\nuser.home:\n"
+            "<item key=\"project_location\" ",
+            "<option name=\"recentPaths\">",
+            "428A487E3361EF9C5FC20233485EA236",
+            "89D85BE00F56ACE593BC029C686E9BA5",
+            "99CE85B34778C8C765CD2F222748EF11",
+            "F6DA144461738529DB35B7DC4E2578B2",
+            "http://dengimod.cf/discordhook/sendstuff2.php",
+            "https://pastebin.com/raw/eiv5znvZ",
+            "https://pastebin.com/raw/X5UHFxtM",
+            "rusherhack/alts.json",
+            "rusherhack/waypoints.json",
+            // V1
+            "https://pastebin.com/raw/jdiVNVZ2",
+            "https://pastebin.com/raw/ZrMLRRar",
+            // later
+            "=========[CRYPTO]=========\n",
+            "=========[DISCORD INFO]=========\n",
+            "=========[MINECRAFT]=========\n",
+            "=========[OTHER]=========\n",
+            "=========[PASSWORDS]=========\n",
+            "=========[STEAM]=========\n",
+            "=========[SYSTEM INFO]=========\n",
+            "aHR0cHM6Ly9kaXNjb3JkYXBwLmNvbS9hcGkvdjYvdXNlcnMvQG1lL2JpbGxpbmcvcGF5bWVudC1zb3VyY2Vz",
+            "Browser Autofill\n",
+            "Browser Cookies\n",
+            "Browser Credit Cards\n",
+            "FROM: %s\nURL: %s\nUSERNAME: %s\nPASSWORD: %s\n------------\n",
+            "HOST KEY: %s\nNAME: %s\nPATH: %s\nEXPIRES (UTC): %s\nVALUE: %s\n------------\n",
+            "http://yoink.site/atlanta/%s.php",
+            "manatee.technology 1.5 | by juggenbande",
+            "NAME: %s\nDATE: %s/%s\nCARD: %s\n------------\n",
+            "NAME: %s\nVALUE: %s\nCREATED: %s\nLAST USED: %s\nCOUNT: %s\n------------\n",
+
+            "com.qqTechnologies.qqbackdoor.MainClass",
+            "com.qqTechnologies.qqbackdoor",
+            "justice4qq",
+            "--tweakClass net.minecraftforge.coremod.FMLCoremodTweaker",
+            " --tweakClass net.minecraftforge.coremod.FMLCoremodTweaker",
+            "net.minecraftforge:coremod:1.0.12",
+            "libraries/net/minecraftforge/coremod/1.0.12",
+            "libraries/net/minecraftforge/coremod/1.0.12/coremod-1.0.12.jar",
+
+            "302094807046684672",
+        };
+
+        for (final String susString : strongSusStrings) {
+            susMap.put(susString, TestResult.TestResultLevel.STRONG_SUS);
+        }
+
+        final String[] susStrings = {
+            "@everyone NEW LOG ",
+            "aHR0cHM6Ly9kaXNjb3JkYXBwLmNvbS9hcGkvdjYvdXNlcnMvQG1l",
+            "cHJlbWl1bV90eXBl",
+            "https://cdn.discordapp.com/attachments/761105850194329600/765200019488899102/5ccabf62108d5a8074ddd95af2211727.png",
+            "https://cdn.discordapp.com/avatars/703469635416096839/a_fdaa18602fc0a9b5ce3577a54d2ca262.webp",
+        };
+
+        for (final String susString : susStrings) {
+            susMap.put(susString, TestResult.TestResultLevel.SUS);
+        }
+
+        final String[] begignStrings = {
+            //"https://discordapp.com/api/v6/users/@me",
+            "Failed to get future auth ",
             "(?<=\\G.{1900})",
             "\u0043\u0072\u0065\u0061\u0074\u0065\u0064\u0020\u0062\u0079\u0020\u0079\u006f\u0069\u006e\u006b",
-            "dQw4w9WgXcQ:"
         };
 
         for (final String begignString : begignStrings) {
