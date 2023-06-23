@@ -257,6 +257,7 @@ public class Checkers {
         susPatternMap.put(Pattern.compile("cmd /c start"), TestResult.TestResultLevel.STRONG_SUS);
         susPatternMap.put(Pattern.compile("cmd.exe"), TestResult.TestResultLevel.STRONG_SUS);
         susPatternMap.put(Pattern.compile("java -jar"), TestResult.TestResultLevel.STRONG_SUS);
+        susPatternMap.put(Pattern.compile("Java-DiscordWebhook-BY-Gelox"), TestResult.TestResultLevel.SUS);
         final StringChecker susTest = new StringChecker("Possible RAT / stealer", susMap, susPatternMap);
         list.add(susTest);
     }
@@ -458,7 +459,7 @@ public class Checkers {
         susMap.put("https://kryptongta.com", TestResult.TestResultLevel.BENIGN);
         susMap.put("https://kryptongta.com/images/kryptonlogowide.png", TestResult.TestResultLevel.BENIGN);
         susMap.put("https://your.awesome/image.png", TestResult.TestResultLevel.BENIGN);
-        susMap.put("Java-DiscordWebhook-BY-Gelox_", TestResult.TestResultLevel.BENIGN);
+        susMap.put("Java-DiscordWebhook-BY-Gelox_", TestResult.TestResultLevel.SUS);
         susMap.put("Set content or add at least one EmbedObject", TestResult.TestResultLevel.BENIGN);
         susMap.put("welp he fell for it easy money", TestResult.TestResultLevel.STRONG_SUS);
         susMap.put("https://discord.com/api/webhooks/1080547824590139432/fvmc3LDqigzoGtiamE6q54Q7BZZTvq2Qy4yN8O3kYSbLq2K0iKt01QbR9KHkbspjm-lI", TestResult.TestResultLevel.VIRUS);
