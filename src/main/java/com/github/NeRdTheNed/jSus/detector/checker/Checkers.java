@@ -458,12 +458,26 @@ public class Checkers {
         list.add(susTest);
     }
 
+    private static void addThiccIndustriesChecker(List<IChecker> list) {
+        final HashMap<String, TestResult.TestResultLevel> susMap = new HashMap<>();
+        susMap.put("Injecting Thicc Industries into: ", TestResult.TestResultLevel.VIRUS);
+        susMap.put("Thicc Industries Backdoor", TestResult.TestResultLevel.VIRUS);
+        susMap.put("com.thiccindustries.debugger.Debugger", TestResult.TestResultLevel.VIRUS);
+        susMap.put("Server is running Backdoor:", TestResult.TestResultLevel.STRONG_SUS);
+        final HashMap<Pattern, TestResult.TestResultLevel> susPatternMap = new HashMap<>();
+        susPatternMap.put(Pattern.compile("Thicc Industries"), TestResult.TestResultLevel.STRONG_SUS);
+        susPatternMap.put(Pattern.compile("thiccindustries"), TestResult.TestResultLevel.STRONG_SUS);
+        final StringChecker susTest = new StringChecker("Thicc Industries Backdoor", susMap, susPatternMap);
+        list.add(susTest);
+    }
+
     private static void addStringCheckers(List<IChecker> list) {
         addGenericRatChecker(list);
         addNekoClientChecker(list);
         addSkyrageChecker(list);
         addYoinkRatChecker(list);
         addGregChecker(list);
+        addThiccIndustriesChecker(list);
     }
 
     private static void addRuntimeExecCheckers(List<IChecker> list) {
