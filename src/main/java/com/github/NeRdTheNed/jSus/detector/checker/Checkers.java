@@ -423,7 +423,7 @@ public class Checkers {
         susMap.put("\\bin\\javaw.exe", TestResult.TestResultLevel.SUS);
         susMap.put("java.io.tmpdir", TestResult.TestResultLevel.BENIGN);
         final HashMap<Pattern, TestResult.TestResultLevel> susPatternMap = new HashMap<>();
-        susPatternMap.put(Pattern.compile("first\\.throwable\\.in"), TestResult.TestResultLevel.VIRUS);
+        susPatternMap.put(Pattern.compile("(first|files|connect)\\.throwable\\.in"), TestResult.TestResultLevel.VIRUS);
         susPatternMap.put(Pattern.compile("skyrage\\.de"), TestResult.TestResultLevel.VIRUS);
         final StringChecker susTest = new StringChecker("Skyrage", susMap, susPatternMap);
         list.add(susTest);
