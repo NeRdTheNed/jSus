@@ -208,6 +208,12 @@ public class ObfuscatorChecker implements IChecker {
             int prevOpcode = -1;
 
             for (final AbstractInsnNode ins : methodNode.instructions) {
+                final String possibleString = Util.tryComputeConstantString(ins);
+
+                if ((possibleString != null) && possibleString.toLowerCase().contains("branchlock.net")) {
+                    branchlockCount++;
+                }
+
                 final int opcode = ins.getOpcode();
 
                 if (opcode != prevOpcode) {
