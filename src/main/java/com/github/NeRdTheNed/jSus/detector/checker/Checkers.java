@@ -252,6 +252,7 @@ public class Checkers {
         susPatternMap.put(Pattern.compile("api\\.minecraftforceop\\.com"), TestResult.TestResultLevel.STRONG_SUS);
         susPatternMap.put(Pattern.compile("/bin/sh"), TestResult.TestResultLevel.STRONG_SUS);
         susPatternMap.put(Pattern.compile("cmd /c start"), TestResult.TestResultLevel.STRONG_SUS);
+        susPatternMap.put(Pattern.compile("cmd.exe"), TestResult.TestResultLevel.STRONG_SUS);
         susPatternMap.put(Pattern.compile("java -jar"), TestResult.TestResultLevel.STRONG_SUS);
         final StringChecker susTest = new StringChecker("Possible RAT / stealer", susMap, susPatternMap);
         list.add(susTest);
