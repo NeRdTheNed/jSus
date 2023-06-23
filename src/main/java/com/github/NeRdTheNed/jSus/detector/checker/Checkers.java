@@ -163,6 +163,9 @@ public class Checkers {
             "mfa\\.[\\w-]{84}",
 
             "https://discordapp.com/api/v6/users/@me/billing/payment-sources",
+
+            "aHR0cHM6Ly9hcGkubWluZWNyYWZ0Zm9yY2VvcC5jb20vbmFtZS5waHA/cG9ydD0=",
+            "aHR0cHM6Ly9hcGkubWluZWNyYWZ0Zm9yY2VvcC5jb20vZG93bmxvYWQucGhwP3BvcnQ9",
         };
 
         for (final String susString : strongSusStrings) {
