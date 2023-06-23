@@ -168,11 +168,11 @@ public class Util {
     }
 
     public static String opcodeName(int opcode) {
-        return ((opcode >= 0) && (opcode < Printer.OPCODES.length)) ? Printer.OPCODES[opcode] : Integer.toString(opcode);
+        return (opcode >= 0) && (opcode < Printer.OPCODES.length) ? Printer.OPCODES[opcode] : Integer.toString(opcode);
     }
 
     public static boolean isOpcodeMethodInvoke(int opcode) {
-        return ((opcode <= Opcodes.INVOKEINTERFACE) && (opcode >= Opcodes.INVOKEVIRTUAL));
+        return (opcode <= Opcodes.INVOKEINTERFACE) && (opcode >= Opcodes.INVOKEVIRTUAL);
     }
 
     public static boolean isCommonBase64DecodeMethod(int opcode, String owner, String name, String signature) {
