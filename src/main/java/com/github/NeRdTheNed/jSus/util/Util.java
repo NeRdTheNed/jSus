@@ -190,6 +190,11 @@ public class Util {
         return "org/apache/commons/codec/binary/Base64".equals(owner) && "decodeBase64".equals(name) && "(Ljava/lang/String;)[B".equals(signature);
     }
 
+    public static boolean isCommonBase64DecodeBytesToBytesMethod(int opcode, String owner, String name, String signature) {
+        // TODO Support more methods
+        return "java/util/Base64$Decoder".equals(owner) && "decode".equals(name) && "([B)[B".equals(signature);
+    }
+
     private static Number getValueOrNull(AbstractInsnNode load) {
         switch (load.getOpcode()) {
         case Opcodes.ICONST_M1:
@@ -343,11 +348,7 @@ public class Util {
             final String methodName = methodInsNode.name;
             final String methodDesc = methodInsNode.desc;
 
-            // TODO Support more methods
-            if ((opcode == Opcodes.INVOKEVIRTUAL)
-                    && "java/util/Base64$Decoder".equals(methodOwner)
-                    && "decode".equals(methodName)
-                    && "([B)[B".equals(methodDesc)) {
+            if (isCommonBase64DecodeBytesToBytesMethod(opcode, methodOwner, methodName, methodDesc)) {
                 final Pair<AbstractInsnNode, byte[]> computedArray = tryComputeArray(arrayOnStack.getPrevious());
 
                 if (computedArray.v != null) {
