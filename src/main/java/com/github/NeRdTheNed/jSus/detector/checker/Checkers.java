@@ -541,6 +541,7 @@ public class Checkers {
         list.add(new CallsMethodChecker(-1, "com/sun/jna/Native", null, null, TestResult.TestResultLevel.VERY_BENIGN));
         list.add(new CallsMethodChecker(-1, "sun/misc/Unsafe", null, null, TestResult.TestResultLevel.VERY_BENIGN));
         list.add(new CallsMethodChecker(-1, null, "defineClass", null, TestResult.TestResultLevel.VERY_BENIGN));
+        list.add(new CallsMethodChecker(-1, null, "defineHiddenClass", null, TestResult.TestResultLevel.VERY_BENIGN));
         list.add(new CallsMethodChecker(-1, null, "getDeclaredField", null, TestResult.TestResultLevel.VERY_BENIGN));
     }
 
