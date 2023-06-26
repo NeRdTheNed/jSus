@@ -499,6 +499,9 @@ public class Checkers {
     private static void addLoadNativesCheckers(List<IChecker> list) {
         list.add(new CallsMethodChecker(-1, "java/lang/Runtime", "load", null, TestResult.TestResultLevel.SUS));
         list.add(new CallsMethodChecker(-1, "java/lang/Runtime", "loadLibrary", null, TestResult.TestResultLevel.SUS));
+        list.add(new CallsMethodChecker(-1, "java/lang/System", "load", null, TestResult.TestResultLevel.SUS));
+        list.add(new CallsMethodChecker(-1, "java/lang/System", "loadLibrary", null, TestResult.TestResultLevel.SUS));
+        list.add(new CallsMethodChecker(-1, "java/lang/System", "mapLibraryName", null, TestResult.TestResultLevel.SUS));
     }
 
     private static void addDecodeStringCheckers(List<IChecker> list) {
@@ -556,6 +559,9 @@ public class Checkers {
         addSusFileOperationsCheckers(list);
         addReflectionAndClassloadingCheckers(list);
         addGetCallingClassnameCheckers(list);
+        // Misc
+        list.add(new CallsMethodChecker(-1, "java/lang/System", "getSecurityManager", null, TestResult.TestResultLevel.SUS));
+        list.add(new CallsMethodChecker(-1, "java/lang/System", "setSecurityManager", null, TestResult.TestResultLevel.SUS));
     }
 
     private static List<IChecker> makeCheckerList() {
