@@ -8,6 +8,7 @@ import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
 
+import com.github.NeRdTheNed.jSus.detector.checker.TestResult.TestResultLevel;
 import com.github.NeRdTheNed.jSus.util.Util;
 
 // I have accidentally created a Kotlin detector, send help
@@ -61,6 +62,11 @@ public class UncommonJVMInstructionChecker implements IChecker {
         }
 
         return res;
+    }
+
+    @Override
+    public TestResultLevel getPossibleHighestResult() {
+        return TestResult.TestResultLevel.STRONG_SUS;
     }
 
 }
