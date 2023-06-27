@@ -19,7 +19,7 @@ public class CheckerTask implements Callable<CheckResult> {
 
     @Override
     public CheckResult call() throws Exception {
-        return new CheckResult(checker.getName(), checker.testClass(clazz));
+        return new CheckResult(clazz.name + ".class", checker.getName(), checker.testClass(clazz));
     }
 
 }

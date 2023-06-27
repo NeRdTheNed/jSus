@@ -1,6 +1,7 @@
 package com.github.NeRdTheNed.jSus;
 
 import java.io.File;
+import java.io.PrintWriter;
 import java.util.List;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
@@ -15,28 +16,31 @@ import com.github.NeRdTheNed.jSus.detector.CheckerTask;
 import com.github.NeRdTheNed.jSus.detector.checker.Checkers;
 import com.github.NeRdTheNed.jSus.detector.checker.IChecker;
 import com.github.NeRdTheNed.jSus.detector.checker.TestResult;
+import com.github.NeRdTheNed.jSus.result.ArchiveScanResults;
+import com.github.NeRdTheNed.jSus.result.FileScanResults;
+import com.github.NeRdTheNed.jSus.result.printer.HumanReadablePrinter;
 import com.github.NeRdTheNed.jSus.util.Util;
-
-import picocli.CommandLine.Help.Ansi;
 
 // TODO Use LL-zip
 public class Scanner {
 
     public static boolean detectSus(File file, boolean verbose, TestResult.TestResultLevel level, boolean color) throws Exception {
+        final PrintWriter pw = new PrintWriter(System.out);
+
         if (file.isDirectory()) {
-            return detectSusFromDirectory(file, verbose, level, color);
+            return detectSusFromDirectory(file, verbose, level, color, pw);
         }
 
         try
             (final JarFile jarFile = new JarFile(file)) {
-            return detectSusFromJar(jarFile, verbose, level, color);
+            return detectSusFromJar(jarFile, verbose, level, color, pw);
         } catch (final Exception e) {
             System.err.println("Invalid directory or jar file " + file.getAbsolutePath());
             throw e;
         }
     }
 
-    public static boolean detectSusFromDirectory(File dir, boolean verbose, TestResult.TestResultLevel level, boolean color) {
+    public static boolean detectSusFromDirectory(File dir, boolean verbose, TestResult.TestResultLevel level, boolean color, PrintWriter pw) {
         if (!dir.isDirectory()) {
             System.err.println("Invalid directory " + dir.getAbsolutePath());
             return false;
@@ -47,7 +51,7 @@ public class Scanner {
 
         if (files != null) {
             for (final File file : files) {
-                if (file.isDirectory() && detectSusFromDirectory(file, verbose, level, color)) {
+                if (file.isDirectory() && detectSusFromDirectory(file, verbose, level, color, pw)) {
                     foundSus = true;
                 }
 
@@ -57,7 +61,7 @@ public class Scanner {
 
                 try
                     (final JarFile jarFile = new JarFile(file)) {
-                    if (detectSusFromJar(jarFile, verbose, level, color)) {
+                    if (detectSusFromJar(jarFile, verbose, level, color, pw)) {
                         foundSus = true;
                     }
                 } catch (final Exception e) {
@@ -70,7 +74,7 @@ public class Scanner {
         return foundSus;
     }
 
-    public static boolean detectSusFromJar(JarFile file, boolean verbose, TestResult.TestResultLevel level, boolean color) {
+    public static boolean detectSusFromJar(JarFile file, boolean verbose, TestResult.TestResultLevel level, boolean color, PrintWriter pw) {
         if (verbose) {
             System.out.println("Scanning " + file.getName());
         }
@@ -89,7 +93,7 @@ public class Scanner {
 
         execService.shutdown();
         boolean didDetectSus = false;
-        boolean firstLog = true;
+        final ArchiveScanResults archRes = new ArchiveScanResults();
 
         for (int i = 0; i < tasks; i++) {
             try {
@@ -98,22 +102,9 @@ public class Scanner {
 
                 if (!finalRes.checkerResults.isEmpty()) {
                     didDetectSus = true;
-                    boolean firstCheckerLog = true;
 
                     for (final TestResult testRes : finalRes.checkerResults) {
-                        if (level.ordinal() >= testRes.result.ordinal()) {
-                            if (firstLog) {
-                                System.out.println((color ? Ansi.AUTO.string("- @|bold,yellow Found sus for file!|@ ") : "- Found sus for file! ") + file.getName());
-                                firstLog = false;
-                            }
-
-                            if (firstCheckerLog) {
-                                System.out.println("  - Sus found by checker " + finalRes.checkerName + "!");
-                                firstCheckerLog = false;
-                            }
-
-                            System.out.println("    - Sus level " + (color ? Ansi.AUTO.string("@|" + testRes.result.color + " " + testRes.result + "|@") : testRes.result) + " (detected " + testRes.amount + " time(s)): " + testRes.reason);
-                        }
+                        archRes.add(finalRes.fileName, new FileScanResults().add(testRes.result, finalRes.checkerName, testRes.reason, testRes.amount));
                     }
                 }
             } catch (final Exception e) {
@@ -122,6 +113,9 @@ public class Scanner {
                 e.printStackTrace();
             }
         }
+
+        new HumanReadablePrinter(file.getName(), archRes, level, color).print(pw);
+        pw.flush();
 
         if (verbose) {
             System.out.println("Finished scanning " + file.getName());
