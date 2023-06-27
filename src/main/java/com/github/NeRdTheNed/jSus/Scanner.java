@@ -27,8 +27,8 @@ public class Scanner {
             return detectSusFromDirectory(file, verbose, level, color);
         }
 
-        try {
-            final JarFile jarFile = new JarFile(file);
+        try
+            (final JarFile jarFile = new JarFile(file)) {
             return detectSusFromJar(jarFile, verbose, level, color);
         } catch (final Exception e) {
             System.err.println("Invalid directory or jar file " + file.getAbsolutePath());
@@ -55,9 +55,8 @@ public class Scanner {
                     continue;
                 }
 
-                try {
-                    final JarFile jarFile = new JarFile(file);
-
+                try
+                    (final JarFile jarFile = new JarFile(file)) {
                     if (detectSusFromJar(jarFile, verbose, level, color)) {
                         foundSus = true;
                     }
