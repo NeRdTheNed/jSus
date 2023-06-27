@@ -81,7 +81,7 @@ public class Util {
         return null;
     }
 
-    private static void findAddNodes(JarFile jarFile, List<ClassNode> nodes, boolean verbose) {
+    private static void findAddNodes(JarFile jarFile, List<ClassNode> nodes, boolean verbose, boolean noLog) {
         String obf = null;
         boolean didFindWeirdObf = false;
 
@@ -99,7 +99,7 @@ public class Util {
             }
 
             if (name.endsWith(".jar")) {
-                if (verbose) {
+                if (verbose && !noLog) {
                     System.out.println("- Adding JIJ " + name + " to scan");
                 }
 
@@ -110,7 +110,7 @@ public class Util {
                     tempFile.toFile().deleteOnExit();
                     Files.copy(is, tempFile, StandardCopyOption.REPLACE_EXISTING);
                     final JarFile jij = new JarFile(tempFile.toFile());
-                    findAddNodes(jij, nodes, verbose);
+                    findAddNodes(jij, nodes, verbose, noLog);
                 } catch (final Exception e) {
                     System.err.println("Issue extracting JIJ " + name + " from " + jarFile.getName() + " to temporary file");
                     e.printStackTrace();
@@ -152,18 +152,18 @@ public class Util {
             }
         }
 
-        if (obf != null) {
+        if ((obf != null) && !noLog) {
             System.out.println("- Note: jar " + jarFile.getName() + " claims to be obfuscated by " + obf);
         }
 
-        if (didFindWeirdObf) {
+        if (didFindWeirdObf && !noLog) {
             System.out.println("- Note: Common class obfuscation technique was used in jar " + jarFile.getName());
         }
     }
 
-    public static List<ClassNode> gatherClassNodesFromJar(JarFile jarFile, boolean verbose) {
+    public static List<ClassNode> gatherClassNodesFromJar(JarFile jarFile, boolean verbose, boolean noLog) {
         final List<ClassNode> nodes = new ArrayList<>();
-        findAddNodes(jarFile, nodes, verbose);
+        findAddNodes(jarFile, nodes, verbose, noLog);
         return nodes;
     }
 

@@ -19,28 +19,29 @@ import com.github.NeRdTheNed.jSus.detector.checker.TestResult;
 import com.github.NeRdTheNed.jSus.result.ArchiveScanResults;
 import com.github.NeRdTheNed.jSus.result.FileScanResults;
 import com.github.NeRdTheNed.jSus.result.printer.HumanReadablePrinter;
+import com.github.NeRdTheNed.jSus.result.printer.JSONPrinter;
 import com.github.NeRdTheNed.jSus.util.Util;
 
 // TODO Use LL-zip
 public class Scanner {
 
-    public static boolean detectSus(File file, boolean verbose, TestResult.TestResultLevel level, boolean color) throws Exception {
+    public static boolean detectSus(File file, boolean verbose, TestResult.TestResultLevel level, boolean color, boolean json) throws Exception {
         final PrintWriter pw = new PrintWriter(System.out);
 
         if (file.isDirectory()) {
-            return detectSusFromDirectory(file, verbose, level, color, pw);
+            return detectSusFromDirectory(file, verbose, level, color, pw, json);
         }
 
         try
             (final JarFile jarFile = new JarFile(file)) {
-            return detectSusFromJar(jarFile, verbose, level, color, pw);
+            return detectSusFromJar(jarFile, verbose, level, color, pw, json);
         } catch (final Exception e) {
             System.err.println("Invalid directory or jar file " + file.getAbsolutePath());
             throw e;
         }
     }
 
-    public static boolean detectSusFromDirectory(File dir, boolean verbose, TestResult.TestResultLevel level, boolean color, PrintWriter pw) {
+    public static boolean detectSusFromDirectory(File dir, boolean verbose, TestResult.TestResultLevel level, boolean color, PrintWriter pw, boolean json) {
         if (!dir.isDirectory()) {
             System.err.println("Invalid directory " + dir.getAbsolutePath());
             return false;
@@ -51,7 +52,7 @@ public class Scanner {
 
         if (files != null) {
             for (final File file : files) {
-                if (file.isDirectory() && detectSusFromDirectory(file, verbose, level, color, pw)) {
+                if (file.isDirectory() && detectSusFromDirectory(file, verbose, level, color, pw, json)) {
                     foundSus = true;
                 }
 
@@ -61,7 +62,7 @@ public class Scanner {
 
                 try
                     (final JarFile jarFile = new JarFile(file)) {
-                    if (detectSusFromJar(jarFile, verbose, level, color, pw)) {
+                    if (detectSusFromJar(jarFile, verbose, level, color, pw, json)) {
                         foundSus = true;
                     }
                 } catch (final Exception e) {
@@ -74,14 +75,14 @@ public class Scanner {
         return foundSus;
     }
 
-    public static boolean detectSusFromJar(JarFile file, boolean verbose, TestResult.TestResultLevel level, boolean color, PrintWriter pw) {
-        if (verbose) {
+    public static boolean detectSusFromJar(JarFile file, boolean verbose, TestResult.TestResultLevel level, boolean color, PrintWriter pw, boolean json) {
+        if (verbose && !json) {
             System.out.println("Scanning " + file.getName());
         }
 
         final ExecutorService execService = Executors.newCachedThreadPool();
         final ExecutorCompletionService<CheckResult> compService = new ExecutorCompletionService<>(execService);
-        final List<ClassNode> nodes = Util.gatherClassNodesFromJar(file, verbose);
+        final List<ClassNode> nodes = Util.gatherClassNodesFromJar(file, verbose, json);
         int tasks = 0;
 
         for (final IChecker checker : Checkers.checkerList) {
@@ -114,10 +115,16 @@ public class Scanner {
             }
         }
 
-        new HumanReadablePrinter(file.getName(), archRes, level, color).print(pw);
+        if (json) {
+            new JSONPrinter(file.getName(), archRes).print(pw);
+            pw.println();
+        } else {
+            new HumanReadablePrinter(file.getName(), archRes, level, color).print(pw);
+        }
+
         pw.flush();
 
-        if (verbose) {
+        if (verbose && !json) {
             System.out.println("Finished scanning " + file.getName());
         }
 

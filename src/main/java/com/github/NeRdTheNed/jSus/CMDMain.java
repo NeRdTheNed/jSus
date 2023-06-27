@@ -26,11 +26,21 @@ public class CMDMain implements Callable<Integer> {
     @Option(names = { "--colour", "--color", "-c" }, negatable = true, defaultValue = "true", fallbackValue = "true", description = "Enable color output (may not work on Windows).")
     boolean color = true;
 
+    @Option(names = { "--json", "-j" }, description = "Log results as JSON (experimental, format will likely change)")
+    boolean json = false;
+
     @Override
     public Integer call() throws Exception {
-        System.out.println("jSus: Starting scan of " + file);
-        final boolean didSus = Scanner.detectSus(file, verbose, level, color);
-        System.out.println("jSus: Finished scan of " + file);
+        if (!json) {
+            System.out.println("jSus: Starting scan of " + file);
+        }
+
+        final boolean didSus = Scanner.detectSus(file, verbose, level, color, json);
+
+        if (!json) {
+            System.out.println("jSus: Finished scan of " + file);
+        }
+
         return didSus ? 1 : CommandLine.ExitCode.OK;
     }
 
