@@ -35,7 +35,7 @@ public class CMDMain implements Callable<Integer> {
             System.out.println("jSus: Starting scan of " + file);
         }
 
-        final boolean didSus = Scanner.detectSus(file, verbose, level, color, json);
+        final boolean didSus = Scanner.detectSus(file, verbose, json ? TestResult.TestResultLevel.VERY_BENIGN : level, color, json);
 
         if (!json) {
             System.out.println("jSus: Finished scan of " + file);

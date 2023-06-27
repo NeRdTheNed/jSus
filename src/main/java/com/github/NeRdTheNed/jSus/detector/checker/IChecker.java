@@ -8,5 +8,7 @@ public interface IChecker {
 
     String getName();
 
+    TestResult.TestResultLevel getPossibleHighestResult();
+
     List<TestResult> testClass(ClassNode clazz);
 }

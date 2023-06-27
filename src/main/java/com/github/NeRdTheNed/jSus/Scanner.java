@@ -86,9 +86,13 @@ public class Scanner {
         int tasks = 0;
 
         for (final IChecker checker : Checkers.checkerList) {
-            for (final ClassNode node : nodes) {
-                compService.submit(new CheckerTask(checker, node));
-                tasks++;
+            final TestResult.TestResultLevel possibleResult = checker.getPossibleHighestResult();
+
+            if ((possibleResult == null) || (level.ordinal() >= possibleResult.ordinal())) {
+                for (final ClassNode node : nodes) {
+                    compService.submit(new CheckerTask(checker, node));
+                    tasks++;
+                }
             }
         }
 

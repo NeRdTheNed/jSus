@@ -9,6 +9,7 @@ import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
+import com.github.NeRdTheNed.jSus.detector.checker.TestResult.TestResultLevel;
 import com.github.NeRdTheNed.jSus.util.Util;
 
 public class WeirdStringConstructionMethodsChecker implements IChecker {
@@ -16,6 +17,11 @@ public class WeirdStringConstructionMethodsChecker implements IChecker {
     @Override
     public String getName() {
         return "Weird string construction methods checker";
+    }
+
+    @Override
+    public TestResultLevel getPossibleHighestResult() {
+        return TestResult.TestResultLevel.STRONG_SUS;
     }
 
     // TODO More thorough check, check for any use of fixed Base64 as well

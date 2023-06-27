@@ -1,12 +1,14 @@
 package com.github.NeRdTheNed.jSus.detector.checker;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
@@ -23,6 +25,8 @@ public class StringChecker implements IChecker {
     private final Map<String, TestResult.TestResultLevel> susMap;
     private final Map<Pattern, TestResult.TestResultLevel> susPatternMap;
 
+    private final TestResultLevel maxRes;
+
     public StringChecker(String name, Map<String, TestResult.TestResultLevel> susMap) {
         this(name, susMap, new HashMap<>());
     }
@@ -31,6 +35,7 @@ public class StringChecker implements IChecker {
         this.name = name + " string checker";
         this.susMap = susMap;
         this.susPatternMap = susPatternMap;
+        maxRes = Stream.concat(susMap.values().stream(), susPatternMap.values().stream()).distinct().min(Comparator.naturalOrder()).orElse(null);
     }
 
     private void testStringImpl(Map<Pair<String, TestResult.TestResultLevel>, Integer> foundStrings, String toCheck) {
@@ -94,6 +99,11 @@ public class StringChecker implements IChecker {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public TestResultLevel getPossibleHighestResult() {
+        return maxRes;
     }
 
 }

@@ -13,6 +13,7 @@ import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
 
+import com.github.NeRdTheNed.jSus.detector.checker.TestResult.TestResultLevel;
 import com.github.NeRdTheNed.jSus.util.Util;
 
 // TODO Doesn't really do much
@@ -140,6 +141,11 @@ public class ObfuscatorChecker implements IChecker {
     @Override
     public String getName() {
         return "Obfuscator checker";
+    }
+
+    @Override
+    public TestResultLevel getPossibleHighestResult() {
+        return TestResult.TestResultLevel.BENIGN;
     }
 
     private static void checkName(String name, boolean isClassName, String className, Map<String, Integer> foundBenign, Map<String, Integer> foundVeryBenign) {

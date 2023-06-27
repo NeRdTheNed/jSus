@@ -8,6 +8,7 @@ import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
+import com.github.NeRdTheNed.jSus.detector.checker.TestResult.TestResultLevel;
 import com.github.NeRdTheNed.jSus.util.Util;
 
 public class CallsMethodChecker implements IChecker {
@@ -44,6 +45,11 @@ public class CallsMethodChecker implements IChecker {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public TestResultLevel getPossibleHighestResult() {
+        return result;
     }
 
     // TODO Add option to print constants used in parameters to calls

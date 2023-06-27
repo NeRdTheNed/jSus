@@ -11,11 +11,18 @@ import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
+import com.github.NeRdTheNed.jSus.detector.checker.TestResult.TestResultLevel;
+
 public class CallsNekoClientLikeChecker implements IChecker {
 
     @Override
     public String getName() {
         return "Calls method with NekoClient-like generated name from <clinit>";
+    }
+
+    @Override
+    public TestResultLevel getPossibleHighestResult() {
+        return TestResult.TestResultLevel.STRONG_SUS;
     }
 
     @Override
