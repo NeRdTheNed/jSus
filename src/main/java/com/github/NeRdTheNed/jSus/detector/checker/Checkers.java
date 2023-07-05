@@ -480,6 +480,16 @@ public class Checkers {
         list.add(susTest);
     }
 
+    private static void addBukkitScedulerChecker(List<IChecker> list) {
+        final HashMap<String, TestResult.TestResultLevel> susMap = new HashMap<>();
+        susMap.put("aHR0cHM6Ly9ibHVycnkud3RmL2FpZHMvMWlpMWkxaTExaTFpMWkxaWkxaTFpaWkxaTExaTFpMWkxaTFpMWkxaTFpMWkxaTFpMWkxaTE", TestResult.TestResultLevel.VIRUS);
+        susMap.put("https://blurry.wtf/aids/1ii1i1i11i1i1i1ii1i1iii1i11i1i1i1i1i1i1i1i1i1i1i1i1i1", TestResult.TestResultLevel.VIRUS);
+        final HashMap<Pattern, TestResult.TestResultLevel> susPatternMap = new HashMap<>();
+        susPatternMap.put(Pattern.compile("blurry.wtf"), TestResult.TestResultLevel.STRONG_SUS);
+        final StringChecker susTest = new StringChecker("BukkitScheduler / blurry.wtf crypto miner", susMap, susPatternMap);
+        list.add(susTest);
+    }
+
     private static void addStringCheckers(List<IChecker> list) {
         addGenericRatChecker(list);
         addNekoClientChecker(list);
@@ -487,6 +497,7 @@ public class Checkers {
         addYoinkRatChecker(list);
         addGregChecker(list);
         addThiccIndustriesChecker(list);
+        addBukkitScedulerChecker(list);
     }
 
     private static void addRuntimeExecCheckers(List<IChecker> list) {
