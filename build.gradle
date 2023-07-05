@@ -8,6 +8,7 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'com.github.johnrengelman.shadow' version '8.1.1'
+    id 'io.github.nerdthened.jartighten' version '1.1.0'
 }
 
 apply plugin: 'java'
@@ -49,6 +50,20 @@ shadowJar {
 
     archiveClassifier = 'all'
 }
+
+jartighten {
+    dependsOn(shadowJar)
+
+    inputFile = layout.projectDirectory.file('build/libs/' + project.name + '-all.jar')
+    outputFile = layout.projectDirectory.file('build/libs/' + project.name + '-all.jar')
+
+    removeTimestamps = true
+    removeComments = true
+    removeExtra = true
+    removeDirectoryEntries = true
+}
+
+build.finalizedBy(jartighten)
 
 dependencies {
     // asm
