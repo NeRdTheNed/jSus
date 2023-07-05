@@ -485,7 +485,7 @@ public class Checkers {
         susMap.put("aHR0cHM6Ly9ibHVycnkud3RmL2FpZHMvMWlpMWkxaTExaTFpMWkxaWkxaTFpaWkxaTExaTFpMWkxaTFpMWkxaTFpMWkxaTFpMWkxaTE", TestResult.TestResultLevel.VIRUS);
         susMap.put("https://blurry.wtf/aids/1ii1i1i11i1i1i1ii1i1iii1i11i1i1i1i1i1i1i1i1i1i1i1i1i1", TestResult.TestResultLevel.VIRUS);
         final HashMap<Pattern, TestResult.TestResultLevel> susPatternMap = new HashMap<>();
-        susPatternMap.put(Pattern.compile("blurry.wtf"), TestResult.TestResultLevel.STRONG_SUS);
+        susPatternMap.put(Pattern.compile("blurry\\.wtf"), TestResult.TestResultLevel.STRONG_SUS);
         final StringChecker susTest = new StringChecker("BukkitScheduler / blurry.wtf crypto miner", susMap, susPatternMap);
         list.add(susTest);
     }
