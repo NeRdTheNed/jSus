@@ -166,11 +166,13 @@ public class Scanner {
             }
         }
 
-        if (json) {
-            new JSONPrinter(name, archRes).print(pw);
-            pw.println();
-        } else {
-            new HumanReadablePrinter(name, archRes, level, color).print(pw);
+        if (didDetectSus) {
+            if (json) {
+                new JSONPrinter(name, archRes).print(pw);
+                pw.println();
+            } else {
+                new HumanReadablePrinter(name, archRes, level, color).print(pw);
+            }
         }
 
         pw.flush();

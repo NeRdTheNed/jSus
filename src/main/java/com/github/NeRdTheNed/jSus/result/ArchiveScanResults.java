@@ -10,6 +10,7 @@ public class ArchiveScanResults {
     public boolean errorReadingArchive;
     @JsonInclude(value = Include.NON_EMPTY, content = Include.NON_NULL)
     public final Map<String, ArchiveScanResults> recursiveArchiveScanResults;
+    @JsonInclude(value = Include.NON_EMPTY, content = Include.NON_NULL)
     public final Map<String, FileScanResults> fileScanResults;
 
     public ArchiveScanResults(boolean errorReadingArchive, Map<String, ArchiveScanResults> recursiveArchiveScanResults, Map<String, FileScanResults> fileScanResults) {
