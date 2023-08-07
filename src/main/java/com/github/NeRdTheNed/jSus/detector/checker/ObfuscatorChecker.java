@@ -159,7 +159,9 @@ public class ObfuscatorChecker implements IChecker {
             return;
         }
 
-        for (int i = 1; !notValidJavaIdent && (i < name.length()); i++) {
+        final int length = name.length();
+
+        for (int i = 1; !notValidJavaIdent && (i < length); i++) {
             final char currentChar = name.charAt(i);
 
             if (!Character.isJavaIdentifierPart(currentChar) && (currentChar != '$') && (currentChar != '-')) {
@@ -176,10 +178,10 @@ public class ObfuscatorChecker implements IChecker {
         if (notValidJavaIdent) {
             final String str = isClassName ? "Found common obfuscated classname technique at class " + className : "Found common obfuscated method name technique for method " + name + " at class " + className;
             foundBenign.merge(str, 1, Integer::sum);
-        } else if ((checkVeryShortNameLength && (name.length() == 1)) || commonObfNamesListCaseSensitive.contains(name) || commonObfNamesList.contains(name.toLowerCase())) {
+        } else if ((checkVeryShortNameLength && (length == 1)) || commonObfNamesListCaseSensitive.contains(name) || commonObfNamesList.contains(name.toLowerCase())) {
             final String str = isClassName ? "Found common obfuscated classname " + className : "Found common obfuscated method name " + name + " at class " + className;
             foundBenign.merge(str, 1, Integer::sum);
-        } else if (checkShortNameLength && (name.length() == 2)) {
+        } else if (checkShortNameLength && (length == 2)) {
             final String str = isClassName ? "Class name may be obfuscated " + className : "Method name " + name + " may be obfuscated at class " + className;
             foundVeryBenign.merge(str, 1, Integer::sum);
         }
@@ -195,7 +197,7 @@ public class ObfuscatorChecker implements IChecker {
         final Map<String, Integer> foundBenign = new HashMap<>();
         final Map<String, Integer> foundVeryBenign = new HashMap<>();
         final String className = clazz.name;
-        final String processedClassName = className.substring(className.lastIndexOf("/") + 1);
+        final String processedClassName = className.substring(className.lastIndexOf('/') + 1);
         checkName(processedClassName, true, className, foundBenign, foundVeryBenign);
         final Map<Integer, Integer> chains = new HashMap<>();
         int allatoriDemoCount = 0;

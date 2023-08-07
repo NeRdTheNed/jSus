@@ -2,8 +2,9 @@ package com.github.NeRdTheNed.jSus;
 
 import java.io.File;
 import java.io.PrintWriter;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CompletionService;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -123,12 +124,12 @@ public class Scanner {
     }
 
     public static boolean detectSusFromNode(ClassNode node, String name, boolean verbose, TestResult.TestResultLevel level, boolean color, PrintWriter pw, boolean json) {
-        return detectSusFromNodes(Arrays.asList(node), name, verbose, level, color, pw, json);
+        return detectSusFromNodes(Collections.singletonList(node), name, verbose, level, color, pw, json);
     }
 
-    public static boolean detectSusFromNodes(List<ClassNode> nodes, String name, boolean verbose, TestResult.TestResultLevel level, boolean color, PrintWriter pw, boolean json) {
+    public static boolean detectSusFromNodes(Iterable<? extends ClassNode> nodes, String name, boolean verbose, TestResult.TestResultLevel level, boolean color, PrintWriter pw, boolean json) {
         final ExecutorService execService = Executors.newCachedThreadPool();
-        final ExecutorCompletionService<CheckResult> compService = new ExecutorCompletionService<>(execService);
+        final CompletionService<CheckResult> compService = new ExecutorCompletionService<>(execService);
         int tasks = 0;
 
         for (final IChecker checker : Checkers.checkerList) {

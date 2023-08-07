@@ -38,7 +38,7 @@ public class CallsNekoClientLikeChecker implements IChecker {
                         final MethodInsnNode methodInsNode = (MethodInsnNode) ins;
                         final String methodName = methodInsNode.name;
 
-                        if ((methodName.length() != 33) || !methodName.startsWith("_")) {
+                        if ((methodName.length() != 33) || (methodName.charAt(0) != '_')) {
                             continue;
                         }
 

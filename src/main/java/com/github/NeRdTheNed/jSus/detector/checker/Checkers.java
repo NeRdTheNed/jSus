@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Pattern;
 
-
 public class Checkers {
 
     public static final List<IChecker> checkerList = makeCheckerList();
@@ -50,7 +49,7 @@ public class Checkers {
             "\\Mozilla\\Firefox\\Profiles",
             "\\Opera Software\\Opera Stable",
             "\\Yandex\\YandexBrowser\\User Data\\Default",
-            "\u0024USER_HOME\u0024",
+            "$USER_HOME$",
 
             "/.config/BraveSoftware/Brave-Browser/Default/Login Data",
             "/.config/BraveSoftware/Brave-Browser/Local State",
@@ -380,7 +379,7 @@ public class Checkers {
             //"https://discordapp.com/api/v6/users/@me",
             "Failed to get future auth ",
             "(?<=\\G.{1900})",
-            "\u0043\u0072\u0065\u0061\u0074\u0065\u0064\u0020\u0062\u0079\u0020\u0079\u006f\u0069\u006e\u006b",
+            "Created by yoink",
         };
 
         for (final String begignString : begignStrings) {

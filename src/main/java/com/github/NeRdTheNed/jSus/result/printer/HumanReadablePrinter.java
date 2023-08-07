@@ -21,7 +21,7 @@ public class HumanReadablePrinter extends Printer {
     private static final String FOUND_SUS_ARCH_NOCOL = FOUND_SUS_ARCH_BASE + " ";
 
     private String getLevelText(TestResult.TestResultLevel level) {
-        return color ? Ansi.AUTO.string("@|" + level.color + " " + level.toString() + "|@") : level.toString();
+        return color ? Ansi.AUTO.string("@|" + level.color + " " + level + "|@") : level.toString();
     }
 
     public HumanReadablePrinter(Map<String, ArchiveScanResults> scanResults, TestResultLevel level, boolean color) {

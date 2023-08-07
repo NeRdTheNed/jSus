@@ -33,7 +33,12 @@ import me.coley.cafedude.io.ClassFileReader;
 import me.coley.cafedude.io.ClassFileWriter;
 import me.coley.cafedude.transform.IllegalStrippingTransformer;
 
-public class Util {
+public final class Util {
+    /** Private constructor to hide the default one */
+    private Util() {
+        // This space left intentionally blank
+    }
+
     public static final Base64.Decoder decoder = Base64.getDecoder();
 
     public static byte[] convertInputStreamToBytes(InputStream in) throws IOException {
@@ -88,7 +93,7 @@ public class Util {
 
     public static ClassNode classfilePathToClass(Path clazz) {
         try
-            (InputStream is = Files.newInputStream(clazz)) {
+            (final InputStream is = Files.newInputStream(clazz)) {
             return streamToClass(is, clazz.toString());
         } catch (final IOException e) {
             System.err.println("Error reading class file " + clazz);
@@ -98,14 +103,15 @@ public class Util {
         return null;
     }
 
-    private static void findAddNodes(JarFile jarFile, List<ClassNode> nodes, boolean verbose, boolean noLog) {
+    private static void findAddNodes(JarFile jarFile, List<? super ClassNode> nodes, boolean verbose, boolean noLog) {
         String obf = null;
         boolean didFindWeirdObf = false;
+        final Enumeration<JarEntry> entries = jarFile.entries();
 
-        for (final Enumeration<JarEntry> entries = jarFile.entries(); entries.hasMoreElements();) {
+        while (entries.hasMoreElements()) {
             final JarEntry entry = entries.nextElement();
             final String name = entry.getName();
-            final boolean weirdClassObf = name.endsWith(".class/") && ((entry.getCompressedSize() > 0) || (entry.getSize() > 0));
+            final boolean weirdClassObf = name.endsWith(".class/") && ((entry.getCompressedSize() > 0L) || (entry.getSize() > 0L));
 
             if (entry.isDirectory() && !weirdClassObf) {
                 continue;
@@ -121,7 +127,7 @@ public class Util {
                 }
 
                 try
-                    (InputStream is = jarFile.getInputStream(entry)) {
+                    (final InputStream is = jarFile.getInputStream(entry)) {
                     // TODO Not totally sure if this is correct
                     final Path tempFile = Files.createTempFile(null, null);
                     tempFile.toFile().deleteOnExit();
@@ -136,7 +142,7 @@ public class Util {
 
             if (weirdClassObf || name.endsWith(".class")) {
                 try
-                    (InputStream is = jarFile.getInputStream(entry)) {
+                    (final InputStream is = jarFile.getInputStream(entry)) {
                     final ClassNode node = streamToClass(is, name);
 
                     if (node != null) {
@@ -245,19 +251,19 @@ public class Util {
             return 1L;
 
         case Opcodes.FCONST_0:
-            return 0f;
+            return 0.0f;
 
         case Opcodes.FCONST_1:
-            return 1f;
+            return 1.0f;
 
         case Opcodes.FCONST_2:
-            return 2f;
+            return 2.0f;
 
         case Opcodes.DCONST_0:
-            return 0d;
+            return 0.0d;
 
         case Opcodes.DCONST_1:
-            return 1d;
+            return 1.0d;
 
         case Opcodes.BIPUSH:
         case Opcodes.SIPUSH:
