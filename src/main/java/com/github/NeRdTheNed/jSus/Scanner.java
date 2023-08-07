@@ -2,6 +2,7 @@ package com.github.NeRdTheNed.jSus;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
@@ -32,6 +33,10 @@ public class Scanner {
             return detectSusFromDirectory(file, verbose, level, color, pw, json);
         }
 
+        if (file.toString().toLowerCase().endsWith(".class")) {
+            return detectSusFromClassfile(file, verbose, level, color, pw, json);
+        }
+
         try
             (final JarFile jarFile = new JarFile(file)) {
             return detectSusFromJar(jarFile, verbose, level, color, pw, json);
@@ -56,7 +61,22 @@ public class Scanner {
                     foundSus = true;
                 }
 
-                if (!file.toString().toLowerCase().endsWith(".jar")) {
+                final String fileName = file.toString().toLowerCase();
+
+                if (fileName.endsWith(".class")) {
+                    try {
+                        if (detectSusFromClassfile(file, verbose, level, color, pw, json)) {
+                            foundSus = true;
+                        }
+                    } catch (final Exception e) {
+                        System.err.println("Invalid class file " + file.getAbsolutePath());
+                        e.printStackTrace();
+                    }
+
+                    continue;
+                }
+
+                if (!fileName.endsWith(".jar")) {
                     continue;
                 }
 
@@ -75,14 +95,40 @@ public class Scanner {
         return foundSus;
     }
 
-    public static boolean detectSusFromJar(JarFile file, boolean verbose, TestResult.TestResultLevel level, boolean color, PrintWriter pw, boolean json) {
+    public static boolean detectSusFromClassfile(File file, boolean verbose, TestResult.TestResultLevel level, boolean color, PrintWriter pw, boolean json) {
+        final String name = file.getPath();
+
         if (verbose && !json) {
-            System.out.println("Scanning " + file.getName());
+            System.out.println("Scanning " + name);
         }
 
+        final ClassNode node = Util.classfileFileToClass(file);
+
+        if (node != null) {
+            return detectSusFromNode(node, name, verbose, level, color, pw, json);
+        }
+
+        return false;
+    }
+
+    public static boolean detectSusFromJar(JarFile file, boolean verbose, TestResult.TestResultLevel level, boolean color, PrintWriter pw, boolean json) {
+        final String name = file.getName();
+
+        if (verbose && !json) {
+            System.out.println("Scanning " + name);
+        }
+
+        final List<ClassNode> nodes = Util.gatherClassNodesFromJar(file, verbose, json);
+        return detectSusFromNodes(nodes, name, verbose, level, color, pw, json);
+    }
+
+    public static boolean detectSusFromNode(ClassNode node, String name, boolean verbose, TestResult.TestResultLevel level, boolean color, PrintWriter pw, boolean json) {
+        return detectSusFromNodes(Arrays.asList(node), name, verbose, level, color, pw, json);
+    }
+
+    public static boolean detectSusFromNodes(List<ClassNode> nodes, String name, boolean verbose, TestResult.TestResultLevel level, boolean color, PrintWriter pw, boolean json) {
         final ExecutorService execService = Executors.newCachedThreadPool();
         final ExecutorCompletionService<CheckResult> compService = new ExecutorCompletionService<>(execService);
-        final List<ClassNode> nodes = Util.gatherClassNodesFromJar(file, verbose, json);
         int tasks = 0;
 
         for (final IChecker checker : Checkers.checkerList) {
@@ -120,16 +166,16 @@ public class Scanner {
         }
 
         if (json) {
-            new JSONPrinter(file.getName(), archRes).print(pw);
+            new JSONPrinter(name, archRes).print(pw);
             pw.println();
         } else {
-            new HumanReadablePrinter(file.getName(), archRes, level, color).print(pw);
+            new HumanReadablePrinter(name, archRes, level, color).print(pw);
         }
 
         pw.flush();
 
         if (verbose && !json) {
-            System.out.println("Finished scanning " + file.getName());
+            System.out.println("Finished scanning " + name);
         }
 
         return didDetectSus;

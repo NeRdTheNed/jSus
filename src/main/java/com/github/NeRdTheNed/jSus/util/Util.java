@@ -1,6 +1,7 @@
 package com.github.NeRdTheNed.jSus.util;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -75,6 +76,22 @@ public class Util {
             return node;
         } catch (final Exception e) {
             System.err.println("Malformed class " + name + ", could not read with CAFED00D");
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public static ClassNode classfileFileToClass(File clazz) {
+        return classfilePathToClass(clazz.toPath());
+    }
+
+    public static ClassNode classfilePathToClass(Path clazz) {
+        try
+            (InputStream is = Files.newInputStream(clazz)) {
+            return streamToClass(is, clazz.toString());
+        } catch (final IOException e) {
+            System.err.println("Error reading class file " + clazz);
             e.printStackTrace();
         }
 
