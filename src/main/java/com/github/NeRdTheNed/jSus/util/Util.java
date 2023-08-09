@@ -126,17 +126,31 @@ public final class Util {
                     System.out.println("- Adding JIJ " + name + " to scan");
                 }
 
+                Path tempFile = null;
+
                 try
                     (final InputStream is = jarFile.getInputStream(entry)) {
                     // TODO Not totally sure if this is correct
-                    final Path tempFile = Files.createTempFile(null, null);
+                    tempFile = Files.createTempFile("jSus-temp-", ".jar");
                     tempFile.toFile().deleteOnExit();
                     Files.copy(is, tempFile, StandardCopyOption.REPLACE_EXISTING);
-                    final JarFile jij = new JarFile(tempFile.toFile());
-                    findAddNodes(jij, nodes, verbose, noLog);
+
+                    try
+                        (final JarFile jij = new JarFile(tempFile.toFile())) {
+                        findAddNodes(jij, nodes, verbose, noLog);
+                    }
                 } catch (final Exception e) {
                     System.err.println("Issue extracting JIJ " + name + " from " + jarFile.getName() + " to temporary file");
                     e.printStackTrace();
+                } finally {
+                    if (tempFile != null) {
+                        try {
+                            Files.deleteIfExists(tempFile);
+                        } catch (final Exception e) {
+                            System.err.println("Issue deleting temporary file " + tempFile);
+                            e.printStackTrace();
+                        }
+                    }
                 }
             }
 
