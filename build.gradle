@@ -70,12 +70,12 @@ dependencies {
     api 'org.ow2.asm:asm-tree:9.5'
     api 'org.ow2.asm:asm-util:9.5'
 
-    api 'info.picocli:picocli:4.7.4'
-    annotationProcessor 'info.picocli:picocli-codegen:4.7.4'
+    api 'info.picocli:picocli:4.7.5'
+    annotationProcessor 'info.picocli:picocli-codegen:4.7.5'
 
     api 'com.github.Col-E:CAFED00D:1.10.2'
-    api 'org.slf4j:slf4j-api:2.0.7'
-    api 'org.slf4j:slf4j-jdk14:2.0.7'
+    api 'org.slf4j:slf4j-api:2.0.9'
+    api 'org.slf4j:slf4j-jdk14:2.0.9'
 
     api 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
 
@@ -86,11 +86,11 @@ dependencies {
     shadow 'org.ow2.asm:asm-tree:9.5'
     shadow 'org.ow2.asm:asm-util:9.5'
 
-    shadow 'info.picocli:picocli:4.7.4'
+    shadow 'info.picocli:picocli:4.7.5'
 
     shadow 'com.github.Col-E:CAFED00D:1.10.2'
-    shadow 'org.slf4j:slf4j-api:2.0.7'
-    shadow 'org.slf4j:slf4j-jdk14:2.0.7'
+    shadow 'org.slf4j:slf4j-api:2.0.9'
+    shadow 'org.slf4j:slf4j-jdk14:2.0.9'
 
     shadow 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
 
